@@ -8,3 +8,4 @@
 | `004` | `gpu-gates-setup-smoke` | Tasks 11, 12 | `complete` | GPU Session 1: 21.25 GB root size (`bake_9b` tier qualified), BF16 verified, dependencies locked, 4B snapshot downloaded; GPU Session 2: **10/10 (100%) exact match**, 0.565s p50 |
 | `005` | `synthetic-dataset-dev-eval` | Task 13 | `complete` | 120-image dev/holdout splits with 6 degradations; GPU Session 3: **109/120 (90.8%) exact match**, 0.515s p50, 0 violations |
 | `006` | `container-packaging-release` | Task 14 | `complete` | Multi-stage Dockerfile, entrypoint daemon, automated 60 GiB & 11-layer container validation script |
+| `007` | `fix-sample-hardcode-and-data-generator` | Bug fix fast-path | `complete` | Removed hardcoded sample check in `rules.py` (anti-cheating compliance); fixed text overflow in synthetic data generator with dynamic word wrapping |
