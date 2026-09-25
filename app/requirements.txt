@@ -1,0 +1,4 @@
+# Candidate only. Task 11 installs this on the GPU box and freezes exact versions into requirements.lock.
+# NEVER add torch, torchvision, triton, numpy or accelerate: `pip install --target` would pull a
+# non-ROCm build into /workspace/pylib and shadow the preinstalled ROCm torch.
+transformers>=5.17,<6
