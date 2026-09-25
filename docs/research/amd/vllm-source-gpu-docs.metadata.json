@@ -1,0 +1,10 @@
+{
+  "id": "vllm-source-gpu-docs",
+  "url": "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/getting_started/installation/gpu.md",
+  "retrieved_utc": "2026-09-22T12:33:56.665248+00:00",
+  "status": 200,
+  "final_url": "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/getting_started/installation/gpu.md",
+  "content_type": "text/plain; charset=utf-8",
+  "server_date": "Tue, 22 Sep 2026 12:33:57 GMT",
+  "response_bytes": 4170
+}

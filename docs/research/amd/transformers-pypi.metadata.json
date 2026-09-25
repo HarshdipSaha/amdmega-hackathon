@@ -1,0 +1,10 @@
+{
+  "id": "transformers-pypi",
+  "url": "https://pypi.org/pypi/transformers/json",
+  "retrieved_utc": "2026-09-22T12:33:02.180699+00:00",
+  "status": 200,
+  "final_url": "https://pypi.org/pypi/transformers/json",
+  "content_type": "application/json",
+  "server_date": "Tue, 22 Sep 2026 12:33:01 GMT",
+  "response_bytes": 411851
+}

@@ -1,0 +1,65 @@
+{
+  "query": "AMD lablab mini challenge 2 OCR September 2026",
+  "mode": "text",
+  "region": "wt-wt",
+  "retrieved_at": "2026-09-22T12:31:53.422466+00:00",
+  "attempts": [
+    {
+      "endpoint": "ddgs.text(backend=duckduckgo)",
+      "http_status": null,
+      "outcome": "error",
+      "error": "No results found."
+    },
+    {
+      "endpoint": "https://html.duckduckgo.com/html/",
+      "url": "https://html.duckduckgo.com/html/?q=AMD+lablab+mini+challenge+2+OCR+September+2026",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://lite.duckduckgo.com/lite/",
+      "url": "https://lite.duckduckgo.com/lite/?q=AMD+lablab+mini+challenge+2+OCR+September+2026",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://www.bing.com/search",
+      "url": "https://www.bing.com/search?q=AMD+lablab+mini+challenge+2+OCR+September+2026",
+      "http_status": 200,
+      "outcome": "success"
+    }
+  ],
+  "results": [
+    {
+      "title": "AMD ׀ together we advance_AI",
+      "href": "https://www.bing.com/ck/a?!&&p=1cde1321704d21144fbb9200eaeed1e9a61064c60dfe52c97964bf3d6c42c404JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=29600185-d8ea-6e19-089d-1659d9016f4f&u=a1aHR0cHM6Ly93d3cuYW1kLmNvbS9lbi5odG1s&ntb=1",
+      "body": "Sep 2, 2026 · AMD delivers leadership high-performance and adaptive computing solutions to advance data center AI, AI PCs, …"
+    },
+    {
+      "title": "Drivers and Support for Processors and Graphics - AMD",
+      "href": "https://www.bing.com/ck/a?!&&p=7a531657c5f7bf5c3ea391921c95d7824838407df6eb2a2ab69883b09ac99b6cJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=29600185-d8ea-6e19-089d-1659d9016f4f&u=a1aHR0cHM6Ly93d3cuYW1kLmNvbS9lbi9zdXBwb3J0L2Rvd25sb2FkL2RyaXZlcnMuaHRtbA&ntb=1",
+      "body": "Download drivers and software for AMD products — includes Windows and Linux support, auto-detect tools & detailed guides for …"
+    },
+    {
+      "title": "AMD - Wikipedia",
+      "href": "https://www.bing.com/ck/a?!&&p=3a19b76901d166fbd433a7cde7a84178f944e8ad7f5922ffc4c0e33a0fb0592fJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=29600185-d8ea-6e19-089d-1659d9016f4f&u=a1aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQU1E&ntb=1",
+      "body": "AMD serves a wide range of business and consumer markets, including personal computers (PCs), gaming, data centers, and …"
+    },
+    {
+      "title": "Advanced Micro Devices, Inc . ( AMD ) - Yahoo Finance",
+      "href": "https://www.bing.com/ck/a?!&&p=892b4b551fd7ca0de89e93209414e18ada42a89cb28cabd0d96899dba904efc0JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=29600185-d8ea-6e19-089d-1659d9016f4f&u=a1aHR0cHM6Ly9maW5hbmNlLnlhaG9vLmNvbS9xdW90ZS9BTUQv&ntb=1",
+      "body": "Find the latest Advanced Micro Devices, Inc. (AMD) stock quote, history, news and other vital information to help you with your stock …"
+    },
+    {
+      "title": "Advanced Micro Devices, Inc. ( AMD )",
+      "href": "https://www.bing.com/ck/a?!&&p=7c5c3778fa85b65be060f5ee77537f63d12c4f8c4443013e7d57b6d2e4b4e69fJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=29600185-d8ea-6e19-089d-1659d9016f4f&u=a1aHR0cHM6Ly9pci5hbWQuY29tLw&ntb=1",
+      "body": "Aug 31, 2011 · For 50 years AMD has driven innovation in high-performance computing, graphics and visualization technologies ― …"
+    },
+    {
+      "title": "AMD Radeon Adrenalin Graphics Driver 26.9.1 Hotfix - TechSpot",
+      "href": "https://www.bing.com/ck/a?!&&p=9d1c7acd47cabaaabde8c7946df63b0fea82c571c8b2166d5b3684330856857dJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=29600185-d8ea-6e19-089d-1659d9016f4f&u=a1aHR0cHM6Ly93d3cudGVjaHNwb3QuY29tL2Rvd25sb2Fkcy9kcml2ZXJzL2Vzc2VudGlhbHMvYW1kLXJhZGVvbi1ob3RmaXgv&ntb=1",
+      "body": "Sep 3, 2026 · AMD APU products codenamed \"Kaveri\", \"Godavari\" and \"Carrizo\" are only supported by AMD Radeon Software …"
+    }
+  ],
+  "source": "Bing HTML (non-DDG fallback)"
+}

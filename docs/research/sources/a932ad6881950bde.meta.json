@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/models?search=FireRed-OCR&sort=downloads&direction=-1&limit=6",
+  "retrieved_at": "2026-09-22T12:33:54.665285+00:00",
+  "http_status": 200,
+  "final_url": "https://huggingface.co/api/models?search=FireRed-OCR&sort=downloads&direction=-1&limit=6",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\a932ad6881950bde.json",
+  "chars": 2660
+}

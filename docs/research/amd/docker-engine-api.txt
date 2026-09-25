@@ -1,0 +1,6 @@
+This reference uses JavaScript for the interactive explorer. View
+the
+Markdown page
+or
+download the OpenAPI specification
+if JavaScript is unavailable.

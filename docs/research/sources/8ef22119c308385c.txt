@@ -1,0 +1,2869 @@
+Qwen3-VL · Hugging Face
+Transformers documentation
+Qwen3-VL
+Transformers
+🏡 View all docs
+AWS Trainium & Inferentia
+Accelerate
+Argilla
+AutoTrain
+Bitsandbytes
+CLI
+Chat UI
+Dataset viewer
+Datasets
+Deploying on AWS
+Diffusers
+Distilabel
+Evaluate
+Google Cloud
+Google TPUs
+Gradio
+Hub
+Hub Python Library
+Huggingface.js
+Inference Endpoints (dedicated)
+Inference Providers
+Kernels
+LeRobot
+Leaderboards
+Lighteval
+Microsoft Azure
+OpenEnv
+Optimum
+PEFT
+Reachy Mini
+Safetensors
+Sentence Transformers
+TRL
+Tasks
+Text Embeddings Inference
+Text Generation Inference
+Tokenizers
+Trackio
+Transformers
+Transformers.js
+Xet
+smolagents
+timm
+Search documentation
+main
+v5.17.0
+v5.15.1
+v5.14.0
+v5.13.1
+v5.12.0
+v5.11.0
+v5.10.4
+v5.9.0
+v5.8.1
+v5.7.0
+v5.6.2
+v5.5.4
+v5.4.0
+v5.3.0
+v5.2.0
+v5.1.0
+v5.0.0
+v4.57.6
+v4.56.2
+v4.55.4
+v4.53.3
+v4.52.3
+v4.51.3
+v4.50.0
+v4.49.0
+v4.48.2
+v4.47.1
+v4.46.3
+v4.45.2
+v4.44.2
+v4.43.4
+v4.42.4
+v4.41.2
+v4.40.2
+v4.39.3
+v4.38.2
+v4.37.2
+v4.36.1
+v4.35.2
+v4.34.1
+v4.33.3
+v4.32.1
+v4.31.0
+v4.30.0
+v4.29.1
+v4.28.1
+v4.27.2
+v4.26.1
+v4.25.1
+v4.24.0
+v4.23.1
+v4.22.2
+v4.21.3
+v4.20.1
+v4.19.4
+v4.18.0
+v4.17.0
+v4.16.2
+v4.15.0
+v4.14.1
+v4.13.0
+v4.12.5
+v4.11.3
+v4.10.1
+v4.9.2
+v4.8.2
+v4.7.0
+v4.6.0
+v4.5.1
+v4.4.2
+v4.3.3
+v4.2.2
+v4.1.1
+v4.0.1
+v3.5.1
+v3.4.0
+v3.3.1
+v3.2.0
+v3.1.0
+v3.0.2
+v2.11.0
+v2.10.0
+v2.9.1
+v2.8.0
+v2.7.0
+v2.6.0
+v2.5.1
+v2.4.1
+v2.3.0
+v2.2.2
+v2.1.1
+v2.0.0
+v1.2.0
+v1.1.0
+v1.0.0
+doc-builder-html
+AR
+DE
+EN
+ES
+FR
+HI
+IT
+JA
+KO
+PT
+RO
+TR
+ZH
+Join the Hugging Face community
+and get access to the augmented documentation experience
+Collaborate on models, datasets and Spaces
+Faster examples with accelerated inference
+Switch between documentation themes
+Sign Up
+to get started
+This model was published in HF papers on 2025-02-19 and contributed to Hugging Face Transformers on 2025-09-15.
+Copy page
+Qwen3-VL
+Qwen3-VL
+is a multimodal vision-language model series, encompassing both dense and MoE variants, as well as Instruct and Thinking versions. Building upon its predecessors, Qwen3-VL delivers significant improvements in visual understanding while maintaining strong pure text capabilities. Key architectural advancements include: enhanced MRope with interleaved layout for better spatial-temporal modeling, DeepStack integration to effectively leverage multi-level features from the Vision Transformer (ViT), and improved video understanding through text-based time alignment—evolving from T-RoPE to text timestamp alignment for more precise temporal grounding. These innovations collectively enable Qwen3-VL to achieve superior performance in complex multimodal tasks.
+Set
+use_kernels=True
+in
+from_pretrained()
+to replace supported layers with optimized kernels from the Hub. Refer to
+Loading kernels
+to learn more.
+Model usage
+AutoModel
+Copied
+from
+transformers
+import
+AutoProcessor, Qwen3VLForConditionalGeneration
+
+
+model = Qwen3VLForConditionalGeneration.from_pretrained(
+"Qwen/Qwen3-VL"
+,
+    device_map=
+"auto"
+,
+    attn_implementation=
+"sdpa"
+)
+processor = AutoProcessor.from_pretrained(
+"Qwen/Qwen3-VL"
+)
+messages = [
+    {
+"role"
+:
+"user"
+,
+"content"
+:[
+            {
+"type"
+:
+"image"
+,
+"url"
+:
+"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/pipeline-cat-chonk.jpeg"
+},
+            {
+"type"
+:
+"text"
+,
+"text"
+:
+"Describe this image."
+}
+        ]
+    }
+
+]
+
+inputs = processor.apply_chat_template(
+    messages,
+    tokenize=
+True
+,
+    add_generation_prompt=
+True
+,
+    return_dict=
+True
+,
+    return_tensors=
+"pt"
+,
+)
+inputs.pop(
+"token_type_ids"
+,
+None
+)
+
+generated_ids = model.generate(**inputs, max_new_tokens=
+128
+)
+generated_ids_trimmed = [
+            out_ids[
+len
+(in_ids) :]
+for
+in_ids, out_ids
+in
+zip
+(inputs.input_ids, generated_ids)
+]
+output_text = processor.batch_decode(
+       generated_ids_trimmed, skip_special_tokens=
+True
+, clean_up_tokenization_spaces=
+False
+)
+print
+(output_text)
+Qwen3VLConfig
+class
+transformers.
+Qwen3VLConfig
+<
+source
+>
+(
+transformers_version
+: str | None = None
+architectures
+: list[str] | None = None
+output_hidden_states
+: bool | None = False
+return_dict
+: bool | None = True
+dtype
+: typing.Union[str, ForwardRef('torch.dtype'), NoneType] = None
+chunk_size_feed_forward
+: int = 0
+is_encoder_decoder
+: bool = False
+id2label
+: dict[int, str] | dict[str, str] | None = None
+label2id
+: dict[str, int] | dict[str, str] | None = None
+problem_type
+: typing.Optional[typing.Literal['regression', 'single_label_classification', 'multi_label_classification']] = None
+text_config
+: dict | transformers.configuration_utils.PreTrainedConfig | None = None
+vision_config
+: dict | transformers.configuration_utils.PreTrainedConfig | None = None
+image_token_id
+: int = 151655
+video_token_id
+: int = 151656
+vision_start_token_id
+: int = 151652
+vision_end_token_id
+: int = 151653
+tie_word_embeddings
+: bool = False
+)
+Parameters
+text_config
+(
+Union[dict, ~configuration_utils.PreTrainedConfig]
+,
+optional
+) —
+The config object or dictionary of the text backbone.
+vision_config
+(
+Union[dict, ~configuration_utils.PreTrainedConfig]
+,
+optional
+) —
+The config object or dictionary of the vision backbone.
+image_token_id
+(
+int
+,
+optional
+, defaults to
+151655
+) —
+The image token index used as a placeholder for input images.
+video_token_id
+(
+int
+,
+optional
+, defaults to
+151656
+) —
+The video token index used as a placeholder for input videos.
+vision_start_token_id
+(
+int
+,
+optional
+, defaults to
+151652
+) —
+Token ID that marks the start of a visual segment in the multimodal input sequence.
+vision_end_token_id
+(
+int
+,
+optional
+, defaults to
+151653
+) —
+Token ID that marks the end of a visual segment in the multimodal input sequence.
+tie_word_embeddings
+(
+bool
+,
+optional
+, defaults to
+False
+) —
+Whether to tie weight embeddings according to model’s
+tied_weights_keys
+mapping.
+This is the configuration class to store the configuration of a Qwen3VLModel. It is used to instantiate a Qwen3 Vl
+model according to the specified arguments, defining the model architecture. Instantiating a configuration with the
+defaults will yield a similar configuration to that of the
+Qwen/Qwen3-VL-4B-Instruct
+Configuration objects inherit from
+PreTrainedConfig
+and can be used to control the model outputs. Read the
+documentation from
+PreTrainedConfig
+for more information.
+Example:
+Copied
+>>>
+from
+transformers
+import
+Qwen3VLForConditionalGeneration, Qwen3VLConfig
+>>>
+# Initializing a Qwen3-VL style configuration
+>>>
+configuration = Qwen3VLConfig()
+>>>
+# Initializing a model from the Qwen3-VL-4B style configuration
+>>>
+model = Qwen3VLForConditionalGeneration(configuration)
+>>>
+# Accessing the model configuration
+>>>
+configuration = model.config
+Qwen3VLVisionConfig
+class
+transformers.
+Qwen3VLVisionConfig
+<
+source
+>
+(
+transformers_version
+: str | None = None
+architectures
+: list[str] | None = None
+output_hidden_states
+: bool | None = False
+return_dict
+: bool | None = True
+dtype
+: typing.Union[str, ForwardRef('torch.dtype'), NoneType] = None
+chunk_size_feed_forward
+: int = 0
+is_encoder_decoder
+: bool = False
+id2label
+: dict[int, str] | dict[str, str] | None = None
+label2id
+: dict[str, int] | dict[str, str] | None = None
+problem_type
+: typing.Optional[typing.Literal['regression', 'single_label_classification', 'multi_label_classification']] = None
+depth
+: int = 27
+hidden_size
+: int = 1152
+hidden_act
+: str = 'gelu_pytorch_tanh'
+intermediate_size
+: int = 4304
+num_heads
+: int = 16
+in_channels
+: int = 3
+patch_size
+: int | list[int] | tuple[int, int] = 16
+spatial_merge_size
+: int = 2
+temporal_patch_size
+: int | list[int] | tuple[int, int] = 2
+out_hidden_size
+: int = 3584
+num_position_embeddings
+: int = 2304
+deepstack_visual_indexes
+: list[int] | tuple[int, ...] = (8, 16, 24)
+initializer_range
+: float = 0.02
+rope_parameters
+: dict | None = None
+)
+Parameters
+depth
+(
+int
+,
+optional
+, defaults to
+27
+) —
+Number of Transformer layers in the vision encoder.
+hidden_size
+(
+int
+,
+optional
+, defaults to
+1152
+) —
+Dimension of the hidden representations.
+hidden_act
+(
+str
+,
+optional
+, defaults to
+gelu_pytorch_tanh
+) —
+The non-linear activation function (function or string) in the decoder. For example,
+"gelu"
+,
+"relu"
+,
+"silu"
+, etc.
+intermediate_size
+(
+int
+,
+optional
+, defaults to
+4304
+) —
+Dimension of the MLP representations.
+num_heads
+(
+int
+,
+optional
+, defaults to
+16
+) —
+Number of attention heads for each attention layer in the Transformer decoder.
+in_channels
+(
+int
+,
+optional
+, defaults to
+3
+) —
+The number of input channels.
+patch_size
+(
+Union[int, list[int], tuple[int, int]]
+,
+optional
+, defaults to
+16
+) —
+The size (resolution) of each patch.
+spatial_merge_size
+(
+int
+,
+optional
+, defaults to
+2
+) —
+The size of the spatial merge window used to reduce the number of visual tokens by merging neighboring patches.
+temporal_patch_size
+(
+Union[int, list[int], tuple[int, int]]
+,
+optional
+, defaults to
+2
+) —
+Temporal patch size used in the 3D patch embedding for video inputs.
+out_hidden_size
+(
+int
+,
+optional
+, defaults to 3584) —
+The output hidden size of the vision model.
+num_position_embeddings
+(
+int
+,
+optional
+, defaults to 2304) —
+The maximum sequence length that this model might ever be used with
+deepstack_visual_indexes
+(
+list[int]
+,
+optional
+, defaults to
+[8, 16, 24]
+) —
+Indexed of layers for deepstack embeddings.
+initializer_range
+(
+float
+,
+optional
+, defaults to
+0.02
+) —
+The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
+rope_parameters
+(
+dict
+,
+optional
+) —
+Dictionary containing the configuration parameters for the RoPE embeddings. The dictionary should contain
+a value for
+rope_theta
+and optionally parameters used for scaling in case you want to use RoPE
+with longer
+max_position_embeddings
+.
+This is the configuration class to store the configuration of a Qwen3VLModel. It is used to instantiate a Qwen3 Vl
+model according to the specified arguments, defining the model architecture. Instantiating a configuration with the
+defaults will yield a similar configuration to that of the
+Qwen/Qwen3-VL-4B-Instruct
+Configuration objects inherit from
+PreTrainedConfig
+and can be used to control the model outputs. Read the
+documentation from
+PreTrainedConfig
+for more information.
+Qwen3VLTextConfig
+class
+transformers.
+Qwen3VLTextConfig
+<
+source
+>
+(
+transformers_version
+: str | None = None
+architectures
+: list[str] | None = None
+output_hidden_states
+: bool | None = False
+return_dict
+: bool | None = True
+dtype
+: typing.Union[str, ForwardRef('torch.dtype'), NoneType] = None
+chunk_size_feed_forward
+: int = 0
+is_encoder_decoder
+: bool = False
+id2label
+: dict[int, str] | dict[str, str] | None = None
+label2id
+: dict[str, int] | dict[str, str] | None = None
+problem_type
+: typing.Optional[typing.Literal['regression', 'single_label_classification', 'multi_label_classification']] = None
+vocab_size
+: int = 151936
+hidden_size
+: int = 4096
+intermediate_size
+: int = 22016
+num_hidden_layers
+: int = 32
+num_attention_heads
+: int = 32
+num_key_value_heads
+: int | None = 32
+head_dim
+: int = 128
+hidden_act
+: str = 'silu'
+max_position_embeddings
+: int = 128000
+initializer_range
+: float = 0.02
+rms_norm_eps
+: float = 1e-06
+use_cache
+: bool = True
+rope_parameters
+: transformers.modeling_rope_utils.RopeParameters | dict | None = None
+attention_bias
+: bool = False
+attention_dropout
+: float | int = 0.0
+pad_token_id
+: int | None = None
+)
+Parameters
+vocab_size
+(
+int
+,
+optional
+, defaults to
+151936
+) —
+Vocabulary size of the model. Defines the number of different tokens that can be represented by the
+input_ids
+.
+hidden_size
+(
+int
+,
+optional
+, defaults to
+4096
+) —
+Dimension of the hidden representations.
+intermediate_size
+(
+int
+,
+optional
+, defaults to
+22016
+) —
+Dimension of the MLP representations.
+num_hidden_layers
+(
+int
+,
+optional
+, defaults to
+32
+) —
+Number of hidden layers in the Transformer decoder.
+num_attention_heads
+(
+int
+,
+optional
+, defaults to
+32
+) —
+Number of attention heads for each attention layer in the Transformer decoder.
+num_key_value_heads
+(
+int
+,
+optional
+, defaults to
+32
+) —
+This is the number of key_value heads that should be used to implement Grouped Query Attention. If
+num_key_value_heads=num_attention_heads
+, the model will use Multi Head Attention (MHA), if
+num_key_value_heads=1
+the model will use Multi Query Attention (MQA) otherwise GQA is used. When
+converting a multi-head checkpoint to a GQA checkpoint, each group key and value head should be constructed
+by meanpooling all the original heads within that group. For more details, check out
+this
+paper
+. If it is not specified, will default to
+num_attention_heads
+.
+head_dim
+(
+int
+,
+optional
+, defaults to
+128
+) —
+The attention head dimension. If None, it will default to hidden_size // num_attention_heads
+hidden_act
+(
+str
+,
+optional
+, defaults to
+silu
+) —
+The non-linear activation function (function or string) in the decoder. For example,
+"gelu"
+,
+"relu"
+,
+"silu"
+, etc.
+max_position_embeddings
+(
+int
+,
+optional
+, defaults to
+128000
+) —
+The maximum sequence length that this model might ever be used with.
+initializer_range
+(
+float
+,
+optional
+, defaults to
+0.02
+) —
+The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
+rms_norm_eps
+(
+float
+,
+optional
+, defaults to
+1e-06
+) —
+The epsilon used by the rms normalization layers.
+use_cache
+(
+bool
+,
+optional
+, defaults to
+True
+) —
+Whether or not the model should return the last key/values attentions (not used by all models). Only
+relevant if
+config.is_decoder=True
+or when the model is a decoder-only generative model.
+rope_parameters
+(
+Union[~modeling_rope_utils.RopeParameters, dict]
+,
+optional
+) —
+Dictionary containing the configuration parameters for the RoPE embeddings. The dictionary should contain
+a value for
+rope_theta
+and optionally parameters used for scaling in case you want to use RoPE
+with longer
+max_position_embeddings
+.
+attention_bias
+(
+bool
+,
+optional
+, defaults to
+False
+) —
+Whether to use a bias in the query, key, value and output projection layers during self-attention.
+attention_dropout
+(
+Union[float, int]
+,
+optional
+, defaults to
+0.0
+) —
+The dropout ratio for the attention probabilities.
+pad_token_id
+(
+int
+,
+optional
+) —
+Token id used for padding in the vocabulary.
+This is the configuration class to store the configuration of a Qwen3VLModel. It is used to instantiate a Qwen3 Vl
+model according to the specified arguments, defining the model architecture. Instantiating a configuration with the
+defaults will yield a similar configuration to that of the
+Qwen/Qwen3-VL-4B-Instruct
+Configuration objects inherit from
+PreTrainedConfig
+and can be used to control the model outputs. Read the
+documentation from
+PreTrainedConfig
+for more information.
+Example:
+Copied
+>>>
+from
+transformers
+import
+Qwen3VLTextModel, Qwen3VLTextConfig
+>>>
+# Initializing a Qwen3VL style configuration
+>>>
+configuration = Qwen3VLTextConfig()
+>>>
+# Initializing a model from the Qwen3-VL-7B style configuration
+>>>
+model = Qwen3VLTextModel(configuration)
+>>>
+# Accessing the model configuration
+>>>
+configuration = model.config
+Qwen3VLProcessor
+class
+transformers.
+Qwen3VLProcessor
+<
+source
+>
+(
+image_processor
+= None
+tokenizer
+= None
+video_processor
+= None
+chat_template
+= None
+**kwargs
+)
+Parameters
+image_processor
+(
+Qwen2VLImageProcessor
+) —
+The image processor is a required input.
+tokenizer
+(
+Qwen2Tokenizer
+) —
+The tokenizer is a required input.
+video_processor
+(
+Qwen3VLVideoProcessor
+) —
+The video processor is a required input.
+chat_template
+(
+str
+) —
+A Jinja template to convert lists of messages in a chat into a tokenizable string.
+Constructs a Qwen3VLProcessor which wraps a image processor, a tokenizer, and a video processor into a single processor.
+Qwen3VLProcessor
+offers all the functionalities of
+Qwen2VLImageProcessor
+,
+Qwen2Tokenizer
+, and
+Qwen3VLVideoProcessor
+. See the
+~Qwen2VLImageProcessor
+,
+~Qwen2Tokenizer
+, and
+~Qwen3VLVideoProcessor
+for more information.
+__call__
+<
+source
+>
+(
+images
+: typing.Union[ForwardRef('PIL.Image.Image'), numpy.ndarray, ForwardRef('torch.Tensor'), list['PIL.Image.Image'], list[numpy.ndarray], list['torch.Tensor'], NoneType] = None
+text
+: str | list[str] | list[list[str]] | None = None
+videos
+: typing.Union[list['PIL.Image.Image'], numpy.ndarray, ForwardRef('torch.Tensor'), list[numpy.ndarray], list['torch.Tensor'], list[list['PIL.Image.Image']], list[list[numpy.ndarray]], list[list['torch.Tensor']], transformers.video_utils.URL, list[transformers.video_utils.URL], list[list[transformers.video_utils.URL]], transformers.video_utils.Path, list[transformers.video_utils.Path], list[list[transformers.video_utils.Path]], NoneType] = None
+audio
+: typing.Union[numpy.ndarray, ForwardRef('torch.Tensor'), collections.abc.Sequence[numpy.ndarray], collections.abc.Sequence['torch.Tensor'], NoneType] = None
+**kwargs
+: Unpack
+)
+Parameters
+images
+(
+Union[PIL.Image.Image, numpy.ndarray, torch.Tensor, list[PIL.Image.Image], list[numpy.ndarray], list[torch.Tensor]]
+,
+optional
+) —
+Image to preprocess. Expects a single or batch of images with pixel values ranging from 0 to 255. If
+passing in images with pixel values between 0 and 1, set
+do_rescale=False
+.
+text
+(
+Union[str, list[str], list[list[str]]]
+,
+optional
+) —
+The sequence or batch of sequences to be encoded. Each sequence can be a string or a list of strings
+(pretokenized string). If you pass a pretokenized input, set
+is_split_into_words=True
+to avoid ambiguity with batched inputs.
+videos
+(
+Union[list[PIL.Image.Image], numpy.ndarray, torch.Tensor, list[numpy.ndarray], list[torch.Tensor], list[list[PIL.Image.Image]], list[list[numpy.ndarray]], list[list[torch.Tensor]], ~video_utils.URL, list[~video_utils.URL], list[list[~video_utils.URL]], ~video_utils.Path, list[~video_utils.Path], list[list[~video_utils.Path]]]
+,
+optional
+) —
+Video to preprocess. Expects a single or batch of videos with pixel values ranging from 0 to 255. If
+passing in videos with pixel values between 0 and 1, set
+do_rescale=False
+.
+audio
+(
+Union[numpy.ndarray, torch.Tensor, collections.abc.Sequence[numpy.ndarray], collections.abc.Sequence[torch.Tensor]]
+,
+optional
+) —
+The audio or batch of audios to be prepared. Each audio can be a NumPy array or PyTorch tensor.
+In case of a NumPy array/PyTorch tensor, each audio should be of shape (C, T), where C is a number of channels,
+and T is the sample length of the audio.
+return_tensors
+(
+str
+or
+TensorType
+,
+optional
+) —
+If set, will return tensors of a particular framework. Acceptable values are:
+'pt'
+: Return PyTorch
+torch.Tensor
+objects.
+'np'
+: Return NumPy
+np.ndarray
+objects.
+*
+*kwargs
+(
+ProcessingKwargs
+,
+optional
+) —
+Additional processing options for each modality (text, images, videos, audio). Model-specific parameters
+are listed above; see the TypedDict class for the complete list of supported arguments.
+Qwen3VLVideoProcessor
+class
+transformers.
+Qwen3VLVideoProcessor
+<
+source
+>
+(
+**kwargs
+: Unpack
+)
+Parameters
+*
+*kwargs
+(
+Qwen3VLVideoProcessorInitKwargs
+,
+optional
+) —
+Additional image preprocessing options. Model-specific kwargs are listed above; see the TypedDict class
+for the complete list of supported arguments.
+Constructs a Qwen3VLVideoProcessor video processor.
+get_num_of_video_patches
+<
+source
+>
+(
+num_frames
+: int
+height
+: int
+width
+: int
+videos_kwargs
+= None
+)
+→
+Tuple(int, int)
+Parameters
+num_frames
+(
+int
+) —
+Number of frames in the input video.
+height
+(
+int
+) —
+Height of the input video.
+width
+(
+int
+) —
+Width of the input video.
+videos_kwargs
+(
+dict
+,
+optional
+) —
+Any kwargs to override defaults of the video processor.
+Returns
+Tuple(int, int)
+Number of placeholder tokens required and number of patches per image.
+A utility that returns number of video patches a given video size.
+patchify
+<
+source
+>
+(
+videos
+: torch.Tensor
+patch_size
+: int
+merge_size
+: int
+temporal_patch_size
+: int
+)
+Patchifies each video into flat layout of shape (
+seq_len
+,
+patch_dim
+) so we can concat dynamically shaped pixels.
+resize
+<
+source
+>
+(
+videos
+: torch.Tensor
+size
+: SizeDict
+resample
+: PILImageResampling | tvF.InterpolationMode | int | None
+factor
+: int
+temporal_factor
+: int
+cap_pixels_per_frame
+: bool | None = None
+**kwargs
+)
+Resize dynamically based on input video aspect ratio.
+sample_frames
+<
+source
+>
+(
+metadata
+: VideoMetadata
+num_frames
+: int | None = None
+fps
+: int | float | None = None
+**kwargs
+)
+→
+torch.Tensor
+Parameters
+video
+(
+torch.Tensor
+) —
+Video that need to be sampled.
+metadata
+(
+VideoMetadata
+) —
+Metadata of the video containing information about total duration, fps and total number of frames.
+num_frames
+(
+int
+,
+optional
+) —
+Maximum number of frames to sample. Defaults to
+self.num_frames
+.
+fps
+(
+int
+or
+float
+,
+optional
+) —
+Target frames to sample per second. Defaults to
+self.fps
+.
+Returns
+torch.Tensor
+Sampled video frames.
+Default sampling function which uniformly samples the desired number of frames between 0 and total number of frames.
+If
+fps
+is passed along with metadata,
+fps
+frames per second are sampled uniformty. Arguments
+num_frames
+and
+fps
+are mutually exclusive.
+Qwen3VLVisionModel
+class
+transformers.
+Qwen3VLVisionModel
+<
+source
+>
+(
+config
+*inputs
+**kwargs
+)
+forward
+<
+source
+>
+(
+hidden_states
+: Tensor
+grid_thw
+: Tensor
+**kwargs
+: Unpack
+)
+→
+torch.Tensor
+Parameters
+hidden_states
+(
+torch.Tensor
+of shape
+(seq_len, hidden_size)
+) —
+The final hidden states of the model.
+grid_thw
+(
+torch.Tensor
+of shape
+(num_images_or_videos, 3)
+) —
+The temporal, height and width of feature shape of each image in LLM.
+Returns
+torch.Tensor
+hidden_states.
+Qwen3VLTextModel
+class
+transformers.
+Qwen3VLTextModel
+<
+source
+>
+(
+config
+: Qwen3VLTextConfig
+)
+Parameters
+config
+(
+Qwen3VLTextConfig
+) —
+Model configuration class with all the parameters of the model. Initializing with a config file does not
+load the weights associated with the model, only the configuration. Check out the
+from_pretrained()
+method to load the model weights.
+Text part of Qwen3VL, not a pure text-only model, as DeepStack integrates visual features into the early hidden states.
+This model inherits from
+PreTrainedModel
+. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)
+This model is also a PyTorch
+torch.nn.Module
+subclass.
+Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+and behavior.
+forward
+<
+source
+>
+(
+input_ids
+: typing.Optional[torch.LongTensor] = None
+attention_mask
+: typing.Optional[torch.Tensor] = None
+position_ids
+: typing.Optional[torch.LongTensor] = None
+past_key_values
+: transformers.cache_utils.Cache | None = None
+inputs_embeds
+: typing.Optional[torch.FloatTensor] = None
+use_cache
+: bool | None = None
+visual_pos_masks
+: typing.Optional[torch.Tensor] = None
+deepstack_visual_embeds
+: list[torch.Tensor] | None = None
+**kwargs
+: Unpack
+)
+→
+BaseModelOutputWithPast
+or
+tuple(torch.FloatTensor)
+Parameters
+input_ids
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of input sequence tokens in the vocabulary. Padding will be ignored by default.
+Indices can be obtained using
+AutoTokenizer
+. See
+PreTrainedTokenizer.encode()
+and
+PreTrainedTokenizer.
+call
+()
+for details.
+What are input IDs?
+attention_mask
+(
+torch.Tensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Mask to avoid performing attention on padding token indices. Mask values selected in
+[0, 1]
+:
+1 for tokens that are
+not masked
+,
+0 for tokens that are
+masked
+.
+What are attention masks?
+position_ids
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of positions of each input sequence tokens in the position embeddings. Selected in the range
+[0, config.n_positions - 1]
+.
+What are position IDs?
+past_key_values
+(
+~cache_utils.Cache
+,
+optional
+) —
+Pre-computed hidden-states (key and values in the self-attention blocks and in the cross-attention
+blocks) that can be used to speed up sequential decoding. This typically consists in the
+past_key_values
+returned by the model at a previous stage of decoding, when
+use_cache=True
+or
+config.use_cache=True
+.
+Only
+Cache
+instance is allowed as input, see our
+kv cache guide
+.
+If no
+past_key_values
+are passed,
+DynamicCache
+will be initialized by default.
+The model will output the same cache format that is fed as input.
+If
+past_key_values
+are used, the user is expected to input only unprocessed
+input_ids
+(those that don’t
+have their past key value states given to this model) of shape
+(batch_size, unprocessed_length)
+instead of all
+input_ids
+of shape
+(batch_size, sequence_length)
+.
+inputs_embeds
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+,
+optional
+) —
+Optionally, instead of passing
+input_ids
+you can choose to directly pass an embedded representation. This
+is useful if you want more control over how to convert
+input_ids
+indices into associated vectors than the
+model’s internal embedding lookup matrix.
+use_cache
+(
+bool
+,
+optional
+) —
+If set to
+True
+,
+past_key_values
+key value states are returned and can be used to speed up decoding (see
+past_key_values
+).
+visual_pos_masks
+(
+torch.Tensor
+of shape
+(batch_size, seqlen)
+,
+optional
+) —
+The mask of the visual positions.
+deepstack_visual_embeds
+(
+list[torch.Tensor]
+,
+optional
+) —
+The deepstack visual embeddings. The shape is (num_layers, visual_seqlen, embed_dim).
+The feature is extracted from the different visual encoder layers, and fed to the decoder
+hidden states. It’s from the paper DeepStack(
+https://arxiv.org/abs/2406.04334
+).
+Returns
+BaseModelOutputWithPast
+or
+tuple(torch.FloatTensor)
+A
+BaseModelOutputWithPast
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+Qwen3VLConfig
+) and inputs.
+The
+Qwen3VLTextModel
+forward method, overrides the
+__call__
+special method.
+Although the recipe for forward pass needs to be defined within this function, one should call the
+Module
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.
+last_hidden_state
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+) — Sequence of hidden-states at the output of the last layer of the model.
+If
+past_key_values
+is used only the last hidden-state of the sequences of shape
+(batch_size, 1, hidden_size)
+is output.
+past_key_values
+(
+Cache
+,
+optional
+, returned when
+use_cache=True
+is passed or when
+config.use_cache=True
+) — It is a
+Cache
+instance. For more details, see our
+kv cache guide
+.
+Contains pre-computed hidden-states (key and values in the self-attention blocks and optionally if
+config.is_encoder_decoder=True
+in the cross-attention blocks) that can be used (see
+past_key_values
+input) to speed up sequential decoding.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+Qwen3VLModel
+class
+transformers.
+Qwen3VLModel
+<
+source
+>
+(
+config
+)
+Parameters
+config
+(
+Qwen3VLModel
+) —
+Model configuration class with all the parameters of the model. Initializing with a config file does not
+load the weights associated with the model, only the configuration. Check out the
+from_pretrained()
+method to load the model weights.
+The bare Qwen3 Vl Model outputting raw hidden-states without any specific head on top.
+This model inherits from
+PreTrainedModel
+. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)
+This model is also a PyTorch
+torch.nn.Module
+subclass.
+Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+and behavior.
+forward
+<
+source
+>
+(
+input_ids
+: LongTensor = None
+attention_mask
+: typing.Optional[torch.Tensor] = None
+position_ids
+: typing.Optional[torch.LongTensor] = None
+past_key_values
+: transformers.cache_utils.Cache | None = None
+inputs_embeds
+: typing.Optional[torch.FloatTensor] = None
+pixel_values
+: typing.Optional[torch.Tensor] = None
+pixel_values_videos
+: typing.Optional[torch.FloatTensor] = None
+image_grid_thw
+: typing.Optional[torch.LongTensor] = None
+video_grid_thw
+: typing.Optional[torch.LongTensor] = None
+mm_token_type_ids
+: typing.Optional[torch.IntTensor] = None
+**kwargs
+: Unpack
+)
+→
+Qwen3VLModelOutputWithPast
+or
+tuple(torch.FloatTensor)
+Parameters
+input_ids
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of input sequence tokens in the vocabulary. Padding will be ignored by default.
+Indices can be obtained using
+AutoTokenizer
+. See
+PreTrainedTokenizer.encode()
+and
+PreTrainedTokenizer.
+call
+()
+for details.
+What are input IDs?
+attention_mask
+(
+torch.Tensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Mask to avoid performing attention on padding token indices. Mask values selected in
+[0, 1]
+:
+1 for tokens that are
+not masked
+,
+0 for tokens that are
+masked
+.
+What are attention masks?
+position_ids
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of positions of each input sequence tokens in the position embeddings. Selected in the range
+[0, config.n_positions - 1]
+.
+What are position IDs?
+past_key_values
+(
+~cache_utils.Cache
+,
+optional
+) —
+Pre-computed hidden-states (key and values in the self-attention blocks and in the cross-attention
+blocks) that can be used to speed up sequential decoding. This typically consists in the
+past_key_values
+returned by the model at a previous stage of decoding, when
+use_cache=True
+or
+config.use_cache=True
+.
+Only
+Cache
+instance is allowed as input, see our
+kv cache guide
+.
+If no
+past_key_values
+are passed,
+DynamicCache
+will be initialized by default.
+The model will output the same cache format that is fed as input.
+If
+past_key_values
+are used, the user is expected to input only unprocessed
+input_ids
+(those that don’t
+have their past key value states given to this model) of shape
+(batch_size, unprocessed_length)
+instead of all
+input_ids
+of shape
+(batch_size, sequence_length)
+.
+inputs_embeds
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+,
+optional
+) —
+Optionally, instead of passing
+input_ids
+you can choose to directly pass an embedded representation. This
+is useful if you want more control over how to convert
+input_ids
+indices into associated vectors than the
+model’s internal embedding lookup matrix.
+pixel_values
+(
+torch.Tensor
+of shape
+(batch_size, num_channels, image_size, image_size)
+,
+optional
+) —
+The tensors corresponding to the input images. Pixel values can be obtained using
+image_processor_class
+. See
+image_processor_class.__call__
+for details (
+processor_class
+uses
+image_processor_class
+for processing images).
+pixel_values_videos
+(
+torch.FloatTensor
+of shape
+(batch_size, num_frames, num_channels, frame_size, frame_size)
+,
+optional
+) —
+The tensors corresponding to the input video. Pixel values for videos can be obtained using
+video_processor_class
+. See
+video_processor_class.__call__
+for details (
+processor_class
+uses
+video_processor_class
+for processing videos).
+image_grid_thw
+(
+torch.LongTensor
+of shape
+(num_images, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each image in LLM.
+video_grid_thw
+(
+torch.LongTensor
+of shape
+(num_videos, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each video in LLM.
+mm_token_type_ids
+(
+torch.IntTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of input sequence tokens matching each modality. For example text (0), image (1), video (2).
+Multimodal token type ids can be obtained using
+AutoProcessor
+. See
+ProcessorMixin.
+call
+()
+for details.
+Returns
+Qwen3VLModelOutputWithPast
+or
+tuple(torch.FloatTensor)
+A
+Qwen3VLModelOutputWithPast
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+None
+) and inputs.
+The
+Qwen3VLModel
+forward method, overrides the
+__call__
+special method.
+Although the recipe for forward pass needs to be defined within this function, one should call the
+Module
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.
+last_hidden_state
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+) — Sequence of hidden-states at the output of the last layer of the model.
+If
+past_key_values
+is used only the last hidden-state of the sequences of shape
+(batch_size, 1, hidden_size)
+is output.
+past_key_values
+(
+Cache
+,
+optional
+, returned when
+use_cache=True
+is passed or when
+config.use_cache=True
+) — It is a
+Cache
+instance. For more details, see our
+kv cache guide
+.
+Contains pre-computed hidden-states (key and values in the self-attention blocks and optionally if
+config.is_encoder_decoder=True
+in the cross-attention blocks) that can be used (see
+past_key_values
+input) to speed up sequential decoding.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+rope_deltas
+(
+torch.LongTensor
+of shape
+(batch_size, )
+,
+optional
+) — The rope index difference between sequence length and multimodal rope.
+The attribute is deprecated and will be removed in v5.20, use
+model.base_model.rope_deltas
+instead.
+get_video_features
+<
+source
+>
+(
+pixel_values_videos
+: FloatTensor
+video_grid_thw
+: typing.Optional[torch.LongTensor] = None
+**kwargs
+: Unpack
+)
+→
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+Parameters
+pixel_values_videos
+(
+torch.FloatTensor
+of shape
+(batch_size, num_frames, num_channels, frame_size, frame_size)
+) —
+The tensors corresponding to the input video. Pixel values for videos can be obtained using
+Qwen3VLVideoProcessor
+. See
+Qwen3VLVideoProcessor.__call__()
+for details (
+Qwen3VLProcessor
+uses
+Qwen3VLVideoProcessor
+for processing videos).
+video_grid_thw
+(
+torch.LongTensor
+of shape
+(num_videos, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each video in LLM.
+Returns
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+A
+BaseModelOutputWithDeepstackFeatures
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+Qwen3VLConfig
+) and inputs.
+last_hidden_state
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+) — Sequence of hidden-states at the output of the last layer of the model.
+pooler_output
+(
+torch.FloatTensor
+of shape
+(batch_size, hidden_size)
+) — Last layer hidden-state of the first token of the sequence (classification token) after further processing
+through the layers used for the auxiliary pretraining task. E.g. for BERT-family of models, this returns
+the classification token after processing through a linear layer and a tanh activation function. The linear
+layer weights are trained from the next sentence prediction (classification) objective during pretraining.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+deepstack_features
+(
+List[torch.FloatTensor]
+,
+optional
+) — List of hidden-states (feature maps) from deepstack layers.
+get_image_features
+<
+source
+>
+(
+pixel_values
+: FloatTensor
+image_grid_thw
+: typing.Optional[torch.LongTensor] = None
+**kwargs
+: Unpack
+)
+→
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+Parameters
+pixel_values
+(
+torch.FloatTensor
+of shape
+(batch_size, num_channels, image_size, image_size)
+) —
+The tensors corresponding to the input images. Pixel values can be obtained using
+Qwen2VLImageProcessor
+. See
+Qwen2VLImageProcessor.__call__()
+for details (
+Qwen3VLProcessor
+uses
+Qwen2VLImageProcessor
+for processing images).
+image_grid_thw
+(
+torch.LongTensor
+of shape
+(num_images, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each image in LLM.
+Returns
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+A
+BaseModelOutputWithDeepstackFeatures
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+Qwen3VLConfig
+) and inputs.
+last_hidden_state
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+) — Sequence of hidden-states at the output of the last layer of the model.
+pooler_output
+(
+torch.FloatTensor
+of shape
+(batch_size, hidden_size)
+) — Last layer hidden-state of the first token of the sequence (classification token) after further processing
+through the layers used for the auxiliary pretraining task. E.g. for BERT-family of models, this returns
+the classification token after processing through a linear layer and a tanh activation function. The linear
+layer weights are trained from the next sentence prediction (classification) objective during pretraining.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+deepstack_features
+(
+List[torch.FloatTensor]
+,
+optional
+) — List of hidden-states (feature maps) from deepstack layers.
+Qwen3VLForConditionalGeneration
+class
+transformers.
+Qwen3VLForConditionalGeneration
+<
+source
+>
+(
+config
+)
+forward
+<
+source
+>
+(
+input_ids
+: LongTensor = None
+attention_mask
+: typing.Optional[torch.Tensor] = None
+position_ids
+: typing.Optional[torch.LongTensor] = None
+past_key_values
+: transformers.cache_utils.Cache | None = None
+inputs_embeds
+: typing.Optional[torch.FloatTensor] = None
+labels
+: typing.Optional[torch.LongTensor] = None
+pixel_values
+: typing.Optional[torch.Tensor] = None
+pixel_values_videos
+: typing.Optional[torch.FloatTensor] = None
+image_grid_thw
+: typing.Optional[torch.LongTensor] = None
+video_grid_thw
+: typing.Optional[torch.LongTensor] = None
+mm_token_type_ids
+: typing.Optional[torch.IntTensor] = None
+logits_to_keep
+: typing.Union[int, torch.Tensor] = 0
+**kwargs
+: Unpack
+)
+→
+Qwen3VLCausalLMOutputWithPast
+or
+tuple(torch.FloatTensor)
+Parameters
+input_ids
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of input sequence tokens in the vocabulary. Padding will be ignored by default.
+Indices can be obtained using
+AutoTokenizer
+. See
+PreTrainedTokenizer.encode()
+and
+PreTrainedTokenizer.
+call
+()
+for details.
+What are input IDs?
+attention_mask
+(
+torch.Tensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Mask to avoid performing attention on padding token indices. Mask values selected in
+[0, 1]
+:
+1 for tokens that are
+not masked
+,
+0 for tokens that are
+masked
+.
+What are attention masks?
+position_ids
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of positions of each input sequence tokens in the position embeddings. Selected in the range
+[0, config.n_positions - 1]
+.
+What are position IDs?
+past_key_values
+(
+~cache_utils.Cache
+,
+optional
+) —
+Pre-computed hidden-states (key and values in the self-attention blocks and in the cross-attention
+blocks) that can be used to speed up sequential decoding. This typically consists in the
+past_key_values
+returned by the model at a previous stage of decoding, when
+use_cache=True
+or
+config.use_cache=True
+.
+Only
+Cache
+instance is allowed as input, see our
+kv cache guide
+.
+If no
+past_key_values
+are passed,
+DynamicCache
+will be initialized by default.
+The model will output the same cache format that is fed as input.
+If
+past_key_values
+are used, the user is expected to input only unprocessed
+input_ids
+(those that don’t
+have their past key value states given to this model) of shape
+(batch_size, unprocessed_length)
+instead of all
+input_ids
+of shape
+(batch_size, sequence_length)
+.
+inputs_embeds
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+,
+optional
+) —
+Optionally, instead of passing
+input_ids
+you can choose to directly pass an embedded representation. This
+is useful if you want more control over how to convert
+input_ids
+indices into associated vectors than the
+model’s internal embedding lookup matrix.
+labels
+(
+torch.LongTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Labels for computing the masked language modeling loss. Indices should either be in
+[0, ..., config.vocab_size]
+or -100 (see
+input_ids
+docstring). Tokens with indices set to
+-100
+are ignored
+(masked), the loss is only computed for the tokens with labels in
+[0, ..., config.vocab_size]
+.
+pixel_values
+(
+torch.Tensor
+of shape
+(batch_size, num_channels, image_size, image_size)
+,
+optional
+) —
+The tensors corresponding to the input images. Pixel values can be obtained using
+Qwen2VLImageProcessor
+. See
+Qwen2VLImageProcessor.__call__()
+for details (
+Qwen3VLProcessor
+uses
+Qwen2VLImageProcessor
+for processing images).
+pixel_values_videos
+(
+torch.FloatTensor
+of shape
+(batch_size, num_frames, num_channels, frame_size, frame_size)
+,
+optional
+) —
+The tensors corresponding to the input video. Pixel values for videos can be obtained using
+Qwen3VLVideoProcessor
+. See
+Qwen3VLVideoProcessor.__call__()
+for details (
+Qwen3VLProcessor
+uses
+Qwen3VLVideoProcessor
+for processing videos).
+image_grid_thw
+(
+torch.LongTensor
+of shape
+(num_images, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each image in LLM.
+video_grid_thw
+(
+torch.LongTensor
+of shape
+(num_videos, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each video in LLM.
+mm_token_type_ids
+(
+torch.IntTensor
+of shape
+(batch_size, sequence_length)
+,
+optional
+) —
+Indices of input sequence tokens matching each modality. For example text (0), image (1), video (2).
+Multimodal token type ids can be obtained using
+AutoProcessor
+. See
+ProcessorMixin.
+call
+()
+for details.
+logits_to_keep
+(
+Union[int, torch.Tensor]
+,
+optional
+, defaults to
+0
+) —
+If an
+int
+, compute logits for the last
+logits_to_keep
+tokens. If
+0
+, calculate logits for all
+input_ids
+(special case). Only last token logits are needed for generation, and calculating them only for that
+token can save memory, which becomes pretty significant for long sequences or large vocabulary size.
+If a
+torch.Tensor
+, must be 1D corresponding to the indices to keep in the sequence length dimension.
+This is useful when using packed tensor format (single dimension for batch and sequence length).
+Returns
+Qwen3VLCausalLMOutputWithPast
+or
+tuple(torch.FloatTensor)
+A
+Qwen3VLCausalLMOutputWithPast
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+Qwen3VLConfig
+) and inputs.
+The
+Qwen3VLForConditionalGeneration
+forward method, overrides the
+__call__
+special method.
+Although the recipe for forward pass needs to be defined within this function, one should call the
+Module
+instance afterwards instead of this since the former takes care of running the pre and post processing steps while
+the latter silently ignores them.
+loss
+(
+torch.FloatTensor
+of shape
+(1,)
+,
+optional
+, returned when
+labels
+is provided) — Language modeling loss (for next-token prediction).
+logits
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, config.vocab_size)
+) — Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+past_key_values
+(
+Cache
+,
+optional
+, returned when
+use_cache=True
+is passed or when
+config.use_cache=True
+) — It is a
+Cache
+instance. For more details, see our
+kv cache guide
+.
+Contains pre-computed hidden-states (key and values in the self-attention blocks) that can be used (see
+past_key_values
+input) to speed up sequential decoding.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+rope_deltas
+(
+torch.LongTensor
+of shape
+(batch_size, )
+,
+optional
+) — The rope index difference between sequence length and multimodal rope.
+The attribute is deprecated and will be removed in v5.20, use
+model.base_model.rope_deltas
+instead.
+Example:
+Copied
+>>>
+from
+transformers
+import
+AutoProcessor, Qwen3VLForConditionalGeneration
+>>>
+model = Qwen3VLForConditionalGeneration.from_pretrained(
+"Qwen/Qwen3-VL-8B-Instruct"
+)
+>>>
+processor = AutoProcessor.from_pretrained(
+"Qwen/Qwen3-VL-8B-Instruct"
+)
+>>>
+messages = [
+    {
+"role"
+:
+"user"
+,
+"content"
+: [
+            {
+"type"
+:
+"image"
+,
+"image"
+:
+"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/pipeline-cat-chonk.jpeg"
+,
+            },
+            {
+"type"
+:
+"text"
+,
+"text"
+:
+"Describe the image."
+},
+        ],
+    }
+]
+>>>
+inputs = processor.apply_chat_template(
+    messages,
+    tokenize=
+True
+,
+    add_generation_prompt=
+True
+,
+    return_dict=
+True
+,
+    return_tensors=
+"pt"
+)
+>>>
+# Generate
+>>>
+generated_ids = model.generate(**inputs, max_new_tokens=
+1024
+)
+>>>
+generated_ids_trimmed = [out_ids[
+len
+(in_ids) :]
+for
+in_ids, out_ids
+in
+zip
+(inputs.input_ids, generated_ids)]
+>>>
+output_text = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=
+True
+, clean_up_tokenization_spaces=
+False
+)[
+0
+]
+>>>
+print
+(output_text)
+get_video_features
+<
+source
+>
+(
+pixel_values_videos
+: FloatTensor
+video_grid_thw
+: typing.Optional[torch.LongTensor] = None
+**kwargs
+: Unpack
+)
+→
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+Parameters
+pixel_values_videos
+(
+torch.FloatTensor
+of shape
+(batch_size, num_channels, image_size, image_size)
+) —
+The tensors corresponding to the input videos.
+video_grid_thw
+(
+torch.LongTensor
+of shape
+(num_videos, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each video in LLM.
+Returns
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+A
+BaseModelOutputWithDeepstackFeatures
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+Qwen3VLConfig
+) and inputs.
+last_hidden_state
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+) — Sequence of hidden-states at the output of the last layer of the model.
+pooler_output
+(
+torch.FloatTensor
+of shape
+(batch_size, hidden_size)
+) — Last layer hidden-state of the first token of the sequence (classification token) after further processing
+through the layers used for the auxiliary pretraining task. E.g. for BERT-family of models, this returns
+the classification token after processing through a linear layer and a tanh activation function. The linear
+layer weights are trained from the next sentence prediction (classification) objective during pretraining.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+deepstack_features
+(
+List[torch.FloatTensor]
+,
+optional
+) — List of hidden-states (feature maps) from deepstack layers.
+Example:
+Copied
+>>>
+from
+PIL
+import
+Image
+>>>
+from
+transformers
+import
+AutoProcessor, Qwen3VLForConditionalGeneration
+>>>
+model = Qwen3VLForConditionalGeneration.from_pretrained(
+"Qwen/Qwen3-VL-4B-Instruct"
+)
+>>>
+processor = AutoProcessor.from_pretrained(
+"Qwen/Qwen3-VL-4B-Instruct"
+)
+>>>
+messages = [
+...
+{
+...
+"role"
+:
+"user"
+,
+"content"
+: [
+...
+{
+"type"
+:
+"image"
+,
+"url"
+:
+"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/pipeline-cat-chonk.jpeg"
+},
+...
+{
+"type"
+:
+"text"
+,
+"text"
+:
+"Where is the cat standing?"
+},
+...
+]
+...
+},
+...
+]
+>>>
+inputs = processor.apply_chat_template(
+...
+messages,
+...
+tokenize=
+True
+,
+...
+return_dict=
+True
+,
+...
+return_tensors=
+"pt"
+,
+...
+add_generation_prompt=
+True
+...
+)
+>>>
+# Generate
+>>>
+generate_ids = model.generate(**inputs)
+>>>
+processor.batch_decode(generate_ids, skip_special_tokens=
+True
+)[
+0
+]
+get_image_features
+<
+source
+>
+(
+pixel_values
+: FloatTensor
+image_grid_thw
+: typing.Optional[torch.LongTensor] = None
+**kwargs
+: Unpack
+)
+→
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+Parameters
+pixel_values
+(
+torch.FloatTensor
+of shape
+(batch_size, num_channels, image_size, image_size)
+) —
+The tensors corresponding to the input images.
+image_grid_thw
+(
+torch.LongTensor
+of shape
+(num_images, 3)
+,
+optional
+) —
+The temporal, height and width of feature shape of each image in LLM.
+Returns
+BaseModelOutputWithDeepstackFeatures
+or
+tuple(torch.FloatTensor)
+A
+BaseModelOutputWithDeepstackFeatures
+or a tuple of
+torch.FloatTensor
+(if
+return_dict=False
+is passed or when
+config.return_dict=False
+) comprising various
+elements depending on the configuration (
+Qwen3VLConfig
+) and inputs.
+last_hidden_state
+(
+torch.FloatTensor
+of shape
+(batch_size, sequence_length, hidden_size)
+) — Sequence of hidden-states at the output of the last layer of the model.
+pooler_output
+(
+torch.FloatTensor
+of shape
+(batch_size, hidden_size)
+) — Last layer hidden-state of the first token of the sequence (classification token) after further processing
+through the layers used for the auxiliary pretraining task. E.g. for BERT-family of models, this returns
+the classification token after processing through a linear layer and a tanh activation function. The linear
+layer weights are trained from the next sentence prediction (classification) objective during pretraining.
+hidden_states
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_hidden_states=True
+is passed or when
+config.output_hidden_states=True
+) — Tuple of
+torch.FloatTensor
+(one for the output of the embeddings, if the model has an embedding layer, +
+one for the output of each layer) of shape
+(batch_size, sequence_length, hidden_size)
+.
+Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
+attentions
+(
+tuple(torch.FloatTensor)
+,
+optional
+, returned when
+output_attentions=True
+is passed or when
+config.output_attentions=True
+) — Tuple of
+torch.FloatTensor
+(one for each layer) of shape
+(batch_size, num_heads, sequence_length, sequence_length)
+.
+Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+heads.
+deepstack_features
+(
+List[torch.FloatTensor]
+,
+optional
+) — List of hidden-states (feature maps) from deepstack layers.
+Example:
+Copied
+>>>
+from
+PIL
+import
+Image
+>>>
+from
+transformers
+import
+AutoProcessor, Qwen3VLForConditionalGeneration
+>>>
+model = Qwen3VLForConditionalGeneration.from_pretrained(
+"Qwen/Qwen3-VL-4B-Instruct"
+)
+>>>
+processor = AutoProcessor.from_pretrained(
+"Qwen/Qwen3-VL-4B-Instruct"
+)
+>>>
+messages = [
+...
+{
+...
+"role"
+:
+"user"
+,
+"content"
+: [
+...
+{
+"type"
+:
+"image"
+,
+"url"
+:
+"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/pipeline-cat-chonk.jpeg"
+},
+...
+{
+"type"
+:
+"text"
+,
+"text"
+:
+"Where is the cat standing?"
+},
+...
+]
+...
+},
+...
+]
+>>>
+inputs = processor.apply_chat_template(
+...
+messages,
+...
+tokenize=
+True
+,
+...
+return_dict=
+True
+,
+...
+return_tensors=
+"pt"
+,
+...
+add_generation_prompt=
+True
+...
+)
+>>>
+# Generate
+>>>
+generate_ids = model.generate(**inputs)
+>>>
+processor.batch_decode(generate_ids, skip_special_tokens=
+True
+)[
+0
+]
+Update
+on GitHub
+←
+Qwen3-Omni-MoE
+Qwen3VLMoe
+→

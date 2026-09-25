@@ -1,0 +1,1176 @@
+
+
+===== PAGE 1 =====
+
+PP-OCRv5: A Specialized 5M-Parameter Model Rivaling Billion-Parameter
+Vision-Language Models on OCR Tasks
+Cheng Cui*
+Yubo Zhang*
+Ting Sun
+Xueqing Wang
+Hongen Liu
+Manhui Lin
+Yue Zhang
+Tingquan Gao
+Changda Zhou
+Jiaxuan Liu
+Zelun Zhang
+Jing Zhang
+Jun Zhang
+Yi Liu†
+PaddlePaddle Team, Baidu Inc.
+Abstract
+The advent of “OCR 2.0” and large-scale vision-language
+models (VLMs) has set new benchmarks in text recogni-
+tion. However, these unified architectures often come with
+significant computational demands, challenges in precise
+text localization within complex layouts, and a propen-
+sity for textual hallucinations.
+Revisiting the prevailing
+notion that model scale is the sole path to high accu-
+racy, this paper introduces PP-OCRv5, a meticulously op-
+timized, lightweight OCR system with merely 5 million pa-
+rameters. We demonstrate that PP-OCRv5 achieves per-
+formance competitive with many billion-parameter VLMs
+on standard OCR benchmarks, while offering superior lo-
+calization precision and reduced hallucinations. The cor-
+nerstone of our success lies not in architectural expansion
+but in a data-centric investigation. We systematically dis-
+sect the role of training data by quantifying three critical
+dimensions: data difficulty, data accuracy, and data diver-
+sity. Our extensive experiments reveal that with a sufficient
+volume of high-quality, accurately labeled, and diverse
+data, the performance ceiling for traditional, efficient two-
+stage OCR pipelines is far higher than commonly assumed.
+This work provides compelling evidence for the viability of
+lightweight, specialized models in the large-model era and
+offers practical insights into data curation for OCR. The
+source code and models are publicly available at https:
+//github.com/PaddlePaddle/PaddleOCR.
+1. Introduction
+The field of computer vision is increasingly dominated by
+large-scale models, particularly VLMs, which have demon-
+strated impressive generalist capabilities across a wide
+range of tasks [2, 14, 18, 24]. This trend of scaling model
+*The authors contributed equally.
+†Corresponding author (liuyi22@baidu.com).
+Figure 1. PP-OCRv5 vs. Vision-Language Models: 1-EditDist
+Accuracy and Parameter Size Comparison.
+size has naturally extended to OCR, with modern “OCR
+2.0” and VLM-based approaches promising an end-to-end
+solution for extracting text from complex, real-world im-
+ages. While the performance of these large models is aca-
+demically remarkable, the prevailing focus on scale often
+encounters significant practical limitations when deployed
+in real-world OCR scenarios, which demand not only high
+recognition accuracy but also precision, reliability, and effi-
+ciency.
+A primary challenge arises from the “generalist’s
+dilemma.” Unified VLM architectures, although designed
+for diverse tasks, often lack the specialized capabilities
+needed for high-precision OCR. This manifests in three crit-
+ical limitations: (1) Imprecise Localization: These mod-
+els often fail to produce the tight, accurate bounding boxes
+essential for document analysis, instead providing coarse
+region-of-interest indicators.
+(2) Hallucination: In com-
+plex layouts, models can confidently “hallucinate,” gener-
+ating plausible yet incorrect text. This presents a critical
+arXiv:2603.24373v1  [cs.CV]  25 Mar 2026
+
+
+===== PAGE 2 =====
+
+vulnerability for data-sensitive applications. (3) Computa-
+tional Inefficiency: Massive parameter counts render these
+models impractical for deployment in resource-constrained
+environments or for services demanding high-throughput,
+low-latency processing. Collectively, these issues create a
+significant gap between large-scale model capabilities and
+industrial demands for fast, accurate, and reliable OCR.
+These challenges inherent in large-scale models natu-
+rally steer the focus back towards lightweight, specialized
+OCR systems. However, the development of conventional
+small OCR models has also faced its own set of challenges,
+often hitting a performance plateau. A significant body of
+research has concentrated on model-centric innovations, in-
+troducing more sophisticated architectures for text detec-
+tion and recognition [6, 22]. While these architectural ad-
+vancements have pushed benchmark performance, they of-
+ten yield diminishing returns and are fundamentally con-
+strained by the quality and scale of the training data. On the
+data front, while the use of synthetic data [9] and augmen-
+tation is standard practice, these methods are frequently ap-
+plied in an ad-hoc manner, lacking a systematic framework
+to guide the curation and scaling of data. This results in
+models that, despite performing well on academic datasets,
+struggle to generalize to the vast “long-tail” of real-world
+scenarios, ultimately limiting their industrial applicability.
+This exposes a critical research gap:
+the need for
+a methodology that can unlock the full potential of
+lightweight models, pushing their performance ceiling to
+rival that of large-scale counterparts. We therefore recon-
+sider the prevailing model-centric narrative and ask a funda-
+mental question: Can a meticulously optimized, lightweight
+model rival these giants in OCR scenarios? We posit that
+the performance ceiling of a model is determined not only
+by its parameter count but, more critically, by the diffi-
+culty, accuracy [23], and diversity of its training data. This
+leads us back to a foundational principle: Data-Centric
+AI [21, 26, 28]. We hypothesize that a specialized, efficient
+OCR model, when fueled by a massive, high-quality, and
+diverse dataset, can achieve performance comparable to, or
+even exceeding, its billion-parameter counterparts. To ex-
+plore this, we move beyond treating data as a monolithic en-
+tity and instead propose a principled framework to analyze
+and scale it along three key dimensions: (1) Data Difficulty,
+identified by model confidence scores to filter out noise and
+overly simplistic samples; (2) Data Accuracy, quantifying
+the impact of label noise; and (3) Data Diversity, ensuring
+broad feature space coverage through systematic sampling.
+Guided by this framework, we develop PP-OCRv5, a
+highly efficient two-stage (detection + recognition) OCR
+system with a total of only 5 million parameters1. By apply-
+ing our data-centric methodology to a large-scale dataset,
+we systematically enhance its capabilities.
+Our compre-
+hensive experiments demonstrate that PP-OCRv5 achieves
+accuracy comparable to state-of-the-art billion-parameter
+VLMs on standard OCR benchmarks, while simultaneously
+providing superior localization precision, a drastic reduc-
+tion in hallucinations, and a fraction of the computational
+cost.Our main contributions are summarized as follows:
+• We present PP-OCRv5, a practical, lightweight, and eas-
+ily deployable OCR system that is highly efficient.
+• We propose a novel and systematic guiding principle for
+data-centric scaling in OCR, which analyzes and opti-
+mizes large-scale training data from the perspectives of
+difficulty, accuracy, and diversity. This guiding principle
+is not only applicable to the development of small OCR
+models but may also provide valuable insights for the de-
+velopment of any expert models.
+• We demonstrate that PP-OCRv5, optimized through our
+data-centric methodology, achieves competitive perfor-
+mance with billion-parameter VLMs while providing im-
+proved text localization precision, reduced computational
+cost, and lower susceptibility to hallucinations—making
+it a practical and efficient alternative for production OCR
+deployments.
+2. Related Work
+This section reviews key advancements in the field of OCR,
+focusing on two primary research directions: the conven-
+tional two-stage OCR pipeline, which has become an in-
+dustry standard, and the emerging application of large-scale
+Vision-Language Models (VLMs) for text-related tasks.
+2.1. Specialized Two-Stage OCR Systems
+The two-stage pipeline, which decouples text detection and
+recognition, remains a cornerstone of high-performance
+OCR due to its proven accuracy and efficiency, making it
+the de facto standard in industrial applications. This ap-
+proach typically combines a segmentation-based detector
+with a Transformer-based recognizer. For detection, meth-
+ods like DBNet [15] and its variants (e.g., PANet [25]) are
+favored for their robustness in handling arbitrarily shaped
+text via a differentiable binarization module. For recogni-
+tion, the field has evolved from the seminal CRNN [22] to
+powerful Vision Transformer architectures like SVTR [5],
+which excel at capturing long-range dependencies.
+The
+PP-OCR series [4, 13], which serves as the foundation
+for our work, exemplifies this evolution by integrating
+these advanced components with aggressive efficiency-
+driven optimizations, such as lightweight backbones (e.g.,
+PP-LCNet [3]) and knowledge distillation. However, these
+prior efforts primarily focused on architectural and algorith-
+mic enhancements, treating the training data as a largely
+1PP-OCRv5 is released in two variants: PP-OCRv5 mobile (5M pa-
+rameters), which serves as the primary subject of this paper, and PP-
+OCRv5 server, a higher-capacity variant. Unless otherwise specified, all
+mentions of “PP-OCRv5” in this paper refer to PP-OCRv5 mobile.
+
+
+===== PAGE 3 =====
+
+static component. Our PP-OCRv5 builds upon this strong
+lineage but represents a paradigm shift, moving the focus
+from architectural tweaks to a systematic, data-centric scal-
+ing methodology, which is the core contribution of this
+work.
+2.2. Vision-Language Models for OCR
+Recently, large-scale VLMs such as GPT-4V [27], Gem-
+ini [24], and Qwen-VL [2] have demonstrated unprece-
+dented multimodal understanding capabilities. Pre-trained
+on vast amounts of image-text data, these models can per-
+form OCR in a zero-shot or few-shot manner and compre-
+hend the semantic and layout context of text within a docu-
+ment. This makes them exceptionally suited for high-level
+tasks like Document AI and Visual Question Answering
+(VQA), e.g., directly answering “What is the total amount
+on the invoice?” from an image.
+However, when VLMs are applied to core OCR tasks
+that demand high precision, their inherent limitations be-
+come apparent.
+First, coarse localization: VLMs typi-
+cally do not output accurate polygon-level bounding boxes,
+which is unacceptable for applications requiring structured
+data extraction.
+Second, text hallucination: In complex
+or low-quality images, VLMs may generate “hallucinated”
+text that does not exist in the image, compromising the re-
+liability of the output. Finally, prohibitive computational
+cost: Their massive model size and immense inference re-
+quirements make them difficult to deploy at scale, espe-
+cially on edge devices or in high-throughput cloud services.
+While some specialized models designed for document un-
+derstanding (e.g., Donut [11], Pix2Struct [12]) have par-
+tially mitigated these issues, they still lag significantly be-
+hind lightweight, specialized models in terms of deploy-
+ment efficiency and cost, as they often remain as sizable,
+monolithic architectures that lack the granular optimization
+of a dedicated two-stage pipeline.
+In summary, while VLMs have opened new frontiers,
+their challenges in accuracy, reliability, and efficiency for
+core OCR tasks underscore the continued importance and
+practical value of optimizing lightweight, efficient, and pro-
+fessional OCR solutions like PP-OCRv5.
+3. Method
+We propose PP-OCRv5,
+a highly efficient two-stage
+OCR system that systematically enhances model capabil-
+ity through data-centric scaling principles. As illustrated
+in Figure 2, our framework is built on two pillars: (1) a
+lightweight model architecture inherited from PP-OCRv4,
+and (2) a novel, large-scale data curation and optimiza-
+tion process.
+Given the strong performance of the PP-
+OCRv4 text detection model, the primary focus of the PP-
+OCRv5 upgrade was on augmenting the training data for
+the text recognition model to address challenging cases.
+Consequently, the data construction methodologies detailed
+in Section 3.2 pertain specifically to the text recognition
+model.
+3.1. Lightweight Model Architecture Design
+Our architecture, summarized in Figure 2(a), follows the
+established and effective two-stage pipeline of PP-OCRv4.
+This design naturally incorporates a strong prior: textual in-
+formation is predominantly organized in lines. The pipeline
+comprises a dedicated text detection model for locating text-
+line regions, and a text recognition model for decoding the
+content of the cropped lines. This division of labor simpli-
+fies the task for each model, allowing both to remain highly
+lightweight and efficient without sacrificing performance.
+3.1.1. Text Detection.
+Our text detection module is built upon the DB algo-
+rithm [15] for robust text localization. It employs the PP-
+LCNetV3 backbone for efficient feature extraction.
+The
+network leverages a large kernel PAN [25] structure as
+its neck, which is designed to capture features with a
+large receptive field, and a residual squeeze-and-excitation
+FPN [16] that incorporates residual attention modules for
+multi-scale feature fusion.
+3.1.2. Text Recognition.
+The
+recognition
+model
+adopts
+SVTR LCNet
+[5],
+a
+lightweight hybrid architecture that combines the strengths
+of SVTR framework with PP-LCNetV3 backbone.
+The
+model employs the GTC [10] (Guided Training of CTC [8])
+strategy, where an attention-based decoder guides the CTC
+training process, enabling more effective sequence model-
+ing and alignment. This approach leverages the comple-
+mentary advantages of attention mechanisms for global de-
+pendency modeling and CTC for efficient sequence recog-
+nition. The integrated design ensures superior recognition
+accuracy for various text patterns while optimizing for de-
+ployment efficiency in resource-constrained environments.
+3.2. Large-scale Data Curation and Optimization
+To systematically optimize the training data for the PP-
+OCRv5 recognition model, we decompose the data along
+two principal dimensions: data quality and data quantity.
+With respect to data quality, we further abstract it into three
+key attributes: Data Difficulty, Data Accuracy, and Data
+Diversity. For each attribute, we designed targeted exper-
+iments to quantitatively validate its impact on model ac-
+curacy, providing strong empirical support for developing
+ultra-lightweight yet high-precision text recognition mod-
+els. In the following, we elaborate on the definitions and
+construction methodologies for each attribute. The overall
+workflow is depicted in Figure 2(b).
+
+
+===== PAGE 4 =====
+
+Figure 2. Overview of the PP-OCRv5 Framework: (a) Lightweight model architecture design; (b) Large-scale data construction and
+optimization strategies; (c) Distribution of training data across 22.6M samples; (d) Comparative performance of the PP-OCR series across
+multiple scenarios.
+3.2.1. Data Difficulty
+To quantify data difficulty, we first train a bootstrap recog-
+nition model on an initial 4M-sample dataset, then apply
+it to candidate text lines. Each sample receives a confi-
+dence score c ∈[0, 1], computed as the average character-
+level softmax probability across the predicted sequence. A
+high score (e.g. c > 0.97) indicates a visually simple text
+line, while a low score (e.g. c < 0.80) typically signals ei-
+ther a genuinely hard sample or a mislabeled one. Sam-
+ples are then ranked by c to yield a continuous difficulty
+spectrum. Our ablation reveals a clear unimodal relation-
+ship: training on samples from the [0.95, 0.97] range—
+challenging enough to provide informative gradients yet re-
+liably labeled—yields the best performance, which we term
+the “sweet spot.” This finding directly guided our final data
+sampling strategy.
+3.2.2. Data Accuracy
+To evaluate our model’s robustness to the label errors com-
+monly found in real-world data, we conducted a controlled
+experiment with synthetic noise. Starting from a perfectly
+clean dataset, we created several training sets by inject-
+ing noise at predefined rates (e.g. 5%, 10%, 15%). The
+noise was introduced by randomly selecting a percentage of
+samples and corrupting their labels, replacing 1-3 charac-
+ters with random characters from the model’s vocabulary.
+This setup isolates the impact of label accuracy by keeping
+the image data distribution constant, allowing us to directly
+measure the performance degradation caused solely by la-
+bel noise. This result provides a reference for determining
+the acceptable level of data accuracy in training datasets.
+3.2.3. Data Diversity
+Data diversity reflects the breadth of the visual feature space
+covered by the training corpus. As PP-OCRv5 targets not
+only document scenarios but also diverse wild scenes, we
+employ the visual encoder of CLIP [20] as our feature ex-
+tractor. Unlike domain-specific encoders, CLIP’s general
+visual representations capture the semantic and stylistic va-
+riety inherent in real-world scenes (e.g. text on a product
+label vs. a highway sign vs. a handwritten note), ensur-
+ing broad visual distribution coverage beyond merely vary-
+ing text content. The extracted features are clustered into
+1,000 groups via K-Means [1], where each cluster approx-
+imates a distinct visual pattern.
+To isolate the effect of
+diversity from quantity, we construct five training sets of
+identical size (600k samples) by sampling uniformly from
+200, 400, 600, 800, and all 1,000 clusters, respectively—
+increasing feature-space coverage while holding volume
+constant. This design enables a controlled measurement of
+
+
+===== PAGE 5 =====
+
+0.6-0.7
+0.7-0.8
+0.8-0.85
+0.85-0.9
+0.9-0.93
+0.93-0.95
+0.95-0.97
+0.97-0.99
+0.99-1.0
+Confidence Score Range
+0.60
+0.62
+0.64
+0.66
+0.68
+0.70
+Accuracy
+Peak: 0.6843
+0.65
+0.70
+0.75
+0.80
+0.85
+0.90
+0.95
+Confidence Score
+(a) Impact of Data Difficulty on PP-OCRv5
+0
+5
+10
+15
+20
+Label Error Rate (%)
+0.700
+0.705
+0.710
+0.715
+0.720
+0.725
+Accuracy
+Mean Accuracy: 0.7121
+Standard Deviation: ±0.0047
+20%
+0%
+Label Error Rate (%)
+(b) Impact of Data Accuracy on PP-OCRv5
+200
+400
+600
+800
+1000
+Number of K-means Clusters
+0.58
+0.60
+0.62
+0.64
+0.66
+Accuracy
+Peak: 0.6398
++3.7%
++0.5%
++1.8%
++2.8%
+Trend line (r=0.976, p=0.00440)
+200
+300
+400
+500
+600
+700
+800
+900
+1000
+Number of Clusters
+(c) Impact of Data Diversity on PP-OCRv5
+100
+200
+300
+400
+500
+Training Data Quantity (10,000s)
+0.64
+0.66
+0.68
+0.70
+0.72
+0.74
+0.76
+0.78
+0.80
+Accuracy
++8.1%
++3.6%
++1.6%
++2.7%
+Logarithmic fit
+Extrapolation
+100
+150
+200
+250
+300
+350
+400
+450
+500
+Data Quantity (10,000s)
+(d) Impact of Data Quantity on PP-OCRv5
+Figure 3. Comprehensive analysis of training data characteristics. Our key findings include: (a) A “sweet spot” of medium-difficulty data
+is most effective; (b) The model exhibits remarkable robustness to label noise; (c) Data diversity is paramount for performance; (d) Model
+accuracy scales nearly linearly with data quantity.
+diversity’s contribution to model generalization.
+The methodologies for Data Difficulty, Data Accuracy,
+and Data Diversity described above constitute a systematic
+experimental framework for acquiring high-quality train-
+ing data. Through rigorous comparative analysis, we dis-
+till generalizable insights into data quality requirements for
+small-parameter models.
+By applying these data-centric
+strategies specifically to the development of PP-OCRv5, we
+constructed a refined training dataset with the distribution
+shown in Figure 2(c) and scaled the approach to larger vol-
+umes, ultimately obtaining the high-quality data essential
+for effective model training. As shown in Figure 2(d), PP-
+OCRv5 achieves the best accuracy in the series, demonstrat-
+ing the effectiveness of our data-centric approach compared
+to previous versions.
+4. Experiments
+In this section, we present a rigorous evaluation of our data-
+centric framework and the resulting PP-OCRv5 model. All
+models in our ablation studies are trained and evaluated un-
+der consistent settings to ensure a fair comparison. Specif-
+ically, all experiments are conducted on 16 NVIDIA V100
+GPUs with a batch size of 128. The models are trained for
+100 epochs using the cosine learning rate scheduler, starting
+with a base learning rate of 0.0005 and 5 epochs of linear
+warm-up.
+We first conduct in-depth ablation studies to quantita-
+tively validate the impact of each dimension in our proposed
+framework—data difficulty, data accuracy, and data diver-
+sity—along with an investigation into data scaling laws
+(Section 4.1).
+The empirical insights from these experi-
+ments directly informed the construction of our final, large-
+scale training dataset (Section 4.2). Finally, we demonstrate
+the highly competitive performance of the final PP-OCRv5
+model through extensive comparisons against its predeces-
+sor and a suite of leading, large-scale, billion-parameter
+Vision-Language Models (VLMs) (Section 4.3), while also
+highlighting its capabilities alongside notable efficiency.
+
+
+===== PAGE 6 =====
+
+4.1. Ablation Studies on Data Curation Strategy
+To validate the effectiveness of the key components in our
+data curation framework, we conducted numerous detailed
+experiments based on the methods described in section 3.2,
+and the corresponding experimental results will be pre-
+sented below.
+4.1.1. The Impact of Data Difficulty
+To validate our confidence-based difficulty ranking, we
+assessed its impact on model performance.
+We parti-
+tioned a 600k data subset into nine bins according to their
+pre-computed confidence scores and trained a PP-OCRv5
+model independently on each. The results, illustrated in
+Figure 3a, reveal a distinct unimodal relationship.
+Performance is suboptimal on low-confidence samples
+(< 0.8), likely due to a higher prevalence of label noise.
+Conversely, accuracy peaks at 0.6843 in the 0.95-0.97 con-
+fidence range, which we identify as the “sweet spot” con-
+taining challenging yet correctly labeled samples. Notably,
+performance degrades on the highest-confidence samples
+(> 0.97), suggesting these trivial examples contribute min-
+imally to model generalization.
+This finding leads to a crucial insight for data strat-
+egy:
+blindly increasing dataset size is not the optimal
+path to improved model performance. Instead, curating a
+dataset from a ‘sweet spot’ of confidence—avoiding both
+the noisiest low-confidence samples and the most trivial
+high-confidence ones—is key. This selective approach en-
+ables the training of a more robust and generalizable model
+on a smaller, more efficient dataset, thereby significantly re-
+ducing computational costs and training time without sac-
+rificing capability. As shown in Table 1, the final dataset
+is deliberately concentrated in the 0.95–0.97 confidence
+range (48.5%), reflecting the empirically validated “sweet
+spot,” while retaining a modest proportion of harder sam-
+ples (< 0.90, 13.6% combined) to maintain robustness.
+Score Range Ratio Description
+< 0.80
+3.2%
+Hard / Ambiguous
+0.80-0.90
+10.4% Challenging
+0.90-0.95
+25.1% High Quality
+0.95-0.97
+48.5% Sweet Spot (Optimal)
+> 0.97
+12.8% Simple (Stability)
+Table 1. Confidence Score Distribution of the 22.6M Training Set.
+4.1.2. The Impact of Data Accuracy
+To quantify the model’s tolerance to label errors, we ex-
+ecuted the synthetic noise experiment described in our
+methodology. The results, presented in Figure 3b, reveal
+the model’s exceptional resilience.
+Specifically, as the label accuracy was systematically re-
+duced from 100% (a pristine dataset) to 80% (a 20% corrup-
+tion rate), the model’s recognition accuracy only decreased
+Category
+Size (10,000s)
+1. Printed & General Scenes
+Printed Chinese
+5,000
+Printed English
+2,390
+General Scenes
+4,010
+Single Characters
+540
+Special Formats
+50
+2. Handwritten
+Handwritten Chinese
+2,200
+Handwritten English
+1,000
+3. Cross-lingual & Scripts
+JP (Japanese)
+3,510
+Traditional Chinese
+2,390
+Ancient Books
+960
+4. Challenging Variations
+Confusable Characters
+100
+Pinyin
+70
+Rare Characters
+280
+Vertical Text
+30
+Artistic Text
+1.5
+Emoji
+20
+Total Dataset Size
+22,551.5
+Table 2. Statistics of the PP-OCRv5 training dataset. The data is
+categorized into four major groups, with a total of approximately
+22.6M samples.
+from 0.7188 to 0.7055. This represents a performance drop
+of merely 1.33 percentage points, despite a substantial in-
+crease in label noise. This remarkable stability suggests
+that the model learns robust visual features from the image
+content itself, effectively mitigating the impact of incorrect
+supervisory signals.
+This characteristic leads to an important conclusion:
+when training such small models, we can tolerate some
+noise in the labels.
+This makes it possible for large
+vision-language models to automatically annotate massive
+datasets—although these models may occasionally produce
+some unusual errors during the annotation process, the error
+rate does not significantly affect the accuracy of the small
+model. As a result, the cost of data annotation for training
+small models can be greatly reduced.
+4.1.3. The Impact of Data Diversity
+We executed the data diversity experiment to isolate the im-
+pact of feature richness while keeping data volume con-
+stant. The results, depicted in Figure 3c, establish a clear
+and monotonic relationship between the number of source
+clusters and model accuracy. As the diversity of the 600k
+training set increased from 200 to 1000 clusters, the model’s
+accuracy rose substantially from 0.5860 to 0.6398, a gain of
+5.38 percentage points.
+This finding highlights a fundamental principle of effi-
+
+
+===== PAGE 7 =====
+
+Model
+Weighted Acc.
+Scenario-specific Accuracy (%)
+Handwritten
+Printed
+TC-CN
+Ancient
+JP
+Confus.
+Gen.
+Pinyin
+Vert.
+Art.
+CN
+EN
+CN
+EN
+PP-OCRv3
+42.5
+12.5
+22.2
+72.9
+77.0
+13.5
+17.1
+27.6
+33.2
+73.1
+21.3
+44.5
+42.9
+PP-OCRv4
+53.0
+29.8
+25.5
+83.9
+66.0
+32.2
+25.9
+47.2
+46.0
+81.1
+25.9
+59.2
+55.6
+PP-OCRv5
+80.1
+41.7
+49.4
+86.1
+87.5
+72.0
+57.9
+75.8
+55.7
+77.0
+72.5
+80.9
+54.0
+Table 3. Text recognition accuracy (%) of PP-OCR series models on our in-house benchmark, a comprehensive multi-scenario benchmark.
+The weighted accuracy (Weighted Acc.) is the primary overall metric. PP-OCRv5 demonstrates superior robustness across most scenarios.
+Red and blue cells indicate the best and second-best results per column, respectively. Bold values highlight PP-OCRv5 results.
+Abbreviations: CN: Chinese, EN: English, TC: Traditional Chinese, JP: Japanese, Gen.: General Scenes, Confus.: Confusable, Vert.: Vertical, Art.:
+Artistic.
+cient model training: feature diversity, not mere data vol-
+ume, is the true engine of generalization.
+Our results
+demonstrate that a model’s performance ceiling is deter-
+mined by the breadth of the feature space it has been ex-
+posed to. Simply accumulating more samples from famil-
+iar patterns leads to diminishing returns, as the model gains
+little new information. In contrast, strategically acquiring
+data to cover novel feature clusters forces the model to learn
+more robust and comprehensive representations. This estab-
+lishes a clear directive for data strategy: prioritize diversity-
+driven acquisition over volume-centric accumulation.This
+principle guided the curation of our final 22.6M dataset.
+4.1.4. The Impact of Data Quantity
+Having established the foundational role of data diversity,
+we next investigated its synergistic relationship with data
+quantity. We trained the model on datasets of increasing
+scale, from 1 million to 5 million samples, ensuring each
+subset was drawn from our established diverse data pool.
+As illustrated in Figure 3d, quintupling the training data
+resulted in a massive 11.3-point leap in accuracy, from
+0.6707 to 0.7838. This nearly linear improvement demon-
+strates that diversity unlocks the potential of scale; a model
+that has learned a robust representation from a diverse fea-
+ture space possesses a strong base, allowing it to effectively
+consolidate and fine-tune its knowledge with more exam-
+ples. This result does not contradict our previous finding
+but rather complements it, providing a clear rationale for a
+two-fold data strategy: first, establish broad feature-space
+coverage, and second, scale the data volume within that di-
+verse foundation to maximize model performance.
+4.2. The PP-OCRv5 Training Dataset
+Guided by the insights from our comprehensive data ex-
+periments, we constructed the final 22.6M training dataset,
+which serves as the cornerstone for PP-OCRv5’s perfor-
+mance. The composition of this dataset is not arbitrary but
+a direct implementation of our empirically validated data-
+centric principles.
+Our investigation into data difficulty, accuracy, diver-
+sity, and scale provided a clear blueprint.
+To broaden
+PP-OCRv5’s application scope, we incorporated a multi-
+source composition covering diverse scenarios from general
+print to challenging artistic text. Crucially, our diversity
+experiment proved that feature-space richness within each
+category is paramount. Therefore, for each category, we
+sourced data with a wide variety of intrinsic features. The
+data scale experiment then justified expanding this high-
+quality, feature-rich collection to 22.6M samples.
+As detailed in Table 2, the dataset is strategically assem-
+bled, with data volume distributed according to task diffi-
+culty and practical needs. During training, dynamic sam-
+pling strategies (e.g., oversampling) are applied to balance
+learning across different categories, ensuring the model ef-
+fectively learns from all types of data. This approach allows
+us to build a model that is both highly competent in core do-
+mains and robust across a wide array of long-tail scenarios.
+4.3. Comparison with State-of-the-Art
+To comprehensively evaluate the performance of our model,
+we conduct a series of rigorous experiments. We compare
+our model against its direct predecessors on our in-house
+evaluate dataset, assess its capabilities relative to lead-
+ing trillion-parameter scale vision-language models, and fi-
+nally, benchmark it against a wide array of specialized tools
+and large models on the public OmniDocBench dataset.
+4.3.1. Performance on In-house Benchmark
+To quantify the advancements of our latest model, we con-
+ducted a rigorous comparison of the PP-OCR series, eval-
+uating our new PP-OCRv5 against its immediate predeces-
+sors, PP-OCRv4 and PP-OCRv3 The evaluation was per-
+formed on our comprehensive in-house benchmark, which
+is specifically designed to cover a wide array of challeng-
+ing real-world text recognition scenarios. This benchmark
+includes 12 distinct categories, ranging from handwritten
+and printed text in multiple languages to difficult cases like
+vertical text, artistic fonts, and confusable characters. The
+performance is measured by recognition accuracy (%), with
+detailed results presented in Table 3.
+
+
+===== PAGE 8 =====
+
+Model Type
+Model
+Params
+ALL avg↓
+Language
+Text Background
+Text Rotate
+EN↓
+ZH↓
+Mixed↓
+White↓
+Single↓
+Multi↓
+Normal↓
+Rotate90↓
+Horizontal↓
+Rotate270↓
+Vision Language
+Models
+Qwen3-VL
+235B
+0.026
+0.016
+0.026
+0.034
+0.023
+0.023
+0.030
+0.023
+0.046
+0.029
+0.170
+Qwen2-VL
+72B
+0.173
+0.072
+0.274
+0.286
+0.234
+0.155
+0.148
+0.223
+0.273
+0.067
+0.721
+InternVL2
+76B
+0.115
+0.074
+0.155
+0.242
+0.113
+0.352
+0.269
+0.132
+0.610
+0.595
+0.907
+GPT4o
+-
+0.122
+0.020
+0.224
+0.125
+0.167
+0.140
+0.220
+0.168
+0.115
+0.132
+0.718
+Pipeline Tools
+&
+Expert Vision
+Models
+Tesseract-OCR
+-
+0.324
+0.096
+0.551
+0.250
+0.439
+0.328
+0.331
+0.426
+0.117
+0.984
+0.969
+EasyOCR
+-
+0.329
+0.260
+0.398
+0.445
+0.366
+0.287
+0.388
+0.360
+0.970
+0.926
+0.997
+Surya
+-
+0.090
+0.057
+0.123
+0.164
+0.093
+0.186
+0.235
+0.104
+0.634
+0.255
+0.767
+Mathpix
+-
+0.137
+0.033
+0.240
+0.261
+0.185
+0.121
+0.166
+0.180
+0.038
+0.638
+0.185
+GOT-OCR
+0.58B
+0.077
+0.041
+0.112
+0.135
+0.092
+0.052
+0.155
+0.091
+0.562
+0.097
+0.966
+PP-OCRv5
+5M
+0.067
+0.058
+0.076
+0.103
+0.070
+0.081
+0.095
+0.072
+0.012
+0.058
+0.139
+Table 4. Component-level OCR text recognition evaluation on OmniDocBench. Results are reported by OmniDocBench [19] except PP-
+OCRv5 and Qwen3-VL. Red and blue cells indicate the best and second-best results per column, respectively. Bold values highlight
+PP-OCRv5 results.
+In summary, PP-OCRv5 delivers a significant leap in
+recognition performance, raising the overall weighted av-
+erage accuracy from 53.0% (PP-OCRv4) to 80.1%. The
+model achieves substantial breakthroughs in challenging
+scenarios such as handwriting, multilingual text, special-
+ized formats, and complex layouts, with notable gains in
+handwritten English, Traditional Chinese, Japanese, Pinyin,
+and ancient book texts. Core capabilities in printed text
+recognition, especially for printed English, have also been
+markedly enhanced.
+4.3.2. Performance on OmniDocBench
+To objectively evaluate performance, we conducted a com-
+prehensive comparison on the OmniDocBench [19] pub-
+lic benchmark. Unlike OCRBench [7, 17], which evalu-
+ates OCR capabilities of LMMs on high-level tasks like
+VQA, OmniDocBench is more fitting for benchmarking PP-
+OCRv5 as a specialized text recognition engine, with its fo-
+cus purely on recognition accuracy. Our evaluation includes
+PP-OCRv5, other leading specialized OCR engines, and the
+latest large-scale VLMs such as GPT-4o and Qwen2-VL-
+72B. We employ the Normalized Edit Distance as the core
+metric, where lower scores signify superior performance.
+As shown in Table 4, PP-OCRv5 achieves state-of-the-
+art performance among specialized OCR models on the
+overall metric (ALL avg) with an average edit distance of
+0.067. While very-large-scale multimodal models (VLMs)
+like Qwen3-VL achieve even lower scores, PP-OCRv5
+demonstrates a favorable balance of high accuracy and prac-
+tical efficiency for dedicated OCR tasks. The superiority of
+PP-OCRv5 is particularly evident in:
+• Multi-language Processing: PP-OCRv5 maintains con-
+sistent performance across English (0.058), Chinese
+(0.076), and mixed-language (0.103) texts
+• Challenging Layouts: The model demonstrates excep-
+tional robustness on rotated text (Rotate90: 0.012, Ro-
+tate270: 0.139), where VLMs and other OCR engines
+show significant degradation
+• Complex Backgrounds:
+PP-OCRv5 handles various
+background complexities effectively, outperforming com-
+petitors across all background types
+While VLMs demonstrate promising capability on stan-
+dard English text, they generally lack the high precision
+and robustness required for diverse and complex document
+OCR tasks. These results confirm that PP-OCRv5 serves
+as a highly effective and practical solution for real-world
+document recognition scenarios.
+5. Conclusion
+In this work, we demonstrate that a lightweight OCR model
+with only 5M parameters can rival 100B-parameter VLMs
+through a systematic, data-centric optimization strategy.
+The cornerstone of our success is not merely amassing
+large quantities of data, but a meticulous approach to curat-
+ing high-quality data. Through rigorous experimentation,
+we identified an optimal sample difficulty sweet-spot using
+prediction confidence, quantified the model’s resilience to
+label noise, and proved that feature diversity, measured via
+clustering, is a critical driver of performance independent
+of data volume. This methodology enabled PP-OCRv5 to
+achieve performance on par with leading large-scale mod-
+els, as evidenced by its strong results on OmniDocBench.
+Our findings challenge the prevailing “bigger is better”
+paradigm, demonstrating that compact specialized models,
+when trained on data carefully curated across difficulty, ac-
+curacy, and diversity, can close a significant part of the per-
+formance gap against orders-of-magnitude larger counter-
+parts—offering a clear and reproducible path toward OCR
+systems that are highly efficient, accurate, and readily de-
+ployable in real-world scenarios.
+
+
+===== PAGE 9 =====
+
+References
+[1] David Arthur and Sergei Vassilvitskii.
+k-means++: The
+advantages of careful seeding. Technical report, Stanford,
+2006. 4
+[2] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wenbin
+Ge, Sibo Song, Kai Dang, Peng Wang, Shijie Wang, Jun
+Tang, et al. Qwen2. 5-vl technical report. arXiv preprint
+arXiv:2502.13923, 2025. 1, 3
+[3] Cheng Cui, Tingquan Gao, Shengyu Wei, Yuning Du, Ruoyu
+Guo, Shuilong Dong, Bin Lu, Ying Zhou, Xueying Lv, Qi-
+wen Liu, Xiaoguang Hu, Dianhai Yu, and Yanjun Ma. Pp-
+lcnet: A lightweight cpu convolutional neural network, 2021.
+2
+[4] Yuning Du, Chenxia Li, Ruoyu Guo, Xiaoting Yin, Weiwei
+Liu, Jun Zhou, Yifan Bai, Zilin Yu, Yehua Yang, Qingqing
+Dang, et al. Pp-ocr: A practical ultra lightweight ocr system.
+arXiv preprint arXiv:2009.09941, 2020. 2
+[5] Yongkun Du, Zhineng Chen, Caiyan Jia, Xiaoting Yin, Tian-
+lun Zheng, Chenxia Li, Yuning Du, and Yu-Gang Jiang. Svtr:
+Scene text recognition with a single visual model.
+arXiv
+preprint arXiv:2205.00159, 2022. 2, 3
+[6] Shancheng Fang, Hongtao Xie, Yuxin Wang, Zhendong
+Mao, and Yongdong Zhang.
+Read like humans:
+Au-
+tonomous, bidirectional and iterative language modeling for
+scene text recognition. In Proceedings of the IEEE/CVF con-
+ference on computer vision and pattern recognition, pages
+7098–7107, 2021. 2
+[7] Ling Fu, Zhebin Kuang, Jiajun Song, Mingxin Huang, Biao
+Yang, Yuzhe Li, Linghao Zhu, Qidi Luo, Xinyu Wang, Hao
+Lu, et al. Ocrbench v2: An improved benchmark for evaluat-
+ing large multimodal models on visual text localization and
+reasoning. arXiv preprint arXiv:2501.00321, 2024. 8
+[8] Alex Graves, Santiago Fern´andez, Faustino Gomez, and
+J¨urgen Schmidhuber. Connectionist temporal classification:
+labelling unsegmented sequence data with recurrent neural
+networks. In Proceedings of the 23rd international confer-
+ence on Machine learning, pages 369–376, 2006. 3
+[9] Ankush Gupta, Andrea Vedaldi, and Andrew Zisserman.
+Synthetic data for text localisation in natural images. In Pro-
+ceedings of the IEEE conference on computer vision and pat-
+tern recognition, pages 2315–2324, 2016. 2
+[10] Wenyang Hu, Xiaocong Cai, Jun Hou, Shuai Yi, and Zhiping
+Lin. Gtc: Guided training of ctc towards efficient and accu-
+rate scene text recognition. In Proceedings of the AAAI con-
+ference on artificial intelligence, pages 11005–11012, 2020.
+3
+[11] Geewook Kim, Teakgyu Hong, Moonbin Yim, JeongYeon
+Nam, Jinyoung Park, Jinyeong Yim, Wonseok Hwang, Sang-
+doo Yun, Dongyoon Han, and Seunghyun Park.
+Ocr-free
+document understanding transformer. In European Confer-
+ence on Computer Vision, pages 498–517. Springer, 2022.
+3
+[12] Kenton Lee, Mandar Joshi, Iulia Raluca Turc, Hexiang Hu,
+Fangyu Liu, Julian Martin Eisenschlos, Urvashi Khandel-
+wal, Peter Shaw, Ming-Wei Chang, and Kristina Toutanova.
+Pix2struct: Screenshot parsing as pretraining for visual lan-
+guage understanding. In International Conference on Ma-
+chine Learning, pages 18893–18912. PMLR, 2023. 3
+[13] Chenxia Li, Weiwei Liu, Ruoyu Guo, Xiaoting Yin, Kaitao
+Jiang, Yongkun Du, Yuning Du, Lingfeng Zhu, Baohua Lai,
+Xiaoguang Hu, et al. Pp-ocrv3: More attempts for the im-
+provement of ultra lightweight ocr system. arXiv preprint
+arXiv:2206.03001, 2022. 2
+[14] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi.
+Blip: Bootstrapping language-image pre-training for unified
+vision-language understanding and generation. In Interna-
+tional conference on machine learning, pages 12888–12900.
+PMLR, 2022. 1
+[15] Minghui Liao, Zhaoyi Wan, Cong Yao, Kai Chen, and Xiang
+Bai. Real-time scene text detection with differentiable bina-
+rization. In Proceedings of the AAAI conference on artificial
+intelligence, pages 11474–11481, 2020. 2, 3
+[16] Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He,
+Bharath Hariharan, and Serge Belongie.
+Feature pyra-
+mid networks for object detection.
+In Proceedings of the
+IEEE conference on computer vision and pattern recogni-
+tion, pages 2117–2125, 2017. 3
+[17] Yuliang Liu, Zhang Li, Mingxin Huang, Biao Yang, Wenwen
+Yu, Chunyuan Li, Xu-Cheng Yin, Cheng-Lin Liu, Lianwen
+Jin, and Xiang Bai. Ocrbench: on the hidden mystery of
+ocr in large multimodal models. Science China Information
+Sciences, 67(12):220102, 2024. 8
+[18] OpenAI.
+Gpt-4v(ision) system card.
+https://cdn.
+openai.com/papers/GPTV_System_Card.pdf,
+2023. 1
+[19] Linke Ouyang, Yuan Qu, Hongbin Zhou, Jiawei Zhu, Rui
+Zhang, Qunshu Lin, Bin Wang, Zhiyuan Zhao, Man Jiang,
+Xiaomeng Zhao, Jin Shi, Fan Wu, Pei Chu, Minghao Liu,
+Zhenxiang Li, Chao Xu, Bo Zhang, Botian Shi, Zhongy-
+ing Tu, and Conghui He. Omnidocbench: Benchmarking
+diverse pdf document parsing with comprehensive annota-
+tions, 2024. 8
+[20] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya
+Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry,
+Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning
+transferable visual models from natural language supervi-
+sion. In International conference on machine learning, pages
+8748–8763. PmLR, 2021. 4
+[21] Nithya Sambasivan, Shivani Kapania, Hannah Highfill, Di-
+ana Akrong, Praveen Paritosh, and Lora M Aroyo. “every-
+one wants to do the model work, not the data work”: Data
+cascades in high-stakes ai. In proceedings of the 2021 CHI
+Conference on Human Factors in Computing Systems, pages
+1–15, 2021. 2
+[22] Baoguang Shi, Xiang Bai, and Cong Yao. An end-to-end
+trainable neural network for image-based sequence recog-
+nition and its application to scene text recognition. IEEE
+transactions on pattern analysis and machine intelligence,
+39(11):2298–2304, 2016. 2
+[23] Hwanjun Song, Minseok Kim, Dongmin Park, Yooju Shin,
+and Jae-Gil Lee. Learning from noisy labels with deep neural
+networks: A survey. IEEE transactions on neural networks
+and learning systems, 34(11):8135–8153, 2022. 2
+
+
+===== PAGE 10 =====
+
+[24] Gemini Team, Rohan Anil, Sebastian Borgeaud, Jean-
+Baptiste Alayrac, Jiahui Yu, Radu Soricut, Johan Schalkwyk,
+Andrew M Dai, Anja Hauth, Katie Millican, et al. Gemini: a
+family of highly capable multimodal models. arXiv preprint
+arXiv:2312.11805, 2023. 1, 3
+[25] Kaixin Wang, Jun Hao Liew, Yingtian Zou, Daquan Zhou,
+and Jiashi Feng.
+Panet: Few-shot image semantic seg-
+mentation with prototype alignment.
+In proceedings of
+the IEEE/CVF international conference on computer vision,
+pages 9197–9206, 2019. 2, 3
+[26] Steven Euijong Whang, Yuji Roh, Hwanjun Song, and Jae-
+Gil Lee. Data collection and quality challenges in deep learn-
+ing: A data-centric ai perspective. The VLDB Journal, 32(4):
+791–813, 2023. 2
+[27] Zhengyuan Yang, Linjie Li, Kevin Lin, Jianfeng Wang,
+Chung-Ching Lin, Zicheng Liu, and Lijuan Wang. The dawn
+of lmms: Preliminary explorations with gpt-4v (ision). arXiv
+preprint arXiv:2309.17421, 2023. 3
+[28] Daochen Zha, Zaid Pervaiz Bhat, Kwei-Herng Lai, Fan
+Yang, Zhimeng Jiang, Shaochen Zhong, and Xia Hu. Data-
+centric artificial intelligence: A survey.
+ACM Computing
+Surveys, 57(5):1–42, 2025. 2

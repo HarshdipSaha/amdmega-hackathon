@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/datasets?search=TextOCR&limit=6",
+  "retrieved_at": "2026-09-22T12:39:12.473407+00:00",
+  "http_status": 200,
+  "final_url": "https://huggingface.co/api/datasets?search=TextOCR&limit=6",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\c7b9426760b230fd.json",
+  "chars": 6203
+}

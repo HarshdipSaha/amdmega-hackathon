@@ -1,0 +1,65 @@
+{
+  "query": "license plate OCR VLM benchmark 2026",
+  "mode": "text",
+  "region": "wt-wt",
+  "retrieved_at": "2026-09-22T12:33:21.160894+00:00",
+  "attempts": [
+    {
+      "endpoint": "ddgs.text(backend=duckduckgo)",
+      "http_status": null,
+      "outcome": "error",
+      "error": "No results found."
+    },
+    {
+      "endpoint": "https://html.duckduckgo.com/html/",
+      "url": "https://html.duckduckgo.com/html/?q=license+plate+OCR+VLM+benchmark+2026",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://lite.duckduckgo.com/lite/",
+      "url": "https://lite.duckduckgo.com/lite/?q=license+plate+OCR+VLM+benchmark+2026",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://www.bing.com/search",
+      "url": "https://www.bing.com/search?q=license+plate+OCR+VLM+benchmark+2026",
+      "http_status": 200,
+      "outcome": "success"
+    }
+  ],
+  "results": [
+    {
+      "title": "Welcome! | Parivahansewa",
+      "href": "https://www.bing.com/ck/a?!&&p=d5ff6cbeaea0838f74e7df7936381646f20d448559f8892b9facb71cbb78ff79JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=31fa66ef-07a7-625e-029b-713306b263d2&u=a1aHR0cHM6Ly9wYXJpdmFoYW4uZ292LmluL3Bhcml2YWhhbg&ntb=1",
+      "body": "Sep 9, 2026 · Various services related to new/old driving licence or learner's licence like Appointment Booking, Duplicate driving …"
+    },
+    {
+      "title": "License and Registration Details | Parivahansewa",
+      "href": "https://www.bing.com/ck/a?!&&p=9016074ce59c2a77d0cde7d346feadc8c9cf90c8ada592608725ced4d3bafc01JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=31fa66ef-07a7-625e-029b-713306b263d2&u=a1aHR0cHM6Ly9wYXJpdmFoYW4uZ292LmluL2VuL2NvbnRlbnQvbGljZW5zZS1yZWdpc3RyYXRpb24tZGV0YWlscy1wYWdl&ntb=1",
+      "body": "This Website belongs to Ministry of Road Transport & Highways (MoRTH) Government of India."
+    },
+    {
+      "title": "Services On Driver's License | Parivahansewa",
+      "href": "https://www.bing.com/ck/a?!&&p=b7015ed3f08f00ceea6c16a34ffd69b37a4de9971ca24eb400270dcc23de9fc9JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=31fa66ef-07a7-625e-029b-713306b263d2&u=a1aHR0cHM6Ly9wYXJpdmFoYW4uZ292LmluL2VuL2ZhcS9zZXJ2aWNlcy1vbi1kcml2ZXItbGljZW5zZQ&ntb=1",
+      "body": "Sep 9, 2026 · Applicants can apply ONLINE for change of address in Driving License. Visit https://sarathi.parivahan.gov.in >> Select …"
+    },
+    {
+      "title": "New DL -New Driver's License services | Parivahansewa",
+      "href": "https://www.bing.com/ck/a?!&&p=bdc43e319523bb54280baeec4d24971ae8c5544abfbd4ab98dc210a5e726d193JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=31fa66ef-07a7-625e-029b-713306b263d2&u=a1aHR0cHM6Ly9wYXJpdmFoYW4uZ292LmluL2VuL2ZhcS9uZXctZHJpdmVyLWxpY2Vuc2Utc2VydmljZXM&ntb=1",
+      "body": "Sep 9, 2026 · To obtaining a driving license one needs to undergo a Motor Driving test (on vehicle) but vehicle may not be required. I …"
+    },
+    {
+      "title": "New DL -New Driver's License services | Parivahansewa",
+      "href": "https://www.bing.com/ck/a?!&&p=85f45c679c33cf94edd94a98b2afcbf23954fc6eef7b3a3c839559e0503cb48dJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=31fa66ef-07a7-625e-029b-713306b263d2&u=a1aHR0cHM6Ly9wYXJpdmFoYW4uZ292LmluL2VuL2ZhcS9uZXctZHJpdmVyLWxpY2Vuc2Utc2VydmljZXM_cGFnZT0x&ntb=1",
+      "body": "Yes, you can apply for Driving License in India. 1) If you are a Diplomat: You can apply for Driving License directly. 2) If you are a …"
+    },
+    {
+      "title": "Services On Driver's License | Parivahansewa",
+      "href": "https://www.bing.com/ck/a?!&&p=37b7d06d2beeaf924d3ebf0a2f57371fbe33c979b0e009ae8bf6ca39fca482e7JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=31fa66ef-07a7-625e-029b-713306b263d2&u=a1aHR0cHM6Ly9wYXJpdmFoYW4uZ292LmluL2VuL2ZhcS9zZXJ2aWNlcy1vbi1kcml2ZXItbGljZW5zZT9wYWdlPTE&ntb=1",
+      "body": "Sep 9, 2026 · Click on \"Services on Drivers License (Renewal/Duplicate/AEDL/Others)\" from \"Driving License\" menu. 4. Fill up …"
+    }
+  ],
+  "source": "Bing HTML (non-DDG fallback)"
+}

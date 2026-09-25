@@ -1,0 +1,118 @@
+[
+  {
+    "model": "zai-org/GLM-OCR",
+    "revision": "2e85a62840ccac27daa451df36c736c4636b8628",
+    "license": "mit",
+    "weight_bytes": 2650579464,
+    "safetensors": {
+      "parameters": {
+        "BF16": 1325258240
+      },
+      "total": 1325258240
+    },
+    "files": [
+      "model.safetensors"
+    ]
+  },
+  {
+    "model": "Qwen/Qwen3-VL-8B-Instruct",
+    "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+    "license": "apache-2.0",
+    "weight_bytes": 17534339512,
+    "safetensors": {
+      "parameters": {
+        "BF16": 8767123696
+      },
+      "total": 8767123696
+    },
+    "files": [
+      "model-00001-of-00004.safetensors",
+      "model-00002-of-00004.safetensors",
+      "model-00003-of-00004.safetensors",
+      "model-00004-of-00004.safetensors"
+    ]
+  },
+  {
+    "model": "Qwen/Qwen3-VL-4B-Instruct",
+    "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+    "license": "apache-2.0",
+    "weight_bytes": 8875719344,
+    "safetensors": {
+      "parameters": {
+        "BF16": 4437815808
+      },
+      "total": 4437815808
+    },
+    "files": [
+      "model-00001-of-00002.safetensors",
+      "model-00002-of-00002.safetensors"
+    ]
+  },
+  {
+    "model": "tencent/HunyuanOCR",
+    "revision": "47644ecc4fc854efa4f505155158831f36773ee4",
+    "license": "other",
+    "weight_bytes": 4595296000,
+    "safetensors": {
+      "parameters": {
+        "BF16": 1119925744
+      },
+      "total": 1119925744
+    },
+    "files": [
+      "dflash/model.safetensors",
+      "model.safetensors",
+      "v1.0/model-00001-of-00004.safetensors",
+      "v1.0/model-00002-of-00004.safetensors",
+      "v1.0/model-00003-of-00004.safetensors",
+      "v1.0/model-00004-of-00004.safetensors"
+    ]
+  },
+  {
+    "model": "Qwen/Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    "license": "apache-2.0",
+    "weight_bytes": 9319828096,
+    "safetensors": {
+      "parameters": {
+        "BF16": 4659861248,
+        "F32": 3840
+      },
+      "total": 4659865088
+    },
+    "files": [
+      "model.safetensors-00001-of-00002.safetensors",
+      "model.safetensors-00002-of-00002.safetensors"
+    ]
+  },
+  {
+    "model": "PaddlePaddle/PaddleOCR-VL-1.6",
+    "revision": "c5630abae1d940eafe0697512a0325494b02ab42",
+    "license": "apache-2.0",
+    "weight_bytes": 1917255968,
+    "safetensors": {
+      "parameters": {
+        "BF16": 958588736
+      },
+      "total": 958588736
+    },
+    "files": [
+      "model.safetensors"
+    ]
+  },
+  {
+    "model": "deepseek-ai/DeepSeek-OCR-2",
+    "revision": "aaa02f3811945a91062062994c5c4a3f4c0af2b0",
+    "license": "apache-2.0",
+    "weight_bytes": 6778573880,
+    "safetensors": {
+      "parameters": {
+        "BF16": 3389119360
+      },
+      "total": 3389119360
+    },
+    "files": [
+      "model-00001-of-000001.safetensors"
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "retrieval_date_utc": "2026-09-22",
+  "command": "docker version --format '{{json .}}'",
+  "exit_code": 1,
+  "client_version": "28.3.2",
+  "client_api_version": "1.51",
+  "context": "desktop-linux",
+  "server": null,
+  "error": "open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.",
+  "actions_taken": "Read-only version probe; engine not started; no image layers pulled."
+}

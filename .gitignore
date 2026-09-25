@@ -13,3 +13,8 @@ results/*
 !results/*.md
 eval/data/
 *.egg-info/
+node_modules/
+.profile/
+tools/amd-gpu/.profile/
+tools/amd-gpu/node_modules/
+tools/amd-gpu/out/

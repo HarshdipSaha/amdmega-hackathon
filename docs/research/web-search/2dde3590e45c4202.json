@@ -1,0 +1,65 @@
+{
+  "query": "site:huggingface.co OCRBench multilingual Qwen3-VL-4B",
+  "mode": "text",
+  "region": "wt-wt",
+  "retrieved_at": "2026-09-22T12:31:42.808838+00:00",
+  "attempts": [
+    {
+      "endpoint": "ddgs.text(backend=duckduckgo)",
+      "http_status": null,
+      "outcome": "error",
+      "error": "No results found."
+    },
+    {
+      "endpoint": "https://html.duckduckgo.com/html/",
+      "url": "https://html.duckduckgo.com/html/?q=site%3Ahuggingface.co+OCRBench+multilingual+Qwen3-VL-4B",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://lite.duckduckgo.com/lite/",
+      "url": "https://lite.duckduckgo.com/lite/?q=site%3Ahuggingface.co+OCRBench+multilingual+Qwen3-VL-4B",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://www.bing.com/search",
+      "url": "https://www.bing.com/search?q=site%3Ahuggingface.co+OCRBench+multilingual+Qwen3-VL-4B",
+      "http_status": 200,
+      "outcome": "success"
+    }
+  ],
+  "results": [
+    {
+      "title": "File Explorer in Windows | Microsoft Support",
+      "href": "https://www.bing.com/ck/a?!&&p=79ef3081db58ea8d3c9da6c65a0b396f8ef7aae655f522b518e24be66399dc58JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=3fae1287-445a-67bd-0528-055b45db66c3&u=a1aHR0cHM6Ly9zdXBwb3J0Lm1pY3Jvc29mdC5jb20vZW4tdXMvd2luZG93cy9leHBlcmllbmNlL2ZpbGVleHBsb3Jlci9maWxlLWV4cGxvcmVyLWluLXdpbmRvd3M&ntb=1",
+      "body": "Find and open File Explorer in Windows, and customize Quick access by pinning and removing files and folders."
+    },
+    {
+      "title": "Get Help With File Explorer in Windows 11",
+      "href": "https://www.bing.com/ck/a?!&&p=1555370b974e8901704b1af045c1b8126954c242cdd8ebf46a4c3fd6f2c4e937JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=3fae1287-445a-67bd-0528-055b45db66c3&u=a1aHR0cHM6Ly93aW5kb3dzcmVwb3J0LmNvbS9nZXQtaGVscC13aXRoLWZpbGUtZXhwbG9yZXItaW4td2luZG93cy8&ntb=1",
+      "body": "Jul 21, 2026 · Learn where to get help with File Explorer in Windows using built in tools, support pages, and troubleshooters."
+    },
+    {
+      "title": "File Explorer | Microsoft Windows",
+      "href": "https://www.bing.com/ck/a?!&&p=3dc4917bada843e18798d637fe3999833209a73b947f4b3f43036e33267744b1JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=3fae1287-445a-67bd-0528-055b45db66c3&u=a1aHR0cHM6Ly93d3cubWljcm9zb2Z0LmNvbS9lbi11cy93aW5kb3dzL3RpcHMvZmlsZS1leHBsb3Jlcj9tc29ja2lkPTNmYWUxMjg3NDQ1YTY3YmQwNTI4MDU1YjQ1ZGI2NmMz&ntb=1",
+      "body": "Press Windows logo key + E to open File Explorer and find the files and folders you need, including those on OneDrive. You can use …"
+    },
+    {
+      "title": "Get Help With File Explorer in Windows 11 /10",
+      "href": "https://www.bing.com/ck/a?!&&p=d000d2edf13758ee580077b728d28fbaccd51fa62d63b3c6d935f5c6a496771fJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=3fae1287-445a-67bd-0528-055b45db66c3&u=a1aHR0cHM6Ly90ZWNoYmFrZWQuY29tL2dldC1oZWxwLWZpbGUtZXhwbG9yZXItd2luZG93cy8&ntb=1",
+      "body": "Sep 13, 2026 · In this guide, we’ll explain how to get help with File Explorer in Windows 11 and Windows 10, along with how to use its …"
+    },
+    {
+      "title": "The ultimate guide to File Explorer on Windows 11",
+      "href": "https://www.bing.com/ck/a?!&&p=7f91b5492c94787c815970aa2ce531e13937c258c26febe65b5f7be15673cfeeJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=3fae1287-445a-67bd-0528-055b45db66c3&u=a1aHR0cHM6Ly93d3cueGRhLWRldmVsb3BlcnMuY29tL2ZpbGUtZXhwbG9yZXItd2luZG93cy0xMS8&ntb=1",
+      "body": "Nov 6, 2024 · File Explorer is one of the most essential tools in Windows 11, but you may not know everything about it. Let's take a …"
+    },
+    {
+      "title": "Get Help with File Explorer in Windows : Easy Solutions",
+      "href": "https://www.bing.com/ck/a?!&&p=48c3dd695c35c52dd3426649f180677d73b87ac413b06f6ce21648366b836b39JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=3fae1287-445a-67bd-0528-055b45db66c3&u=a1aHR0cHM6Ly93d3cud2lraWhvdy5jb20vR2V0LUhlbHAtd2l0aC1GaWxlLUV4cGxvcmVyLWluLVdpbmRvd3M&ntb=1",
+      "body": "Mar 14, 2026 · Do you need help with Windows File Explorer? If you're having issues using or launching the application, it's easy to …"
+    }
+  ],
+  "source": "Bing HTML (non-DDG fallback)"
+}

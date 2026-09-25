@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/models/Qwen/Qwen3.5-9B?blobs=true",
+  "retrieved_at": "2026-09-22T12:35:34.502808+00:00",
+  "http_status": 200,
+  "final_url": "https://huggingface.co/api/models/Qwen/Qwen3.5-9B?blobs=true",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\412632c35c27f35e.json",
+  "chars": 22824
+}

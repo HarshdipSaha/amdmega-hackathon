@@ -1,0 +1,19 @@
+{
+  "name": "amd-gpu-web",
+  "version": "1.0.0",
+  "description": "Drive the AMD hackathon GPU notebooks (notebooks.amd.com) with Playwright",
+  "scripts": {
+    "login": "node login.js",
+    "browser": "node browser.js",
+    "status": "node gpu.js status",
+    "launch": "node gpu.js launch",
+    "stop": "node gpu.js stop"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  },
+  "private": true
+}

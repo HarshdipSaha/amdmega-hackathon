@@ -1,0 +1,295 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/2MYQec9ajezmo4L2Y61HMfuQap0</id>
+  <title>arXiv Query: search_query=ti:OCRBench OR ti:CC-OCR OR ti:PP-OCRv5 OR ti:CCPD&amp;id_list=&amp;start=0&amp;max_results=12</title>
+  <updated>2026-09-22T12:31:56Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=ti:OCRBench+OR+(ti:CC-OCR+OR+(ti:PP-OCRv5+OR+ti:CCPD))&amp;start=0&amp;max_results=12&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>12</opensearch:itemsPerPage>
+  <opensearch:totalResults>5</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2412.02210v3</id>
+    <title>CC-OCR: A Comprehensive and Challenging OCR Benchmark for Evaluating Large Multimodal Models in Literacy</title>
+    <updated>2024-12-10T05:01:33Z</updated>
+    <link href="https://arxiv.org/abs/2412.02210v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.02210v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large Multimodal Models (LMMs) have demonstrated impressive performance in recognizing document images with natural language instructions. However, it remains unclear to what extent capabilities in literacy with rich structure and fine-grained visual challenges. The current landscape lacks a comprehensive benchmark to effectively measure the literate capabilities of LMMs. Existing benchmarks are often limited by narrow scenarios and specified tasks. To this end, we introduce CC-OCR, a comprehensive benchmark that possesses a diverse range of scenarios, tasks, and challenges. CC-OCR comprises four OCR-centric tracks: multi-scene text reading, multilingual text reading, document parsing, and key information extraction. It includes 39 subsets with 7,058 full annotated images, of which 41% are sourced from real applications, and released for the first time. We evaluate nine prominent LMMs and reveal both the strengths and weaknesses of these models, particularly in text grounding, multi-orientation, and hallucination of repetition. CC-OCR aims to comprehensively evaluate the capabilities of LMMs on OCR-centered tasks, facilitating continued progress in this crucial area.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-03T07:03:25Z</published>
+    <arxiv:comment>23 pages, 14 figures; The code will be released soon</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Zhibo Yang</name>
+    </author>
+    <author>
+      <name>Jun Tang</name>
+    </author>
+    <author>
+      <name>Zhaohai Li</name>
+    </author>
+    <author>
+      <name>Pengfei Wang</name>
+    </author>
+    <author>
+      <name>Jianqiang Wan</name>
+    </author>
+    <author>
+      <name>Humen Zhong</name>
+    </author>
+    <author>
+      <name>Xuejing Liu</name>
+    </author>
+    <author>
+      <name>Mingkun Yang</name>
+    </author>
+    <author>
+      <name>Peng Wang</name>
+    </author>
+    <author>
+      <name>Shuai Bai</name>
+    </author>
+    <author>
+      <name>LianWen Jin</name>
+    </author>
+    <author>
+      <name>Junyang Lin</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2603.24373v1</id>
+    <title>PP-OCRv5: A Specialized 5M-Parameter Model Rivaling Billion-Parameter Vision-Language Models on OCR Tasks</title>
+    <updated>2026-03-25T14:54:40Z</updated>
+    <link href="https://arxiv.org/abs/2603.24373v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2603.24373v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The advent of "OCR 2.0" and large-scale vision-language models (VLMs) has set new benchmarks in text recognition. However, these unified architectures often come with significant computational demands, challenges in precise text localization within complex layouts, and a propensity for textual hallucinations. Revisiting the prevailing notion that model scale is the sole path to high accuracy, this paper introduces PP-OCRv5, a meticulously optimized, lightweight OCR system with merely 5 million parameters. We demonstrate that PP-OCRv5 achieves performance competitive with many billion-parameter VLMs on standard OCR benchmarks, while offering superior localization precision and reduced hallucinations. The cornerstone of our success lies not in architectural expansion but in a data-centric investigation. We systematically dissect the role of training data by quantifying three critical dimensions: data difficulty, data accuracy, and data diversity. Our extensive experiments reveal that with a sufficient volume of high-quality, accurately labeled, and diverse data, the performance ceiling for traditional, efficient two-stage OCR pipelines is far higher than commonly assumed. This work provides compelling evidence for the viability of lightweight, specialized models in the large-model era and offers practical insights into data curation for OCR. The source code and models are publicly available at https://github.com/PaddlePaddle/PaddleOCR.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-03-25T14:54:40Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Cheng Cui</name>
+    </author>
+    <author>
+      <name>Yubo Zhang</name>
+    </author>
+    <author>
+      <name>Ting Sun</name>
+    </author>
+    <author>
+      <name>Xueqing Wang</name>
+    </author>
+    <author>
+      <name>Hongen Liu</name>
+    </author>
+    <author>
+      <name>Manhui Lin</name>
+    </author>
+    <author>
+      <name>Yue Zhang</name>
+    </author>
+    <author>
+      <name>Tingquan Gao</name>
+    </author>
+    <author>
+      <name>Changda Zhou</name>
+    </author>
+    <author>
+      <name>Jiaxuan Liu</name>
+    </author>
+    <author>
+      <name>Zelun Zhang</name>
+    </author>
+    <author>
+      <name>Jing Zhang</name>
+    </author>
+    <author>
+      <name>Jun Zhang</name>
+    </author>
+    <author>
+      <name>Yi Liu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.03903v2</id>
+    <title>CC-OCR V2: Fine-Grained Attribution of LMM Failures in Real-World Visual Document Understanding</title>
+    <updated>2026-08-10T08:03:13Z</updated>
+    <link href="https://arxiv.org/abs/2605.03903v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.03903v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Recent Large Multimodal Models (LMMs) have achieved remarkable progress on OCR-centric document understanding and processing tasks. Existing benchmarks primarily evaluate LMMs across diverse tasks to reflect practical document-processing workflows or analyze how document characteristics influence model performance. However, they provide limited insight into the reliability of LMMs under real-world document acquisition conditions, where factors such as lighting, screen displays, imaging quality, and capture methods can substantially affect performance. To bridge this gap, we present CC-OCR v2, a comprehensive benchmark for attributing LMM failures in real-world document processing. CC-OCR v2 provides a unified evaluation framework covering five core document-processing capabilities through 16 subtasks, 74 application scenarios, and 7,093 samples. The benchmark spans five evaluation tracks, ten document categories, and 32 languages in the recognition suite. Beyond task-level evaluation, each sample is annotated with ten fine-grained document factors, enabling systematic attribution of model failures across document types and acquisition conditions. Extensive experiments on 17 representative LMMs reveal substantial performance variation across tasks, document categories, and real-world conditions. Moreover, models with comparable overall accuracy often exhibit fundamentally different failure patterns under specific document factors, highlighting a significant gap between benchmark-level performance and reliable deployment in practical applications. The dataset and evaluation toolkit are publicly available at https://github.com/eioss/CC-OCR-V2.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-05T15:56:12Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Chunyi Peng</name>
+    </author>
+    <author>
+      <name>Zhipeng Xu</name>
+    </author>
+    <author>
+      <name>Yuqi Xiong</name>
+    </author>
+    <author>
+      <name>Zulong Chen</name>
+    </author>
+    <author>
+      <name>Junhao Ji</name>
+    </author>
+    <author>
+      <name>Qing Liu</name>
+    </author>
+    <author>
+      <name>Zhenghao Liu</name>
+    </author>
+    <author>
+      <name>Zubao Qin</name>
+    </author>
+    <author>
+      <name>Bing Zhao</name>
+    </author>
+    <author>
+      <name>Jianqiang Wan</name>
+    </author>
+    <author>
+      <name>Jun Tang</name>
+    </author>
+    <author>
+      <name>Zhibo Yang</name>
+    </author>
+    <author>
+      <name>Shuai Bai</name>
+    </author>
+    <author>
+      <name>Dayiheng Liu</name>
+    </author>
+    <author>
+      <name>Maosong Sun</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2305.07895v7</id>
+    <title>OCRBench: On the Hidden Mystery of OCR in Large Multimodal Models</title>
+    <updated>2024-08-26T02:37:14Z</updated>
+    <link href="https://arxiv.org/abs/2305.07895v7" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2305.07895v7" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large models have recently played a dominant role in natural language processing and multimodal vision-language learning. However, their effectiveness in text-related visual tasks remains relatively unexplored. In this paper, we conducted a comprehensive evaluation of Large Multimodal Models, such as GPT4V and Gemini, in various text-related visual tasks including Text Recognition, Scene Text-Centric Visual Question Answering (VQA), Document-Oriented VQA, Key Information Extraction (KIE), and Handwritten Mathematical Expression Recognition (HMER). To facilitate the assessment of Optical Character Recognition (OCR) capabilities in Large Multimodal Models, we propose OCRBench, a comprehensive evaluation benchmark. OCRBench contains 29 datasets, making it the most comprehensive OCR evaluation benchmark available. Furthermore, our study reveals both the strengths and weaknesses of these models, particularly in handling multilingual text, handwritten text, non-semantic text, and mathematical expression recognition. Most importantly, the baseline results presented in this study could provide a foundational framework for the conception and assessment of innovative strategies targeted at enhancing zero-shot multimodal techniques. The evaluation pipeline and benchmark are available at https://github.com/Yuliang-Liu/MultimodalOCR.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-05-13T11:28:37Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Yuliang Liu</name>
+    </author>
+    <author>
+      <name>Zhang Li</name>
+    </author>
+    <author>
+      <name>Mingxin Huang</name>
+    </author>
+    <author>
+      <name>Biao Yang</name>
+    </author>
+    <author>
+      <name>Wenwen Yu</name>
+    </author>
+    <author>
+      <name>Chunyuan Li</name>
+    </author>
+    <author>
+      <name>Xucheng Yin</name>
+    </author>
+    <author>
+      <name>Cheng-lin Liu</name>
+    </author>
+    <author>
+      <name>Lianwen Jin</name>
+    </author>
+    <author>
+      <name>Xiang Bai</name>
+    </author>
+    <arxiv:doi>10.1007/s11432-024-4235-6</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1007/s11432-024-4235-6" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2501.00321v2</id>
+    <title>OCRBench v2: An Improved Benchmark for Evaluating Large Multimodal Models on Visual Text Localization and Reasoning</title>
+    <updated>2025-06-05T02:59:05Z</updated>
+    <link href="https://arxiv.org/abs/2501.00321v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2501.00321v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Scoring the Optical Character Recognition (OCR) capabilities of Large Multimodal Models (LMMs) has witnessed growing interest. Existing benchmarks have highlighted the impressive performance of LMMs in text recognition; however, their abilities in certain challenging tasks, such as text localization, handwritten content extraction, and logical reasoning, remain underexplored. To bridge this gap, we introduce OCRBench v2, a large-scale bilingual text-centric benchmark with currently the most comprehensive set of tasks (4x more tasks than the previous multi-scene benchmark OCRBench), the widest coverage of scenarios (31 diverse scenarios), and thorough evaluation metrics, with 10,000 human-verified question-answering pairs and a high proportion of difficult samples. Moreover, we construct a private test set with 1,500 manually annotated images. The consistent evaluation trends observed across both public and private test sets validate the OCRBench v2's reliability. After carefully benchmarking state-of-the-art LMMs, we find that most LMMs score below 50 (100 in total) and suffer from five-type limitations, including less frequently encountered text recognition, fine-grained perception, layout perception, complex element parsing, and logical reasoning. The project website is at: https://99franklin.github.io/ocrbench_v2/</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-31T07:32:35Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Ling Fu</name>
+    </author>
+    <author>
+      <name>Zhebin Kuang</name>
+    </author>
+    <author>
+      <name>Jiajun Song</name>
+    </author>
+    <author>
+      <name>Mingxin Huang</name>
+    </author>
+    <author>
+      <name>Biao Yang</name>
+    </author>
+    <author>
+      <name>Yuzhe Li</name>
+    </author>
+    <author>
+      <name>Linghao Zhu</name>
+    </author>
+    <author>
+      <name>Qidi Luo</name>
+    </author>
+    <author>
+      <name>Xinyu Wang</name>
+    </author>
+    <author>
+      <name>Hao Lu</name>
+    </author>
+    <author>
+      <name>Zhang Li</name>
+    </author>
+    <author>
+      <name>Guozhi Tang</name>
+    </author>
+    <author>
+      <name>Bin Shan</name>
+    </author>
+    <author>
+      <name>Chunhui Lin</name>
+    </author>
+    <author>
+      <name>Qi Liu</name>
+    </author>
+    <author>
+      <name>Binghong Wu</name>
+    </author>
+    <author>
+      <name>Hao Feng</name>
+    </author>
+    <author>
+      <name>Hao Liu</name>
+    </author>
+    <author>
+      <name>Can Huang</name>
+    </author>
+    <author>
+      <name>Jingqun Tang</name>
+    </author>
+    <author>
+      <name>Wei Chen</name>
+    </author>
+    <author>
+      <name>Lianwen Jin</name>
+    </author>
+    <author>
+      <name>Yuliang Liu</name>
+    </author>
+    <author>
+      <name>Xiang Bai</name>
+    </author>
+  </entry>
+</feed>

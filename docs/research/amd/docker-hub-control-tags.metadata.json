@@ -1,0 +1,10 @@
+{
+  "id": "docker-hub-control-tags",
+  "url": "https://hub.docker.com/v2/repositories/rocm/pytorch/tags?page_size=10&ordering=last_updated",
+  "retrieved_utc": "2026-09-22T12:31:58.830104+00:00",
+  "status": 200,
+  "final_url": "https://hub.docker.com/v2/repositories/rocm/pytorch/tags?page_size=10&ordering=last_updated",
+  "content_type": "application/json",
+  "server_date": "Tue, 22 Sep 2026 12:31:58 GMT",
+  "response_bytes": 8815
+}

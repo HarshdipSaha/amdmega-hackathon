@@ -1,0 +1,10 @@
+{
+  "id": "docker-image-spec-current",
+  "url": "https://raw.githubusercontent.com/moby/docker-image-spec/main/spec.md",
+  "retrieved_utc": "2026-09-22T12:33:01.268479+00:00",
+  "status": 200,
+  "final_url": "https://raw.githubusercontent.com/moby/docker-image-spec/main/spec.md",
+  "content_type": "text/plain; charset=utf-8",
+  "server_date": "Tue, 22 Sep 2026 12:33:01 GMT",
+  "response_bytes": 26765
+}

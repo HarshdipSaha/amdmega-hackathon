@@ -1,0 +1,1183 @@
+
+
+===== PAGE 1 =====
+
+A Dataset and Model for Realistic License Plate Deblurring
+Haoyan Gong , Yuzheng Feng , Zhenrong Zhang , Xianxu Hou , Jingxin Liu , Siqi
+Huang and Hongbin Liu ∗
+School of AI and Advanced Computing, Xi’an Jiaotong-Liverpool University
+{haoyan.gong21, yuzheng.feng21, zhenrong.zhang21}@student.xjtlu.edu.cn, {xianxu.hou, jingxin.liu,
+siqi.huang, hongbin.liu}@xjtlu.edu.cn
+Abstract
+Vehicle license plate recognition is a crucial task
+in intelligent traffic management systems. How-
+ever, the challenge of achieving accurate recogni-
+tion persists due to motion blur from fast-moving
+vehicles.
+Despite the widespread use of image
+synthesis approaches in existing deblurring and
+recognition algorithms, their effectiveness in real-
+world scenarios remains unproven. To address this,
+we introduce the first large-scale license plate de-
+blurring dataset named License Plate Blur (LP-
+Blur), captured by a dual-camera system and pro-
+cessed through a post-processing pipeline to avoid
+misalignment issues.
+Then, we propose a Li-
+cense Plate Deblurring Generative Adversarial Net-
+work (LPDGAN) to tackle the license plate de-
+blurring: 1) a Feature Fusion Module to integrate
+multi-scale latent codes; 2) a Text Reconstruction
+Module to restore structure through textual modal-
+ity; 3) a Partition Discriminator Module to en-
+hance the model’s perception of details in each let-
+ter.
+Extensive experiments validate the reliabil-
+ity of the LPBlur dataset for both model training
+and testing, showcasing that our proposed model
+outperforms other state-of-the-art motion deblur-
+ring methods in realistic license plate deblurring
+scenarios. The dataset and code are available at
+https://github.com/haoyGONG/LPDGAN.
+1
+Introduction
+Efficient recognition of vehicle license plates is crucial for
+intelligent traffic management systems, however real-world
+scenarios often pose a significant challenge due to motion
+blur. This blur, making license plates unreadable, is espe-
+cially problematic in situations involving high-speed vehicles
+or low-light conditions. Such issues are exacerbated during
+nighttime or in bad weather, resulting in considerable motion
+blur in captured images. To tackle these issues, our study in-
+troduces a comprehensive dataset and a novel model tailored
+for realistic license plate deblurring.
+∗Corresponding author
+MSSNet
+LBAG
+MIMO-Unet
+Blurred 
+License Plate
+Ground Truth
+LPDGAN
+(Ours)
+Figure 1: The visual deblurring results of several state-of-the-art
+models and our model for real-world motion blurred license plate
+images.
+Image deblurring is a key task in computer vision, focused
+on restoring blurred images to clear ones for accurate obser-
+vation and identification. The progress in this field heavily
+depends on the development of relevant datasets.
+Current
+methods for creating deblurring datasets fall into three main
+categories: (1) synthetic blurring using blur kernels
+[Sun
+et al., 2013; K¨ohler et al., 2012; Lai et al., 2016], which
+leads to a lack of generalization capability for models trained
+on these synthesized images when applied to real-world im-
+ages. (2) The generation of blurred images from sharp frames
+via averaging or fusion [Nah et al., 2017; Shen et al., 2019;
+Jiang et al., 2020], which doesn’t fully mimic real-world
+overexposure outliers [Chang et al., 2021]. (3) Lastly, beam-
+splitting systems capture sharp and blurred image pairs via
+camera shake [Rim et al., 2020], with potential issues in color
+accuracy and alignment. Each approach contributes to the
+field but also has inherent limitations impacting the realism
+and utility of the datasets.
+With the advent of deep learning, numerous convolutional
+neural network (CNN)-based methods have surfaced [Sun et
+al., 2015; Gong et al., 2017; Tao et al., 2018; Shen et al.,
+2019; Zhang et al., 2023], playing an essential role in the
+motion deblurring task. Recently, the proposal of Genera-
+tive Adversarial Networks (GAN) has also profoundly im-
+pacted the image deblurring field [Ramakrishnan et al., 2017;
+Kupyn et al., 2018; Kupyn et al., 2019; Zhao et al., 2022].
+Despite these advancements, deblurring license plate images
+remains a significant challenge, primarily due to the lack of
+large-scale, tailored datasets. The complexity of license plate
+blurring, with its more severe degradation compared to stan-
+dard motion blur, poses an additional challenge. To better jus-
+tify the performance of existing image deblurring algorithms
+on real-world blurred license plate images, we evaluate the
+performance of several state-of-the-art deblurring algorithms
+arXiv:2404.13677v2  [cs.CV]  23 Apr 2024
+
+
+===== PAGE 2 =====
+
+with blurred license plate images. As shown in Figure 1, we
+can conclude that all these methods fail to perform well in this
+task. It underscores the necessity for further research specifi-
+cally targeting real-world vehicle license plate deblurring.
+To address these challenges, we present a comprehensive
+solution consisting of a large-scale paired license plate dataset
+and a dedicated license plate deblurring model. Our data col-
+lection employs a dual-camera setup with different shutter
+speeds to capture sharp and blurred images simultaneously,
+eliminating color deviations and enabling post-processing
+alignment. Our innovative end-to-end model leverages an en-
+coder and latent fusion module for handling multi-scale la-
+tent codes, featuring the Swin transformer block ([Liu et al.,
+2021]) for effective long-range modeling. To enhance let-
+ter reconstruction and text legibility, we introduce a partition
+discriminator assessing per-letter sharpness. Extensive ex-
+periments using our LPBlur dataset, including metrics such
+as L1 loss, Peak Signal-to-Noise Ratio (PSNR), Structural
+Similarity Index (SSIM), Perceptual Loss (PerL), and Text
+Levenshtein Distance (TLD) [Levenshtein and others, 1966],
+validate its suitability for training and testing. Our proposed
+model outperforms state-of-the-art motion deblurring meth-
+ods in real-world license plate deblurring scenarios.
+In summary, our main contributions are as follows:
+• We present a real-world sharp-blurred license plate
+dataset, named LPBlur. This dataset consists of 10,288
+paired images, meticulously collected under diverse
+real-road scenarios using our designed dual-camera sys-
+tem, and corrected by a post-processing pipeline.
+• We introduce a novel LPDGAN, a license plate deblur-
+ring model that leverages multi-scale latent codes as ref-
+erences. It incorporates both a partition discriminator
+and text reconstruction techniques, which enhance the
+model’s capability to generate high-quality license plate
+images through spatial architecture and textual informa-
+tion, respectively.
+• Extensive experiments demonstrate that our dataset LP-
+Blur is highly effective for model training and evalu-
+ation. Compared to other state-of-the-art (SOTA) de-
+blurring models, our proposed LPDGAN can achieve
+21.24% license plate recognition accuracy improve-
+ment.
+2
+Related Work
+2.1
+Image Deblurring Datasets
+Image deblurring relies on paired sharp-blur image datasets.
+Traditionally, blurred images are generated by convolving
+sharp images with uniform or non-uniform blur kernels
+[Levin et al., 2009; Sun et al., 2013; K¨ohler et al., 2012;
+Lai et al., 2016]. Consequently, some researchers attempt to
+capture sequences of sharp frames while vibrating the cam-
+era, averaging or fusing such sequences of frames into cor-
+responding motion-blurred images [Nah et al., 2017; Shen et
+al., 2019; Jiang et al., 2020; Noroozi et al., 2017]. HIDE
+dataset [Shen et al., 2019] is created by averaging 11 con-
+secutive frames, with the central frame serving as the sharp
+image. The same strategy is employed in the collection of the
+Blur-DVS dataset [Jiang et al., 2020] and MSCNN (WILD)
+dataset [Noroozi et al., 2017]. However, models lack general-
+izability to real-world scenarios when they are trained on such
+synthetic datasets generated using the aforementioned meth-
+ods. Recently, certain researchers gathered authentic pairs of
+sharp-blur images employing beam-splitting systems. They
+position two cameras at a fixed angle to ensure that both im-
+ages share the same visual field, as described in works by Rim
+et al. and Li et al.. However, this approach can lead to color
+cast discrepancies in the paired images due to inherent issues
+with beam-splitting systems.
+2.2
+Blind Deblurring
+The majority of conventional approaches employ priors of
+natural images to estimate latent images or blur kernels [Fer-
+gus et al., 2006; Shan et al., 2008; Cho and Lee, 2009;
+Ren et al., 2018; Whyte et al., 2012]. However, the afore-
+mentioned techniques have certain limitations by predicat-
+ing upon the assumption of uniform image blur. To address
+this issue, some methods [Ren et al., 2017; Hyun Kim et al.,
+2013] estimate blur kernels at a pixel level, thereby accom-
+modating more complex blurring situations.
+With the advent of deep learning technologies, significant
+strides have been made in image deblurring, applying deep
+learning to predict blur kernels or latent images to procure
+clear images. In the work of [Sun et al., 2015], a method
+based on CNNs is proposed to predict the probability distri-
+bution of block-level motion blur. Gong et al. introduces a
+method to directly estimate the motion flow of blurred im-
+ages, recovering non-blurred images from the estimated mo-
+tion flow. MIMO-UNet [Cho et al., 2021] deploys a multi-
+input-multi-output single Unet network to simulate multi-
+level Unet for noise reduction across various image scales.
+MSSNet [Kim et al., 2022] enhances deblurring network per-
+formance by using a stage configuration reflecting blur scales,
+an inter-scale information propagation scheme, and a pixel-
+shuffle-based multi-scale scheme. XYDeblur [Ji et al., 2022]
+further augments network efficiency and deblurring perfor-
+mance by employing rotated and shared kernels within the
+decoder.
+2.3
+GAN-Based Deblurring
+In recent years, following the inception of GANs, their ap-
+plication in the domain of image deblurring has achieved
+remarkable success. DeblurGAN [Kupyn et al., 2018] first
+presents an end-to-end learning method for motion deblur-
+ring, and also introduces a new method for blur generation.
+DeblurGAN-v2 [Kupyn et al., 2019] introduces a dual-scale
+discriminator based on a relative conditional GAN framework
+and incorporates a feature pyramid into the deblurring pro-
+cess, which permits the flexible substitution of the backbone
+network. MSG-GAN [Karnewar and Wang, 2020] addresses
+the issue of insufficient overlap between the true and false
+support distributions during the transfer from discriminator to
+generator in GANs by allowing multi-scale gradient networks
+from the discriminator to the generator. FCL-GAN [Zhao
+et al., 2022] designs a lightweight domain conversion unit
+(LDCU) and a parameter-free frequency-domain contrastive
+
+
+===== PAGE 3 =====
+
+Pedestrian Bridge
+Trigger
+Power
+Power
+(a)
+(b)
+Denosing
+Geometrical 
+Alignment
+License Plate 
+Cropping
+Cam S
+Cam L
+Synchronizer
+Cam L
+Cam L
+Cam L
+Cam L
+Output from Cam L
+Output from Cam L
+Output from Cam S
+Output from Cam S
+Cam L
+Cam L
+Cam S
+Cam S
+Cam S
+Cam S
+Cam S
+Cam S
+Figure 2: (a) A schematic diagram of the paired image acquisition system collecting data in a pedestrian bridge. (b) The pipeline of paired
+images post-processing.
+unit (PFCU) for lightweight property and performance su-
+periority. The aforementioned methods can handle standard
+blurred images, but they struggle to deliver satisfactory re-
+sults on license plate blurring with very severe degradation.
+We propose an end-to-end generative model that accommo-
+dates multi-scale inputs and outputs, employing several novel
+modules to accomplish the license plate deblurring task bet-
+ter.
+3
+Proposed LPBlur Dataset
+3.1
+Data Collection
+Causes of Motion Blur.
+Motion blur refers to the percepti-
+ble streaking effect observed when capturing the movement
+of objects.
+In the capturing process, the correlation be-
+tween the amount of light entering the photosensitive compo-
+nent and the camera’s basic parameters satisfies the following
+equation:
+La ∝SL × ISO × Et × (Ap)2 ,
+(1)
+where La denotes the number of photons received by the
+camera, SL represents the light intensity of the scene, ISO
+represents the camera ISO value, Et is the exposure time, Ap
+denotes the camera aperture size. Cameras adjust these pa-
+rameters automatically within limits depending on the light-
+ing situation. For example, cameras increase their aperture
+and exposure time in low-lighting settings to capture enough
+light. Fast-moving objects leave trajectories within a single
+frame during this extended exposure time, resulting in a mo-
+tion blur effect.
+Paired Image Acquisition.
+To collect paired sharp-blur
+images, we use two identical scientific cameras that are set
+with different exposure times. As shown in Figure 2a, cam-
+eras S and L are fixed parallel on a tripod to maintain hori-
+zontally to the ground. Specifically, Camera S is set by an
+extremely short exposure time Ets, employed for the collec-
+tion of sharp images, while Camera L is set by a relatively
+longer exposure time Etl for the acquisition of blurred im-
+ages. Both of these cameras are interfaced with a computer
+via a synchronizer, which ensures the synchronization of the
+start of exposures, and both cameras capture the same scene.
+Scenes are taken in a variety of locations, including above,
+on the right side, and on the left side of roadways, to guaran-
+tee the dataset’s diversity. Also, depending on the road and
+the illumination conditions, we dynamically modulate cam-
+era exposure time according to the subsequent equation:
+v · Et = b · D
+p · f ,
+(2)
+where v denotes vehicular velocity, Et represents exposure
+time, b represents pixels blurred, D is the distance between
+vehicle and camera, f denotes camera focal length, and p is
+pixel edge length on the sensor. Given that the actual speeds
+of individual vehicles are indeterminable, we standardize im-
+age captures on high-speed road sections with a regulatory
+speed limit of 70 km/h to ensure that D is remained within a
+range of 10-20 meters.
+Moreover, to ensure equality in exposure between two
+cameras, we make their exposure times and ISO values to
+satisfy the following equation:
+ISOs
+ISOl = Etl
+Ets ,
+(3)
+where ISOs is the ISO value for Camera S and ISOl Cam-
+era L. However, variations in ISO values can cause changes
+in image noise levels, in post-processing, we incorporate a
+denoising step for sharp images.
+3.2
+Data Post-processing
+As shown in Figure 2b, the paired image post-processing in-
+cludes denoising, geometrical alignment, and license plate
+cropping.
+Denoising.
+Due to the disparate ISO settings of the two
+cameras, Camera S and Camera L capture images with a dif-
+ferent noise level. Consequently, during the conversion of
+RAW images to RGB format, wavelet denoising [Liu et al.,
+2020] is employed after white-balancing, color mapping, and
+gamma correction.
+Geometrical Alignment.
+Cameras S and L capture sharp
+and blurred image pairs with slight horizontal misalignment
+even though they are closely aligned left-to-right to minimize
+the difference. To align these image pairs perfectly, we first
+take a static image pair without any moving vehicles as the
+reference pair for each scene. Then, the Enhanced Corre-
+lation Coefficient Maximization [Evangelidis and Psarakis,
+2008] is adopted to estimate the geometric transformation be-
+tween the sharp and blur of the reference image pair. Finally,
+
+
+===== PAGE 4 =====
+
+Fake Image
+Latent 
+Fusion
+Latent 
+Fusion
+Concat 
+Latent 
+Codes
+Partition
+Discriminator 
+Module
+Global
+Discriminator
+Conv
+Conv
+α 
+β
+Lower-Res Feature
+Higher-Res 
+Feature
+Latent Fusion Module
+Identity
+Swin 
+Transformer 
+Encoder
+Swin 
+Transformer 
+Encoder
+Swin 
+Transformer 
+Encoder
+Swin Transformer 
+Decoder
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Input Image
+Fake Image
+Fake Image
+Text 
+Reconstruction 
+Module
+Figure 3: Overview of the proposed Licence Plate Deblurring Generative Adversarial Network.
+the estimated geometric transformation is applied to the im-
+age pairs in the same scene.
+License Plate Cropping.
+A pre-trained YOLO v5 [Jocher,
+2020] and a pre-trained CRNN [Shi et al., 2016] model are
+facilitated the detection and recognition of license plates un-
+der standard conditions, both models are pre-trained on the
+CCPD [Xu et al., 2018] license plate dataset. Following the
+geometrical alignment, the pre-trained YOLO v5 and CRNN
+detect and recognize the bounding box of each sharp plate in
+the paired images, both the sharp and blurred images are then
+cropped using the same detected coordinates.
+In conclusion, we collect 10,288 image pairs, with an orig-
+inal image size of 1920 × 1220. Post-processing crops image
+size to 224 × 112 with blur size ranging from 20-50 pixels.
+Among them, 5672 pairs are captured under normal light con-
+ditions and 4616 pairs under low light conditions, including
+1,000 pairs under rainy environmental conditions. For more
+information, please refer to the released dataset on the GitHub
+repository.
+4
+Method
+Overview.
+The goal of our work is to improve the clarity of
+license plate images using a meticulously crafted image-to-
+image translation framework, called LPDGAN. As depicted
+in Figure 3, our approach first constructs a multi-scale fea-
+ture extraction and fusion module designed to encode input
+blurred images effectively. Subsequently, an image decoder
+is employed to generate sharp and high-quality images. To
+further enhance the overall image quality, we integrate both a
+global discriminator and a partition discriminator for adver-
+sarial training. Additionally, we incorporate a text reconstruc-
+tion module to enrich the semantic information embedded in
+the generated license plate images.
+4.1
+Multi-scale Feature Extraction and Latent
+Fusion Module
+Feature Extraction.
+In real-world scenarios, license plate
+images affected by motion blur often exhibit intricate degra-
+dations, including noise, low resolution, and ghosting effects.
+Our feature encoder, denoted as E, is specifically used to
+address these degradations, extracting essential image fea-
+tures for subsequent processing. In particular, the Swin trans-
+former block [Liu et al., 2021] is selected for its ability to cap-
+ture global information through self-attention mechanisms.
+This is crucial to resolve the elongated ghosting artifacts that
+often appear in motion-blurred license plate images. To ad-
+dress variations in license plate image sizes due to differing
+capture distances, our approach employs a multi-scale fea-
+ture extraction strategy, which is illustrated in Figure 3. This
+approach facilitates the encoding of features at each scale,
+which are represented as E(xi) for i = 1, 2, 3.
+Latent Fusion.
+Based on the Spatial Feature Transform
+(SFT) [Wang et al., 2018], we further propose a Latent Fusion
+Module F (see Figure 3). This module is designed based on
+an affine transformation to effectively integrate the obtained
+multi-scale features. Specifically, for the fusion of E(x1)
+and E(x2), we first split E(x2) along the channel dimension.
+Each part is then processed through a series of convolutional
+layers to derive the fusion parameters α and β. These pa-
+rameters are employed to modulate E(x1) through scaling
+and shifting operations. Moreover, we reintegrate the origi-
+nal E(x2) using a skip connection, which is then combined
+with the modified E(x1) along the channel dimension. This
+fusion process is also applied between E(x2) and E(x3). The
+corresponding formulas are provided below:
+α, β = Conv (E(xi+1)sp1 + E(xi+1)sp2) ,
+Fi,i+1 = Concat (α ⊙E(xi) + β, E(xi)) ,
+(4)
+
+
+===== PAGE 5 =====
+
+Fake 
+Partitions
+Real 
+Partitions
+Random 
+Selection
+Partition Discriminator Module
+Real Image
+Fake Image
+Partition 
+Discriminator
+P
+Figure 4: The architecture of Partition Discriminator Module.
+where E(xi+1)sp1 and E(xi+1)sp2 represent the two parts
+into which E(xi+1) is divided along the channel dimension.
+4.2
+Decoder and Discriminator
+Decoder.
+As depicted in Figure 3, our decoder D is com-
+posed of a sequence of Swin transformer blocks and patch
+expanding operations. Similar to the encoder, our decoder is
+designed to generate sharp images in a multi-scale fashion,
+and the output images are denoted as ˜y1, ˜y2 and ˜y3 accord-
+ingly.
+Discriminator.
+We design two discriminators:
+1) the
+Global Discriminator (Dg) enhances overall spatial and color
+information in the restored images; 2) the Partition Discrimi-
+nator (Dp) focuses specifically on refining character informa-
+tion by examining n randomly selected partitions of letters
+within the license plate image. The structure of Dp is shown
+in Figure 4. It identifies and locates letter positions in both
+the real image y and the fake image ˜y. Following this, n
+partition images are randomly chosen for evaluation by Par-
+tition Discriminator. In the early stages of training, when our
+mode’s capacity to produce sharp images is still developing,
+the generated image might not be recognized with high ac-
+curacy. To address this, an average partitioning approach is
+applied to both y and ˜y, initially setting n to 7. As training
+progresses, a pre-trained YOLO v5 model is used for precise
+letter detection and the number of partitions n is set to 3. In
+our experiment, we employ WGAN-GP to train our model.
+In particular, the adversarial loss for the Global Discrimina-
+tor can be formulated as follows:
+LDg =E˜y [Dg (˜y)] −Ey [Dg (y)]
++ λgp1Eˆy
+h ∥∇ˆyDg (ˆy)∥2 −1
+2i
+,
+ˆy = ϵ · ˜y + (1 −ϵ) · y, ϵ ∼U [0, 1] .
+(5)
+Similarly, for the Partition Discriminator Dp, the formulation
+is as follows:
+LDp =E˜y [Dp (P (˜y))] −Ey [Dp (P (y))]
++ λgp2Eˆy
+h ∥∇ˆyDp (P (ˆy))∥2 −1
+2i
+,
+ˆy = ϵ · P (˜y) + (1 −ϵ) · P (y) , ϵ ∼U [0, 1] ,
+(6)
+where P is the partition operation, λgp1 and λgp2 are the
+weighting parameters used to control the gradient penalty.
+Note that we apply both discriminators to the outputs at three
+different scales.
+In addition to the adversarial loss, we also incorporate re-
+construction loss Lrec, defined as follows:
+Lrec = λl1 ∥y −˜y∥1 + λper ∥ψvgg (y) −ψvgg (˜y)∥2 ,
+(7)
+where the ψvgg represents a pre-trained VGG-19 network [Si-
+monyan and Zisserman, 2014], from which we use feature
+maps from the 8th, 15th, and 22nd ReLU layers to compare
+shallow textures and deep features between real and gener-
+ated images.
+4.3
+Text Reconstruction Module
+We also incorporate a Text Reconstruction Module T specif-
+ically designed to enhance our model’s ability to accurately
+interpret characters on license plate images. T merges the
+Decoder’s intermediate feature FD with the fusion latent code
+F2,3 along the channel dimension. This combined feature
+then traverses a series of convolutional and linear layers, re-
+sulting in a vector that represents the recognized text. Con-
+currently, a pre-trained CRNN model extracts ground-truth
+text vectors from real images. We calculate the L1 loss be-
+tween the output vector from our Text Reconstruction Module
+T and the ground-truth text vector. The loss is defined as:
+Ltext = ∥T (F2,3, FD) −ψcrnn (y)∥1 ,
+(8)
+where FD is the feature maps obtained from the middle layers
+of Decoder, ψcrnn represents the pre-trained CRNN model.
+4.4
+Fully Objective
+Our full objective is
+L(E, D, F, Dg, Dp, T) = Lrec + λgLDg + λpLDp
++ λtLtext,
+(9)
+where λg, λp and λt control the relative importance of the
+different objectives. We aim to solve:
+E∗, F ∗, D∗= arg
+min
+E,F,D,T max
+Dg,Dp L(E, D, F, Dg, Dp, T).
+(10)
+5
+Experiment
+5.1
+Experimental Setups
+Dataset setup.
+The proposed LPBlur dataset is partitioned
+into a training set with 9,288 image pairs, and a test set with
+1,000 image pairs. The test set encompasses 500 pairs ac-
+quired under normal light conditions and another 500 pairs
+captured in low light conditions.
+Evaluation metrics.
+To evaluate the image quality of de-
+blurred images, we adopt three evaluation metrics: PSNR,
+SSIM, and Perceptual Loss (PerL). The Perceptual Loss is
+specifically defined by comparing the generated images with
+the ground truth images at the output feature maps of sequen-
+tial layers 8, 15, and 22 of a pre-trained VGG-19 model.
+To assess the recognisability of the generated license plate
+images, we calculate the Text Levenshtein Distance (TLD)
+[Levenshtein and others, 1966] between the detected text of
+the generated images and the real images.
+
+
+===== PAGE 6 =====
+
+Ground 
+Truth
+LPDGAN 
+(ours)
+LBAG
+MSSNet
+MIMO-Unet
+Pix2Pix
+DeblurGAN-v2
+Blurred 
+Image
+Normal Light
+Low Light
+Figure 5: Visual comparison of different deblurring methods on LPBlur dataset. The test scene is divided into normal light and low light.
+Since the results in low light scenes are difficult to distinguish visually, we uniformly increase their brightness. The original brightness of the
+low light scene refers to the first line, which is Blur Image.
+Table 1: Quantitative results of comparing motion deblurring models. “PerL” and “TLD” denote Perceptual Loss and Text Levenshtein
+Distance, respectively.
+Scenario
+Normal Light
+Low Light
+PerL↓
+PSNR↑
+SSIM↑
+TLD↓
+PerL↓
+PSNR↑
+SSIM↑
+TLD↓
+Pix2Pix
+5.57
+28.89
+0.6669
+1.35
+2.24
+28.71
+0.7491
+2.53
+DeblurGAN v2
+8.02
+28.51
+0.5257
+2.28
+4.32
+28.11
+0.5451
+4.34
+MIMO-UNet
+3.79
+29.12
+0.7448
+1.02
+1.65
+29.03
+0.8083
+2.68
+MSSNet
+3.39
+29.63
+0.7891
+0.62
+2.74
+29.62
+0.8725
+1.05
+LBAG
+3.34
+29.24
+0.7916
+0.58
+1.44
+29.44
+0.8889
+1.13
+LPDGAN (ours)
+3.31
+29.95
+0.7950
+0.57
+1.01
+30.96
+0.9214
+0.81
+Implementation details.
+The shape of multi-scale input
+images for LPDGAN are (112, 224, 3), (56, 112, 3), and
+(28, 56, 3) respectively.
+Random rain adding and random
+cutout are utilized for data augmentation. The optimizer we
+use is Adam [Kingma and Ba, 2014]. The batch size is set
+to 7. The initial learning rate is 10−4, and the linear weight
+decay is used after the 100th epoch. All experiments are con-
+ducted on a GeForce RTX 3090 GPU.
+5.2
+Deblur Results
+To evaluate the deblur performance of our method, we com-
+pare LPDGAN with five SOTA methods: Pix2Pix [Isola et
+al., 2017], DeblurGAN v2 [Kupyn et al., 2019], MIMO-Unet
+[Cho et al., 2021], MSSNet [Kim et al., 2022], and LBAG [Li
+et al., 2023] on LPBlur.
+From the results presented in Table 1, it can be observed
+that our LPDGAN outperforms all other models in both nor-
+mal and low light conditions.
+In normal light conditions,
+our LPDGAN achieves a PerL of 3.31, PSNR of 29.95, and
+SSIM of 0.795, which are superior to the latest deblurring
+method LBAG. The performance gap becomes even more
+pronounced when dealing with low light images, with our
+model exhibiting improvements of 29.8%, 4.5%, and 3.7%
+in PerL, PSNR, and SSIM, respectively, compared to LBAG
+and MSSNet.
+Figure 5 provides a visual comparison between sets of
+blurred and deblurred images under two light conditions. In
+the case of normal light, our LPDGAN effectively restores
+license plates afflicted with severe motion blur, accurately
+generating and reconstructing characters such as ‘D’, ‘O’ and
+‘B’, as well as numbers like ‘7’, ‘1’, and ‘L’, which often
+pose challenges for other models, as shown in the 1st, 3rd
+and 7th column of Figure 5. In low light scenarios, where
+license plates are barely visible to the human eye, our model
+excels in generating details that significantly surpass the per-
+formance of other models. This highlights the inadequacy of
+models designed for minor blurs in large scenes when applied
+to the deblurring of license plates, which are subject to more
+severe blurring.
+
+
+===== PAGE 7 =====
+
+Blurred 
+License Plate
+Trained on 
+Synthetic Data
+Trained on 
+LPBlur Data
+Ground 
+Truth
+Figure 6: Visual results comparison of LPDGAN trained on syn-
+thetic data and LPBlur data.
+Normal Light
+PerL↓
+PSNR↑
+SSIM↑
+TLD↓
+Synthetic Data
+3.45
+28.74
+0.7061
+1.68
+LPBlur Data
+3.31
+29.95
+0.7950
+0.57
+Low Light
+PerL↓
+PSNR↑
+SSIM↑
+TLD↓
+Synthetic Data
+2.05
+28.28
+0.7933
+2.65
+LPBlur Data
+1.01
+30.96
+0.9214
+0.81
+Table 2: Quantitative comparison using synthetic and LPBlur data
+in normal and low light scenarios, respectively.
+5.3
+Text Recognition Results
+We further evaluate the plate text recognition accuracy based
+on those deblurred images. The CRNN [Shi et al., 2016]
+is incorporated for the recognition of generated and sharp
+license plate characters. The 4th and 8th columns in Ta-
+ble 1 compare the TLD between the generated images and
+original sharp images. In the context of normal light condi-
+tions, LPDGAN exhibits comparable performance to LBAG
+in terms of TLD but surpasses all other models. Under low
+light conditions, LPDGAN is the only model with a TLD
+lower than 1. This implies that a pre-trained CRNN model,
+when employed to recognize deblurred license plate images
+produced by LPDGAN, will obtain an average error in less
+than one character per instance. Consequently, LPDGAN has
+the best performance overall, demonstrating robust capability
+in deblurring license plates across two scenarios.
+5.4
+Ablation Study
+To evaluate the effectiveness of each proposed module, a se-
+ries of ablation experiments are performed, which is shown in
+Table 3. The omission of the Latent Fusion Module leads to
+a decline in global metrics, underscoring its effectiveness in
+fusing multi-scale features and improving the model’s perfor-
+mance in restoring sharp images. Removing the Text Recon-
+struction Module results in a significant downturn in global
+metrics, particularly noticeable under low light conditions.
+This highlights the pivotal role of the Text Reconstruction
+Module in enabling the model to have a deeper understand-
+ing and restoration capability for license plates affected by
+severe pixel disruption. Similarly, the exclusion of the Par-
+tition Discriminator Module deteriorates global metrics and
+notably affects the SSIM metric to a greater extent. This con-
+firms the module’s contribution to enhancing the model focus
+on the details of each letter on the license plate.
+Model No.
+Normal Light
+La. Te. PD PerL↓PSNR↑SSIM↑TLD↓
+1
+✓
+✓
+3.49
+29.68
+0.7883
+0.69
+2
+✓
+✓
+3.56
+29.41
+0.7797
+0.72
+3
+✓
+✓
+3.41
+29.73
+0.7829
+0.61
+LPDGAN
+✓
+✓
+✓
+3.31
+29.95
+0.7950
+0.57
+Model No.
+Low Light
+La. Te. PD PerL↓PSNR↑SSIM↑TLD↓
+1
+✓
+✓
+1.26
+30.05
+0.9165
+0.92
+2
+✓
+✓
+1.79
+29.12
+0.8861
+1.45
+3
+✓
+✓
+1.38
+29.93
+0.9012
+1.01
+LPDGAN
+✓
+✓
+✓
+1.01
+30.96
+0.9214
+0.81
+Table 3: Ablations of LPDGAN on LPBlur. La.,Te. and PD de-
+note the Latent Fusion Module, Text Reconstruction Module and
+Partition Discriminator Module, respectively.
+5.5
+Necessity of LPBlur
+We further demonstrate the importance of introducing a
+dataset consisting of real blurred images for the task of li-
+cense plate deblurring. To assess this, we employ different
+blur kernels randomly to the sharp images in LPBlur dataset
+and finally create a synthetic dataset. The result samples, il-
+lustrated in Figure 6 and summarized in Table 2, clearly in-
+dicate that LPDGAN trained on the synthetic dataset fails to
+eliminate real-world license plate blur effectively. This is ev-
+ident both visually and in the metric evaluations, showcasing
+poorer performance compared to when trained on the LPBlur
+dataset.
+The aforementioned outcomes highlight a significant dis-
+parity between synthetic and real-world license plate blur,
+emphasizing that synthetic blurred image data cannot serve as
+a substitute for the LPBlur dataset. Thus, the LPBlur dataset
+proves to be more effective in training models for real-world
+license plate deblurring.
+6
+Conclusion
+In this paper, we study the issue of motion license plates de-
+blurring. We introduce the first large-scale license plate de-
+blurring dataset for this research and address color bias and
+misalignment problems through appropriate data collection
+methods and post-processing. Furthermore, given that the de-
+gree of blur caused by vehicular motion substantially exceeds
+that induced by camera shake, we propose a model based on
+multi-scale input and output for license plate deblurring. This
+includes a latent fusion module, a supervision module for tex-
+tual modality information, and a partition discriminator mod-
+ule. Experimental results indicate that our model performs
+favorably in comparison to current state-of-the-art deblurring
+algorithms. In the future, we intend to augment our dataset
+with license plates from a broader range of countries and re-
+gions to enhance its diversity. Regarding the model, we in-
+tend to incorporate modules that ensure the restoration capa-
+bility for spatially complex characters, such as Chinese char-
+acters.
+
+
+===== PAGE 8 =====
+
+Acknowledgments
+This work was jointly supported by the National Natural Sci-
+ence Foundation of China (62201474 and 62206180), Suzhou
+Science and Technology Development Planning Programme
+(Grant No.ZXL2023171) and XJTLU Research Development
+Funds (RDF-21-02-084, RDF-22-01-129, RDF-22-01-134,
+and RDF-23-01-053).
+Ethical Statement
+To prevent the disclosure of personal privacy, all private in-
+formation, including human faces and surrounding scenery, is
+removed from the images in the LPBlur, and only the license
+plate number is retained. In addition, sensitive metadata in
+the image is removed, including GPS location, timestamp,
+etc.
+References
+[Chang et al., 2021] Meng Chang, Chenwei Yang, Huajun
+Feng, Zhihai Xu, and Qi Li.
+Beyond camera motion
+blur removing:
+How to handle outliers in deblurring.
+IEEE Transactions on Computational Imaging, 7:463–
+474, 2021.
+[Cho and Lee, 2009] Sunghyun Cho and Seungyong Lee.
+Fast motion deblurring. In ACM SIGGRAPH Asia 2009
+papers, pages 1–8. 2009.
+[Cho et al., 2021] Sung-Jin Cho,
+Seo-Won Ji,
+Jun-Pyo
+Hong, Seung-Won Jung, and Sung-Jea Ko.
+Rethinking
+coarse-to-fine approach in single image deblurring.
+In
+Proceedings of the IEEE/CVF international conference on
+computer vision, pages 4641–4650, 2021.
+[Evangelidis and Psarakis, 2008] Georgios
+D
+Evangelidis
+and Emmanouil Z Psarakis.
+Parametric image align-
+ment using enhanced correlation coefficient maximization.
+IEEE transactions on pattern analysis and machine intel-
+ligence, 30(10):1858–1865, 2008.
+[Fergus et al., 2006] Rob Fergus, Barun Singh, Aaron Hertz-
+mann, Sam T Roweis, and William T Freeman. Removing
+camera shake from a single photograph. In Acm Siggraph
+2006 Papers, pages 787–794. 2006.
+[Gong et al., 2017] Dong Gong, Jie Yang, Lingqiao Liu,
+Yanning Zhang, Ian Reid, Chunhua Shen, Anton Van
+Den Hengel, and Qinfeng Shi. From motion blur to mo-
+tion flow: A deep learning solution for removing heteroge-
+neous motion blur. In Proceedings of the IEEE conference
+on computer vision and pattern recognition, pages 2319–
+2328, 2017.
+[Hyun Kim et al., 2013] Tae Hyun Kim, Byeongjoo Ahn,
+and Kyoung Mu Lee. Dynamic scene deblurring. In Pro-
+ceedings of the IEEE international conference on com-
+puter vision, pages 3160–3167, 2013.
+[Isola et al., 2017] Phillip Isola, Jun-Yan Zhu, Tinghui Zhou,
+and Alexei A Efros. Image-to-image translation with con-
+ditional adversarial networks. In Proceedings of the IEEE
+conference on computer vision and pattern recognition,
+pages 1125–1134, 2017.
+[Ji et al., 2022] Seo-Won Ji, Jeongmin Lee, Seung-Wook
+Kim, Jun-Pyo Hong, Seung-Jin Baek, Seung-Won Jung,
+and Sung-Jea Ko. Xydeblur: divide and conquer for sin-
+gle image deblurring. In Proceedings of the IEEE/CVF
+Conference on Computer Vision and Pattern Recognition,
+pages 17421–17430, 2022.
+[Jiang et al., 2020] Zhe Jiang, Yu Zhang, Dongqing Zou,
+Jimmy Ren, Jiancheng Lv, and Yebin Liu. Learning event-
+based motion deblurring. In Proceedings of the IEEE/CVF
+Conference on Computer Vision and Pattern Recognition,
+pages 3320–3329, 2020.
+[Jocher, 2020] Glenn Jocher. YOLOv5 by Ultralytics, May
+2020.
+[Karnewar and Wang, 2020] Animesh Karnewar and Oliver
+Wang. Msg-gan: Multi-scale gradients for generative ad-
+versarial networks. In Proceedings of the IEEE/CVF con-
+ference on computer vision and pattern recognition, pages
+7799–7808, 2020.
+[Kim et al., 2022] Kiyeon
+Kim,
+Seungyong
+Lee,
+and
+Sunghyun Cho.
+Mssnet: Multi-scale-stage network for
+single image deblurring.
+In European Conference on
+Computer Vision, pages 524–539. Springer, 2022.
+[Kingma and Ba, 2014] Diederik P Kingma and Jimmy Ba.
+Adam:
+A method for stochastic optimization.
+arXiv
+preprint arXiv:1412.6980, 2014.
+[K¨ohler et al., 2012] Rolf K¨ohler, Michael Hirsch, Betty
+Mohler, Bernhard Sch¨olkopf, and Stefan Harmeling.
+Recording and playback of camera shake: Benchmark-
+ing blind deconvolution with a real-world database.
+In
+Computer Vision–ECCV 2012: 12th European Conference
+on Computer Vision, Florence, Italy, October 7-13, 2012,
+Proceedings, Part VII 12, pages 27–40. Springer, 2012.
+[Kupyn et al., 2018] Orest
+Kupyn,
+Volodymyr
+Budzan,
+Mykola Mykhailych, Dmytro Mishkin, and Jiˇr´ı Matas.
+Deblurgan:
+Blind motion deblurring using conditional
+adversarial networks. In Proceedings of the IEEE confer-
+ence on computer vision and pattern recognition, pages
+8183–8192, 2018.
+[Kupyn et al., 2019] Orest Kupyn, Tetiana Martyniuk, Junru
+Wu, and Zhangyang Wang.
+Deblurgan-v2: Deblurring
+(orders-of-magnitude) faster and better. In Proceedings of
+the IEEE/CVF international conference on computer vi-
+sion, pages 8878–8887, 2019.
+[Lai et al., 2016] Wei-Sheng Lai, Jia-Bin Huang, Zhe Hu,
+Narendra Ahuja, and Ming-Hsuan Yang. A comparative
+study for single image blind deblurring. In Proceedings
+of the IEEE Conference on Computer Vision and Pattern
+Recognition, pages 1701–1709, 2016.
+[Levenshtein and others, 1966] Vladimir I Levenshtein et al.
+Binary codes capable of correcting deletions, insertions,
+and reversals. In Soviet physics doklady, volume 10, pages
+707–710. Soviet Union, 1966.
+[Levin et al., 2009] Anat Levin, Yair Weiss, Fredo Durand,
+and William T Freeman. Understanding and evaluating
+blind deconvolution algorithms. In 2009 IEEE conference
+
+
+===== PAGE 9 =====
+
+on computer vision and pattern recognition, pages 1964–
+1971. IEEE, 2009.
+[Li et al., 2023] Haoying Li, Ziran Zhang, Tingting Jiang,
+Peng Luo, Huajun Feng, and Zhihai Xu. Real-world deep
+local motion deblurring. In Proceedings of the AAAI Con-
+ference on Artificial Intelligence, volume 37, pages 1314–
+1322, 2023.
+[Liu et al., 2020] Wei Liu, Qiong Yan, and Yuzhi Zhao.
+Densely self-guided wavelet network for image denoising.
+In Proceedings of the IEEE/CVF Conference on Computer
+Vision and Pattern Recognition Workshops, pages 432–
+433, 2020.
+[Liu et al., 2021] Ze Liu, Yutong Lin, Yue Cao, Han Hu,
+Yixuan Wei, Zheng Zhang, Stephen Lin, and Baining Guo.
+Swin transformer: Hierarchical vision transformer using
+shifted windows.
+In Proceedings of the IEEE/CVF in-
+ternational conference on computer vision, pages 10012–
+10022, 2021.
+[Nah et al., 2017] Seungjun Nah, Tae Hyun Kim, and Ky-
+oung Mu Lee. Deep multi-scale convolutional neural net-
+work for dynamic scene deblurring. In Proceedings of the
+IEEE conference on computer vision and pattern recogni-
+tion, pages 3883–3891, 2017.
+[Noroozi et al., 2017] Mehdi Noroozi, Paramanand Chan-
+dramouli, and Paolo Favaro.
+Motion deblurring in the
+wild. In Pattern Recognition: 39th German Conference,
+GCPR 2017, Basel, Switzerland, September 12–15, 2017,
+Proceedings 39, pages 65–77. Springer, 2017.
+[Ramakrishnan et al., 2017] Sainandan
+Ramakrishnan,
+Shubham Pachori,
+Aalok Gangopadhyay,
+and Shan-
+muganathan Raman.
+Deep generative filter for motion
+deblurring. In Proceedings of the IEEE international con-
+ference on computer vision workshops, pages 2993–3000,
+2017.
+[Ren et al., 2017] Dongwei Ren, Wangmeng Zuo, David
+Zhang, Jun Xu, and Lei Zhang. Partial deconvolution with
+inaccurate blur kernel. IEEE transactions on image pro-
+cessing, 27(1):511–524, 2017.
+[Ren et al., 2018] Wenqi Ren, Jiawei Zhang, Lin Ma, Jin-
+shan Pan, Xiaochun Cao, Wangmeng Zuo, Wei Liu, and
+Ming-Hsuan Yang. Deep non-blind deconvolution via gen-
+eralized low-rank approximation. Advances in neural in-
+formation processing systems, 31, 2018.
+[Rim et al., 2020] Jaesung Rim, Haeyun Lee, Jucheol Won,
+and Sunghyun Cho. Real-world blur dataset for learning
+and benchmarking deblurring algorithms.
+In Computer
+Vision–ECCV 2020: 16th European Conference, Glas-
+gow, UK, August 23–28, 2020, Proceedings, Part XXV 16,
+pages 184–201. Springer, 2020.
+[Shan et al., 2008] Qi Shan, Jiaya Jia, and Aseem Agarwala.
+High-quality motion deblurring from a single image. Acm
+transactions on graphics (tog), 27(3):1–10, 2008.
+[Shen et al., 2019] Ziyi Shen, Wenguan Wang, Xiankai Lu,
+Jianbing Shen, Haibin Ling, Tingfa Xu, and Ling Shao.
+Human-aware motion deblurring. In Proceedings of the
+IEEE/CVF International Conference on Computer Vision,
+pages 5572–5581, 2019.
+[Shi et al., 2016] Baoguang Shi, Xiang Bai, and Cong Yao.
+An end-to-end trainable neural network for image-based
+sequence recognition and its application to scene text
+recognition. IEEE transactions on pattern analysis and
+machine intelligence, 39(11):2298–2304, 2016.
+[Simonyan and Zisserman, 2014] Karen Simonyan and An-
+drew Zisserman.
+Very deep convolutional networks
+for large-scale image recognition.
+arXiv preprint
+arXiv:1409.1556, 2014.
+[Sun et al., 2013] Libin Sun, Sunghyun Cho, Jue Wang, and
+James Hays.
+Edge-based blur kernel estimation using
+patch priors. In IEEE international conference on com-
+putational photography (ICCP), pages 1–8. IEEE, 2013.
+[Sun et al., 2015] Jian Sun, Wenfei Cao, Zongben Xu, and
+Jean Ponce. Learning a convolutional neural network for
+non-uniform motion blur removal. In Proceedings of the
+IEEE conference on computer vision and pattern recogni-
+tion, pages 769–777, 2015.
+[Tao et al., 2018] Xin Tao, Hongyun Gao, Xiaoyong Shen,
+Jue Wang, and Jiaya Jia. Scale-recurrent network for deep
+image deblurring. In Proceedings of the IEEE conference
+on computer vision and pattern recognition, pages 8174–
+8182, 2018.
+[Wang et al., 2018] Xintao Wang, Ke Yu, Chao Dong, and
+Chen Change Loy. Recovering realistic texture in image
+super-resolution by deep spatial feature transform. In Pro-
+ceedings of the IEEE conference on computer vision and
+pattern recognition, pages 606–615, 2018.
+[Whyte et al., 2012] Oliver Whyte, Josef Sivic, Andrew Zis-
+serman, and Jean Ponce.
+Non-uniform deblurring for
+shaken images. International journal of computer vision,
+98:168–186, 2012.
+[Xu et al., 2018] Zhenbo Xu, Wei Yang, Ajin Meng, Nanxue
+Lu, Huan Huang, Changchun Ying, and Liusheng Huang.
+Towards end-to-end license plate detection and recogni-
+tion: A large dataset and baseline. In Proceedings of the
+European conference on computer vision (ECCV), pages
+255–271, 2018.
+[Zhang et al., 2023] Xiang Zhang,
+Lei Yu,
+Wen Yang,
+Jianzhuang Liu, and Gui-Song Xia. Generalizing event-
+based motion deblurring in real-world scenarios. In Pro-
+ceedings of the IEEE/CVF International Conference on
+Computer Vision, pages 10734–10744, 2023.
+[Zhao et al., 2022] Suiyi Zhao, Zhao Zhang, Richang Hong,
+Mingliang Xu, Yi Yang, and Meng Wang.
+Fcl-gan: A
+lightweight and real-time baseline for unsupervised blind
+image deblurring.
+In Proceedings of the 30th ACM In-
+ternational Conference on Multimedia, pages 6220–6229,
+2022.

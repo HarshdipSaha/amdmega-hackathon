@@ -1,0 +1,72 @@
+---
+license: mit
+task_categories:
+- image-to-text
+- visual-question-answering
+- document-question-answering
+language:
+- en
+- zh
+tags:
+- ocr
+- document-understanding
+- multimodal
+size_categories:
+- 1K<n<10K
+viewer: false
+---
+
+# CC-OCR V2: Benchmarking Large Multimodal Models for Literacy in Real-world Document Processing
+
+## Dataset Summary
+
+**CC-OCR V2** is a comprehensive and challenging OCR benchmark tailored to real-world document processing. It focuses on practical enterprise document processing tasks and incorporates hard and corner cases that are critical yet underrepresented in prior benchmarks. 
+
+The dataset comprises **7,093 high-difficulty samples** covering 5 major OCR-centric tracks: Text Recognition, Document Parsing, Document Grounding, Key Information Extraction, and Document Question Answering.
+
+## Dataset Structure
+
+The dataset is structured hierarchically by `task` and `sub_task`. Below is the statistical breakdown of the dataset:
+
+| Task | Sub-task | Samples |
+| :--- | :--- | :--- |
+| **Extraction** | business_transactions | 340 |
+| | public_services | 369 |
+| | regulated_records | 300 |
+| **Grounding** | object_grounding | 734 |
+| | text_grounding | 734 |
+| **Parsing** | complex_table_parsing | 300 |
+| | formula_parsing | 100 |
+| | general_documents_parsing | 300 |
+| | info_board_parsing | 26 |
+| | molecular_parsing | 100 |
+| **QA** | blueprint_qa | 100 |
+| | dashboards_fact_qa | 400 |
+| | dashboards_numeric_qa | 500 |
+| | financial_documents_qa | 1000 |
+| **Recognition** | multi_lingual_recognition | 640 |
+| | natural_scene_recognition | 1150 |
+| **Total** | | **7093** |
+
+## Data Instances
+
+Each sample in the dataset contains the following fields:
+
+- `task` (str): The primary track/category of the task (e.g., `Extraction`, `QA`, `Parsing`).
+- `sub_task` (str): The specific sub-category (e.g., `business_transactions`, `financial_documents_qa`).
+- `scenario` (str): The specific application scenario or document type.
+- `question` (str): The prompt or instruction given to the model.
+- `images_list` (str): A string containing the image file paths associated with the sample.
+- `image` (list of images): The actual images rendered by the viewer.
+- `answer` (str): The ground truth answer or expected output (often in JSON or structured text format).
+
+## Citation
+
+```bibtex
+@article{xu2026ccocr,
+  title={CC-OCR V2: Benchmarking Large Multimodal Models for Literacy in Real-world Document Processing},
+  author={Zhipeng Xu and Junhao Ji and Zulong Chen and Zhenghao Liu and Qing Liu and Chunyi Peng and Zubao Qin and Ze Xu and Jianqiang Wan and Jun Tang and Zhibo Yang and Shuai Bai and Dayiheng Liu},
+  journal={arXiv preprint arXiv:2605.03903},
+  year={2026}
+}
+```

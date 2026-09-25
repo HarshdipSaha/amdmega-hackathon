@@ -1,0 +1,65 @@
+{
+  "query": "FireRed OCR 2 HunyuanOCR OCRBench",
+  "mode": "text",
+  "region": "wt-wt",
+  "retrieved_at": "2026-09-22T12:33:30.188648+00:00",
+  "attempts": [
+    {
+      "endpoint": "ddgs.text(backend=duckduckgo)",
+      "http_status": null,
+      "outcome": "error",
+      "error": "No results found."
+    },
+    {
+      "endpoint": "https://html.duckduckgo.com/html/",
+      "url": "https://html.duckduckgo.com/html/?q=FireRed+OCR+2+HunyuanOCR+OCRBench",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://lite.duckduckgo.com/lite/",
+      "url": "https://lite.duckduckgo.com/lite/?q=FireRed+OCR+2+HunyuanOCR+OCRBench",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://www.bing.com/search",
+      "url": "https://www.bing.com/search?q=FireRed+OCR+2+HunyuanOCR+OCRBench",
+      "http_status": 200,
+      "outcome": "success"
+    }
+  ],
+  "results": [
+    {
+      "title": "Contact Us | Help & Support | Tesco UK",
+      "href": "https://www.bing.com/ck/a?!&&p=b6bd243f766f66505dd2e57d6ee72ad632fc27a744469958a04e02c83d968dfaJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=276464a1-13e8-6e6d-2ff4-737d12536fc3&u=a1aHR0cHM6Ly93d3cudGVzY28uY29tL2hlbHAvY29udGFjdD9tc29ja2lkPTI3NjQ2NGExMTNlODZlNmQyZmY0NzM3ZDEyNTM2ZmMz&ntb=1",
+      "body": "Call 0800 591 688 * if you can’t find the answer to your Clubcard question. Our WhatsApp team is here to help. Find out about how …"
+    },
+    {
+      "title": "FAQ : Contact us - Tesco.com",
+      "href": "https://www.bing.com/ck/a?!&&p=7092ad3d117cc518132868eaabc57096446da1f757f8eadfa0adfb47faeb598aJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=276464a1-13e8-6e6d-2ff4-737d12536fc3&u=a1aHR0cHM6Ly93d3cudGVzY28uY29tL2hlbHAvcGFnZXMvY2x1YmNhcmQtZmFxcy9jbHViY2FyZC1mb3ItMTYtMTdzL2NvbnRhY3QtdXM_bXNvY2tpZD0yNzY0NjRhMTEzZTg2ZTZkMmZmNDczN2QxMjUzNmZjMw&ntb=1",
+      "body": "Jun 23, 2026 · Please contact our Customer Service Team who will be happy to help you: WhatsApp: 0800 917 7403. Phone: 0800 …"
+    },
+    {
+      "title": "Tesco Customer Service Phone Number +4 480 050 5555, Email, …",
+      "href": "https://www.bing.com/ck/a?!&&p=238c272718f2f1fe44fffe20aedc3aa2045910c498fb3d19783faeb7c42f28afJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=276464a1-13e8-6e6d-2ff4-737d12536fc3&u=a1aHR0cHM6Ly90ZXNjby5waXNzZWRjb25zdW1lci5jb20vY3VzdG9tZXItc2VydmljZS5odG1s&ntb=1",
+      "body": "1 day ago · The Tesco customer service number is +44-800-505-555. You can call this helpline for general information about the …"
+    },
+    {
+      "title": "Tesco Complaints",
+      "href": "https://www.bing.com/ck/a?!&&p=83d4969d2b5d4d513d5540e2070d6025bb5d6737159720304aa985fb3158ae09JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=276464a1-13e8-6e6d-2ff4-737d12536fc3&u=a1aHR0cHM6Ly93d3cuY29tcGxhaW50c2RlcGFydG1lbnQuY28udWsvdGVzY28v&ntb=1",
+      "body": "Apr 19, 2023 · Tesco complaints contacts Visit Customer Services Call Customer Services on 0800 505555 Email Customer …"
+    },
+    {
+      "title": "Contact Us | Customer Care & Support | Tesco Mobile",
+      "href": "https://www.bing.com/ck/a?!&&p=a85c4d09ab4e83223fb00760ad734b37e6ea38a0e71efc03904576479e3394b5JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=276464a1-13e8-6e6d-2ff4-737d12536fc3&u=a1aHR0cHM6Ly93d3cudGVzY29tb2JpbGUuY29tL2NvbnRhY3QtdXM&ntb=1",
+      "body": "Get fast support with Tesco Mobile’s online help tools, plus ways to contact us if you need more assistance"
+    },
+    {
+      "title": "General Enquiry | Pay Monthly | Contact Us | Tesco Mobile",
+      "href": "https://www.bing.com/ck/a?!&&p=90b8707681923a3322969c3015e9c5d1f8c537c0bcd48e9b967b25566ac3570cJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=276464a1-13e8-6e6d-2ff4-737d12536fc3&u=a1aHR0cHM6Ly93d3cudGVzY29tb2JpbGUuY29tL2NvbnRhY3QtdXMvcGF5LW1vbnRobHkvZ2VuZXJhbC1lbnF1aXJ5&ntb=1",
+      "body": "Discover answers to your queries in Tesco Mobile's frequently asked questions section. Save time and find solutions to common …"
+    }
+  ],
+  "source": "Bing HTML (non-DDG fallback)"
+}

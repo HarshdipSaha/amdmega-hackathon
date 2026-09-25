@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/ZH8mYBrQqSlvyKIs1jPMu1fE29I</id>
+  <title>arXiv Query: search_query=ti:Qwen3.5 OR ti:CCPD OR (ti:license AND ti:plate AND ti:dataset) OR (ti:TextZoom)&amp;id_list=&amp;start=0&amp;max_results=12</title>
+  <updated>2026-09-22T12:32:33Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=ti:Qwen3.5+OR+(ti:CCPD+OR+((ti:license+AND+(ti:plate+AND+ti:dataset))+OR+ti:TextZoom))&amp;start=0&amp;max_results=12&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>12</opensearch:itemsPerPage>
+  <opensearch:totalResults>15</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2607.04244v2</id>
+    <title>Quantize the Target, Quantize the Drafter: Efficient Inference with Qwen3.5-4B</title>
+    <updated>2026-07-07T01:50:00Z</updated>
+    <link href="https://arxiv.org/abs/2607.04244v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2607.04244v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This report describes our approach to the Efficient Qwen Competition, where the goal is to enable low-latency serving of Qwen3.5-4B on a resource-constrained NVIDIA A10G GPU. Our system combines a quantized target model with speculative decoding. To recover accuracy, we apply quantization-aware distillation to the target model while retaining the original quantization grid. To speed up decoding, a block-diffusion drafter specialized for the quantized target model is trained using a two-stage procedure: first learning from the high-precision target and then adapting to the low-precision target. Because the drafter is invoked at every speculative decoding step, we further reduce its overhead with quantization and sliding-window attention, preserving draft-token acceptance while improving long-context decoding latency. As a result, our submission achieves a 6.978$\times$ average speedup over the baseline while satisfying the required quality thresholds, ranking 3rd overall. We hope these results provide useful insights for practical LLM inference. The code and resources are available at https://github.com/nota-github/adaptfm-quant-dflash</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-07-05T11:44:45Z</published>
+    <arxiv:comment>All authors contributed equally. Our submission to Efficient Qwen Competition, ICML 2026 Workshop on AdaptFM</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Jaeyeon Kim</name>
+    </author>
+    <author>
+      <name>Jewon Lee</name>
+    </author>
+    <author>
+      <name>Bo-Kyeong Kim</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2607.01927v1</id>
+    <title>TUDUM: A Turkish-Thinking Reasoning Pipeline for Qwen3.5-27B</title>
+    <updated>2026-07-02T09:22:36Z</updated>
+    <link href="https://arxiv.org/abs/2607.01927v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2607.01927v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper presents TUDUM (Türkçe Düşünen Üretken Model), a project pipeline for adapting a Qwen-family 27B thinking model toward Turkish reasoning. The central problem is not only to answer Turkish prompts in Turkish, but to make the explicit reasoning trace itself Turkish. A thinking model may translate a Turkish prompt into an English-centered internal or visible scratchpad, solve the problem mostly in English, and only localize the final answer. TUDUM instead treats the generated &lt;think&gt;...&lt;/think&gt; block as a trainable behavior. The pipeline starts from the project base checkpoint unsloth/Qwen3.5-27B, applies supervised fine-tuning (SFT) on 15,991 Turkish reasoning examples using LoRA adapters, and then applies GRPO-family reinforcement learning on a proxy-filtered Turkish mathematics environment. The results are mixed. SFT made the model shorter and more consistently Turkish in its reasoning behavior, with large reductions in average response length and thinking exhaustion, but reduced benchmark accuracy. RL recovered some mathematical performance, especially AIME24 at the best early checkpoint, yet did not uniformly improve all benchmarks and did not exceed the base model on the reported Macro-6 average. The contribution is therefore best framed as a technically honest Turkish-thinking reasoning pipeline and evaluation, not as a claim of state-of-the-art Turkish reasoning. The released step-50 model is publicly available.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-07-02T09:22:36Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Baran Bingol</name>
+    </author>
+    <author>
+      <name>Bahaeddin Turkoglu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.11907v2</id>
+    <title>Procedural-skill SFT across capacity tiers: A W-Shaped pre-SFT Trajectory and Regime-Asymmetric Mechanism on 0.8B-4B Qwen3.5 Models</title>
+    <updated>2026-05-13T22:47:52Z</updated>
+    <link href="https://arxiv.org/abs/2605.11907v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.11907v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We measure procedural-skill SFT contribution across three Qwen3.5 dense scales (0.8B, 2B, 4B) on a 200-task / 40-skill holdout, with Claude Haiku 4.5 as a frontier reference. The corpus is 353 rows of (task + procedural-skill block, Opus chain-of-thought, judge-pass) demonstrations.
+  Main finding. Under matched-path LLM-only scoring, the SFT-attributable procedural-$Δ$ lift is roughly uniform across sizes: $+0.070 / +0.040 / +0.075$ at 0.8B / 2B / 4B. Variation in post-SFT $Δ$ ($-0.005$, $+0.100$, $+0.065$) is dominated by a W-shaped pre-SFT base trajectory ($-0.075$, $+0.060$, $-0.010$, Haiku-4-5 at $+0.030$): the 5-step procedure hurts 0.8B and 4B, helps 2B, and helps frontier Haiku modestly. SFT works hardest in absolute terms where the base struggles with the procedure -- a regime-asymmetric pattern with a falsifiable prediction at 8B/14B.
+  Methodology. (i) A bench format-compliance artifact: 83.5% of the holdout uses a deterministic ANSWER-line extractor that under-counts free-form-prose conclusions; our LLM-only re-judge reveals it was systematically biased against the curated condition. (ii) A negative-iteration sequence at 0.8B: three well-formed recipe variants cluster post-SFT curated pass-rate within a 2 pp band, constraining the absolute-pass-rate ceiling to base capacity rather than recipe.
+  Cross-family judge validation. GPT-5.4 via OpenRouter on all 7 configurations (2800 paired episodes) agrees on the direction of every per-student finding: Cohen's $κ\geq 0.754$, agreement $\geq 93.25\%$, max headline $Δ$ shift $\leq 0.035$ pp.
+  Two earlier framings -- "format-only learning at 0.8B" and "SFT contribution shrinks at 4B" -- were path-mismatch artifacts; this paper supersedes both. Single-seed evaluation; threats itemised in the paper.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-12T10:19:33Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Igor Strozzi</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2604.15804v2</id>
+    <title>Qwen3.5-Omni Technical Report</title>
+    <updated>2026-04-21T03:35:14Z</updated>
+    <link href="https://arxiv.org/abs/2604.15804v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2604.15804v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this work, we present Qwen3.5-Omni, the latest advancement in the Qwen-Omni model family. Representing a significant evolution over its predecessor, Qwen3.5-Omni scales to hundreds of billions of parameters and supports a 256k context length. By leveraging a massive dataset comprising heterogeneous text-vision pairs and over 100 million hours of audio-visual content, the model demonstrates robust omni-modality capabilities. Qwen3.5-Omni-plus achieves SOTA results across 215 audio and audio-visual understanding, reasoning, and interaction subtasks and benchmarks, surpassing Gemini-3.1 Pro in key audio tasks and matching it in comprehensive audio-visual understanding. Architecturally, Qwen3.5-Omni employs a Hybrid Attention Mixture-of-Experts (MoE) framework for both Thinker and Talker, enabling efficient long-sequence inference. The model facilitates sophisticated interaction, supporting over 10 hours of audio understanding and 400 seconds of 720P video (at 1 FPS). To address the inherent instability and unnaturalness in streaming speech synthesis, often caused by encoding efficiency discrepancies between text and speech tokenizers, we introduce ARIA. ARIA dynamically aligns text and speech units, significantly enhancing the stability and prosody of conversational speech with minimal latency impact. Furthermore, Qwen3.5-Omni expands linguistic boundaries, supporting multilingual understanding and speech generation across 10 languages with human-like emotional nuance. Finally, Qwen3.5-Omni exhibits superior audio-visual grounding capabilities, generating script-level structured captions with precise temporal synchronization and automated scene segmentation. Remarkably, we observed the emergence of a new capability in omnimodal models: directly performing coding based on audio-visual instructions, which we call Audio-Visual Vibe Coding.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.AS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-04-17T08:05:46Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name> Qwen Team</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2604.08741v1</id>
+    <title>LPLCv2: An Expanded Dataset for Fine-Grained License Plate Legibility Classification</title>
+    <updated>2026-04-09T20:07:36Z</updated>
+    <link href="https://arxiv.org/abs/2604.08741v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2604.08741v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Modern Automatic License Plate Recognition (ALPR) systems achieve outstanding performance in controlled, well-defined scenarios. However, large-scale real-world usage remains challenging due to low-quality imaging devices, compression artifacts, and suboptimal camera installation. Identifying illegible license plates (LPs) has recently become feasible through a dedicated benchmark; however, its impact has been limited by its small size and annotation errors. In this work, we expand the original benchmark to over three times the size with two extra capture days, revise its annotations and introduce novel labels. LP-level annotations include bounding boxes, text, and legibility level, while vehicle-level annotations comprise make, model, type, and color. Image-level annotations feature camera identity, capture conditions (e.g., rain and faulty cameras), acquisition time, and day ID. We present a novel training procedure featuring an Exponential Moving Average-based loss function and a refined learning rate scheduler, addressing common mistakes in testing. These improvements enable a baseline model to achieve an 89.5% F1-score on the test set, considerably surpassing the previous state of the art. We further introduce a novel protocol to explicitly addresses camera contamination between training and evaluation splits, where results show a small impact. Dataset and code are publicly available at https://github.com/lmlwojcik/LPLCv2-Dataset.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-04-09T20:07:36Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Lucas Wojcik</name>
+    </author>
+    <author>
+      <name>Eduardo A. F. Machoski</name>
+    </author>
+    <author>
+      <name>Eduil Nascimento</name>
+    </author>
+    <author>
+      <name>Rayson Laroca</name>
+    </author>
+    <author>
+      <name>David Menotti</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2508.18425v2</id>
+    <title>LPLC: A Dataset for License Plate Legibility Classification</title>
+    <updated>2025-11-13T12:59:03Z</updated>
+    <link href="https://arxiv.org/abs/2508.18425v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2508.18425v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Automatic License Plate Recognition (ALPR) faces a major challenge when dealing with illegible license plates (LPs). While reconstruction methods such as super-resolution (SR) have emerged, the core issue of recognizing these low-quality LPs remains unresolved. To optimize model performance and computational efficiency, image pre-processing should be applied selectively to cases that require enhanced legibility. To support research in this area, we introduce a novel dataset comprising 10,210 images of vehicles with 12,687 annotated LPs for legibility classification (the LPLC dataset). The images span a wide range of vehicle types, lighting conditions, and camera/image quality levels. We adopt a fine-grained annotation strategy that includes vehicle- and LP-level occlusions, four legibility categories (perfect, good, poor, and illegible), and character labels for three categories (excluding illegible LPs). As a benchmark, we propose a classification task using three image recognition networks to determine whether an LP image is good enough, requires super-resolution, or is completely unrecoverable. The overall F1 score, which remained below 80% for all three baseline models (ViT, ResNet, and YOLO), together with the analyses of SR and LP recognition methods, highlights the difficulty of the task and reinforces the need for further research. The proposed dataset is publicly available at https://github.com/lmlwojcik/lplc-dataset.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-08-25T19:18:02Z</published>
+    <arxiv:comment>Accepted for presentation at the Conference on Graphics, Patterns and Images (SIBGRAPI) 2025</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Lucas Wojcik</name>
+    </author>
+    <author>
+      <name>Gabriel E. Lima</name>
+    </author>
+    <author>
+      <name>Valfride Nascimento</name>
+    </author>
+    <author>
+      <name>Eduil Nascimento</name>
+    </author>
+    <author>
+      <name>Rayson Laroca</name>
+    </author>
+    <author>
+      <name>David Menotti</name>
+    </author>
+    <arxiv:doi>10.1109/SIBGRAPI67909.2025.11223367</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/SIBGRAPI67909.2025.11223367" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2505.06393v1</id>
+    <title>Toward Advancing License Plate Super-Resolution in Real-World Scenarios: A Dataset and Benchmark</title>
+    <updated>2025-05-09T19:37:57Z</updated>
+    <link href="https://arxiv.org/abs/2505.06393v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2505.06393v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Recent advancements in super-resolution for License Plate Recognition (LPR) have sought to address challenges posed by low-resolution (LR) and degraded images in surveillance, traffic monitoring, and forensic applications. However, existing studies have relied on private datasets and simplistic degradation models. To address this gap, we introduce UFPR-SR-Plates, a novel dataset containing 10,000 tracks with 100,000 paired low and high-resolution license plate images captured under real-world conditions. We establish a benchmark using multiple sequential LR and high-resolution (HR) images per vehicle -- five of each -- and two state-of-the-art models for super-resolution of license plates. We also investigate three fusion strategies to evaluate how combining predictions from a leading Optical Character Recognition (OCR) model for multiple super-resolved license plates enhances overall performance. Our findings demonstrate that super-resolution significantly boosts LPR performance, with further improvements observed when applying majority vote-based fusion techniques. Specifically, the Layout-Aware and Character-Driven Network (LCDNet) model combined with the Majority Vote by Character Position (MVCP) strategy led to the highest recognition rates, increasing from 1.7% with low-resolution images to 31.1% with super-resolution, and up to 44.7% when combining OCR outputs from five super-resolved images. These findings underscore the critical role of super-resolution and temporal information in enhancing LPR accuracy under real-world, adverse conditions. The proposed dataset is publicly available to support further research and can be accessed at: https://valfride.github.io/nascimento2024toward/</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-05-09T19:37:57Z</published>
+    <arxiv:comment>Accepted for publication in the Journal of the Brazilian Computer Society</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Valfride Nascimento</name>
+    </author>
+    <author>
+      <name>Gabriel E. Lima</name>
+    </author>
+    <author>
+      <name>Rafael O. Ribeiro</name>
+    </author>
+    <author>
+      <name>William Robson Schwartz</name>
+    </author>
+    <author>
+      <name>Rayson Laroca</name>
+    </author>
+    <author>
+      <name>David Menotti</name>
+    </author>
+    <arxiv:doi>10.5753/jbcs.2025.5159</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.5753/jbcs.2025.5159" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2404.13677v2</id>
+    <title>A Dataset and Model for Realistic License Plate Deblurring</title>
+    <updated>2024-04-23T03:12:24Z</updated>
+    <link href="https://arxiv.org/abs/2404.13677v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2404.13677v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Vehicle license plate recognition is a crucial task in intelligent traffic management systems. However, the challenge of achieving accurate recognition persists due to motion blur from fast-moving vehicles. Despite the widespread use of image synthesis approaches in existing deblurring and recognition algorithms, their effectiveness in real-world scenarios remains unproven. To address this, we introduce the first large-scale license plate deblurring dataset named License Plate Blur (LPBlur), captured by a dual-camera system and processed through a post-processing pipeline to avoid misalignment issues. Then, we propose a License Plate Deblurring Generative Adversarial Network (LPDGAN) to tackle the license plate deblurring: 1) a Feature Fusion Module to integrate multi-scale latent codes; 2) a Text Reconstruction Module to restore structure through textual modality; 3) a Partition Discriminator Module to enhance the model's perception of details in each letter. Extensive experiments validate the reliability of the LPBlur dataset for both model training and testing, showcasing that our proposed model outperforms other state-of-the-art motion deblurring methods in realistic license plate deblurring scenarios. The dataset and code are available at https://github.com/haoyGONG/LPDGAN.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-04-21T14:36:57Z</published>
+    <arxiv:comment>Accepted by IJCAI 2024</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Haoyan Gong</name>
+    </author>
+    <author>
+      <name>Yuzheng Feng</name>
+    </author>
+    <author>
+      <name>Zhenrong Zhang</name>
+    </author>
+    <author>
+      <name>Xianxu Hou</name>
+    </author>
+    <author>
+      <name>Jingxin Liu</name>
+    </author>
+    <author>
+      <name>Siqi Huang</name>
+    </author>
+    <author>
+      <name>Hongbin Liu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2405.10949v1</id>
+    <title>Global License Plate Dataset</title>
+    <updated>2024-03-22T13:01:24Z</updated>
+    <link href="https://arxiv.org/abs/2405.10949v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2405.10949v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In the pursuit of advancing the state-of-the-art (SOTA) in road safety, traffic monitoring, surveillance, and logistics automation, we introduce the Global License Plate Dataset (GLPD). The dataset consists of over 5 million images, including diverse samples captured from 74 countries with meticulous annotations, including license plate characters, license plate segmentation masks, license plate corner vertices, as well as vehicle make, colour, and model. We also include annotated data on more classes, such as pedestrians, vehicles, roads, etc. We include a statistical analysis of the dataset, and provide baseline efficient and accurate models. The GLPD aims to be the primary benchmark dataset for model development and finetuning for license plate recognition.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-03-22T13:01:24Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Siddharth Agrawal</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2209.04680v1</id>
+    <title>IR-LPR: Large Scale of Iranian License Plate Recognition Dataset</title>
+    <updated>2022-09-10T14:41:59Z</updated>
+    <link href="https://arxiv.org/abs/2209.04680v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2209.04680v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Object detection has always been practical. There are so many things in our world that recognizing them can not only increase our automatic knowledge of the surroundings, but can also be lucrative for those interested in starting a new business. One of these attractive objects is the license plate (LP). In addition to the security uses that license plate detection can have, it can also be used to create creative businesses. With the development of object detection methods based on deep learning models, an appropriate and comprehensive dataset becomes doubly important. But due to the frequent commercial use of license plate datasets, there are limited datasets not only in Iran but also in the world. The largest Iranian dataset for detection license plates has 1,466 images. Also, the largest Iranian dataset for recognizing the characters of a license plate has 5,000 images. We have prepared a complete dataset including 20,967 car images along with all the detection annotation of the whole license plate and its characters, which can be useful for various purposes. Also, the total number of license plate images for character recognition application is 27,745 images.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-09-10T14:41:59Z</published>
+    <arxiv:comment>This is the final draft for the paper submitted to the 12th International Conference on Computer and Knowledge Engineering (ICCKE 2022), Ferdowsi University of Mashhad, Iran</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Mahdi Rahmani</name>
+    </author>
+    <author>
+      <name>Melika Sabaghian</name>
+    </author>
+    <author>
+      <name>Seyyede Mahila Moghadami</name>
+    </author>
+    <author>
+      <name>Mohammad Mohsen Talaie</name>
+    </author>
+    <author>
+      <name>Mahdi Naghibi</name>
+    </author>
+    <author>
+      <name>Mohammad Ali Keyvanrad</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2208.10657v2</id>
+    <title>A First Look at Dataset Bias in License Plate Recognition</title>
+    <updated>2022-12-30T10:23:26Z</updated>
+    <link href="https://arxiv.org/abs/2208.10657v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2208.10657v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Public datasets have played a key role in advancing the state of the art in License Plate Recognition (LPR). Although dataset bias has been recognized as a severe problem in the computer vision community, it has been largely overlooked in the LPR literature. LPR models are usually trained and evaluated separately on each dataset. In this scenario, they have often proven robust in the dataset they were trained in but showed limited performance in unseen ones. Therefore, this work investigates the dataset bias problem in the LPR context. We performed experiments on eight datasets, four collected in Brazil and four in mainland China, and observed that each dataset has a unique, identifiable "signature" since a lightweight classification model predicts the source dataset of a license plate (LP) image with more than 95% accuracy. In our discussion, we draw attention to the fact that most LPR models are probably exploiting such signatures to improve the results achieved in each dataset at the cost of losing generalization capability. These results emphasize the importance of evaluating LPR models in cross-dataset setups, as they provide a better indication of generalization (hence real-world performance) than within-dataset ones.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-08-23T00:20:33Z</published>
+    <arxiv:comment>Accepted for presentation at the Conference on Graphics, Patterns and Images (SIBGRAPI) 2022</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Rayson Laroca</name>
+    </author>
+    <author>
+      <name>Marcelo Santos</name>
+    </author>
+    <author>
+      <name>Valter Estevam</name>
+    </author>
+    <author>
+      <name>Eduardo Luz</name>
+    </author>
+    <author>
+      <name>David Menotti</name>
+    </author>
+    <arxiv:doi>10.1109/SIBGRAPI55357.2022.9991768</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/SIBGRAPI55357.2022.9991768" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2206.00859v2</id>
+    <title>Disentangled Generation Network for Enlarged License Plate Recognition and A Unified Dataset</title>
+    <updated>2023-05-25T14:03:01Z</updated>
+    <link href="https://arxiv.org/abs/2206.00859v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2206.00859v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>License plate recognition plays a critical role in many practical applications, but license plates of large vehicles are difficult to be recognized due to the factors of low resolution, contamination, low illumination, and occlusion, to name a few. To overcome the above factors, the transportation management department generally introduces the enlarged license plate behind the rear of a vehicle. However, enlarged license plates have high diversity as they are non-standard in position, size, and style. Furthermore, the background regions contain a variety of noisy information which greatly disturbs the recognition of license plate characters. Existing works have not studied this challenging problem. In this work, we first address the enlarged license plate recognition problem and contribute a dataset containing 9342 images, which cover most of the challenges of real scenes. However, the created data are still insufficient to train deep methods of enlarged license plate recognition, and building large-scale training data is very time-consuming and high labor cost. To handle this problem, we propose a novel task-level disentanglement generation framework based on the Disentangled Generation Network (DGNet), which disentangles the generation into the text generation and background generation in an end-to-end manner to effectively ensure diversity and integrity, for robust enlarged license plate recognition. Extensive experiments on the created dataset are conducted, and we demonstrate the effectiveness of the proposed approach in three representative text recognition frameworks.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-06-02T03:26:50Z</published>
+    <arxiv:comment>Submission to CVIU</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Chenglong Li</name>
+    </author>
+    <author>
+      <name>Xiaobin Yang</name>
+    </author>
+    <author>
+      <name>Guohao Wang</name>
+    </author>
+    <author>
+      <name>Aihua Zheng</name>
+    </author>
+    <author>
+      <name>Chang Tan</name>
+    </author>
+    <author>
+      <name>Ruoran Jia</name>
+    </author>
+    <author>
+      <name>Jin Tang</name>
+    </author>
+  </entry>
+</feed>

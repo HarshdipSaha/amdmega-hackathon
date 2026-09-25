@@ -1,0 +1,8 @@
+amd-aiter
+amdsmi
+flash-attn
+torch
+torchaudio
+torchvision
+triton
+vllm

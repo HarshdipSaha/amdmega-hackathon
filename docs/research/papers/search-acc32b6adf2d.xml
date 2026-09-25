@@ -1,0 +1,772 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/t+rw1505YQwM97qn5Lkg22eq9H0</id>
+  <title>arXiv Query: search_query=ti:Qwen3-VL OR ti:PaddleOCR-VL OR ti:GLM-OCR OR ti:DeepSeek-OCR&amp;id_list=&amp;start=0&amp;max_results=14</title>
+  <updated>2026-09-22T12:31:18Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=ti:Qwen3-VL+OR+(ti:PaddleOCR-VL+OR+(ti:GLM-OCR+OR+ti:DeepSeek-OCR))&amp;start=0&amp;max_results=14&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>14</opensearch:itemsPerPage>
+  <opensearch:totalResults>13</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2511.21631v2</id>
+    <title>Qwen3-VL Technical Report</title>
+    <updated>2025-11-27T12:16:54Z</updated>
+    <link href="https://arxiv.org/abs/2511.21631v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2511.21631v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We introduce Qwen3-VL, the most capable vision-language model in the Qwen series to date, achieving superior performance across a broad range of multimodal benchmarks. It natively supports interleaved contexts of up to 256K tokens, seamlessly integrating text, images, and video. The model family includes both dense (2B/4B/8B/32B) and mixture-of-experts (30B-A3B/235B-A22B) variants to accommodate diverse latency-quality trade-offs. Qwen3-VL delivers three core pillars: (i) markedly stronger pure-text understanding, surpassing comparable text-only backbones in several cases; (ii) robust long-context comprehension with a native 256K-token window for both text and interleaved multimodal inputs, enabling faithful retention, retrieval, and cross-referencing across long documents and videos; and (iii) advanced multimodal reasoning across single-image, multi-image, and video tasks, demonstrating leading performance on comprehensive evaluations such as MMMU and visual-math benchmarks (e.g., MathVista and MathVision). Architecturally, we introduce three key upgrades: (i) an enhanced interleaved-MRoPE for stronger spatial-temporal modeling across images and video; (ii) DeepStack integration, which effectively leverages multi-level ViT features to tighten vision-language alignment; and (iii) text-based time alignment for video, evolving from T-RoPE to explicit textual timestamp alignment for more precise temporal grounding. Under comparable token budgets and latency constraints, Qwen3-VL achieves superior performance in both dense and Mixture-of-Experts (MoE) architectures. We envision Qwen3-VL serving as a foundational engine for image-grounded reasoning, agentic decision-making, and multimodal code intelligence in real-world workflows.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-11-26T17:59:08Z</published>
+    <arxiv:comment>42 pages</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Shuai Bai</name>
+    </author>
+    <author>
+      <name>Yuxuan Cai</name>
+    </author>
+    <author>
+      <name>Ruizhe Chen</name>
+    </author>
+    <author>
+      <name>Keqin Chen</name>
+    </author>
+    <author>
+      <name>Xionghui Chen</name>
+    </author>
+    <author>
+      <name>Zesen Cheng</name>
+    </author>
+    <author>
+      <name>Lianghao Deng</name>
+    </author>
+    <author>
+      <name>Wei Ding</name>
+    </author>
+    <author>
+      <name>Chang Gao</name>
+    </author>
+    <author>
+      <name>Chunjiang Ge</name>
+    </author>
+    <author>
+      <name>Wenbin Ge</name>
+    </author>
+    <author>
+      <name>Zhifang Guo</name>
+    </author>
+    <author>
+      <name>Qidong Huang</name>
+    </author>
+    <author>
+      <name>Jie Huang</name>
+    </author>
+    <author>
+      <name>Fei Huang</name>
+    </author>
+    <author>
+      <name>Binyuan Hui</name>
+    </author>
+    <author>
+      <name>Shutong Jiang</name>
+    </author>
+    <author>
+      <name>Zhaohai Li</name>
+    </author>
+    <author>
+      <name>Mingsheng Li</name>
+    </author>
+    <author>
+      <name>Mei Li</name>
+    </author>
+    <author>
+      <name>Kaixin Li</name>
+    </author>
+    <author>
+      <name>Zicheng Lin</name>
+    </author>
+    <author>
+      <name>Junyang Lin</name>
+    </author>
+    <author>
+      <name>Xuejing Liu</name>
+    </author>
+    <author>
+      <name>Jiawei Liu</name>
+    </author>
+    <author>
+      <name>Chenglong Liu</name>
+    </author>
+    <author>
+      <name>Yang Liu</name>
+    </author>
+    <author>
+      <name>Dayiheng Liu</name>
+    </author>
+    <author>
+      <name>Shixuan Liu</name>
+    </author>
+    <author>
+      <name>Dunjie Lu</name>
+    </author>
+    <author>
+      <name>Ruilin Luo</name>
+    </author>
+    <author>
+      <name>Chenxu Lv</name>
+    </author>
+    <author>
+      <name>Rui Men</name>
+    </author>
+    <author>
+      <name>Lingchen Meng</name>
+    </author>
+    <author>
+      <name>Xuancheng Ren</name>
+    </author>
+    <author>
+      <name>Xingzhang Ren</name>
+    </author>
+    <author>
+      <name>Sibo Song</name>
+    </author>
+    <author>
+      <name>Yuchong Sun</name>
+    </author>
+    <author>
+      <name>Jun Tang</name>
+    </author>
+    <author>
+      <name>Jianhong Tu</name>
+    </author>
+    <author>
+      <name>Jianqiang Wan</name>
+    </author>
+    <author>
+      <name>Peng Wang</name>
+    </author>
+    <author>
+      <name>Pengfei Wang</name>
+    </author>
+    <author>
+      <name>Qiuyue Wang</name>
+    </author>
+    <author>
+      <name>Yuxuan Wang</name>
+    </author>
+    <author>
+      <name>Tianbao Xie</name>
+    </author>
+    <author>
+      <name>Yiheng Xu</name>
+    </author>
+    <author>
+      <name>Haiyang Xu</name>
+    </author>
+    <author>
+      <name>Jin Xu</name>
+    </author>
+    <author>
+      <name>Zhibo Yang</name>
+    </author>
+    <author>
+      <name>Mingkun Yang</name>
+    </author>
+    <author>
+      <name>Jianxin Yang</name>
+    </author>
+    <author>
+      <name>An Yang</name>
+    </author>
+    <author>
+      <name>Bowen Yu</name>
+    </author>
+    <author>
+      <name>Fei Zhang</name>
+    </author>
+    <author>
+      <name>Hang Zhang</name>
+    </author>
+    <author>
+      <name>Xi Zhang</name>
+    </author>
+    <author>
+      <name>Bo Zheng</name>
+    </author>
+    <author>
+      <name>Humen Zhong</name>
+    </author>
+    <author>
+      <name>Jingren Zhou</name>
+    </author>
+    <author>
+      <name>Fan Zhou</name>
+    </author>
+    <author>
+      <name>Jing Zhou</name>
+    </author>
+    <author>
+      <name>Yuanzhi Zhu</name>
+    </author>
+    <author>
+      <name>Ke Zhu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2601.04720v2</id>
+    <title>Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking</title>
+    <updated>2026-01-19T09:03:26Z</updated>
+    <link href="https://arxiv.org/abs/2601.04720v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.04720v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this report, we introduce the Qwen3-VL-Embedding and Qwen3-VL-Reranker model series, the latest extensions of the Qwen family built on the Qwen3-VL foundation model. Together, they provide an end-to-end pipeline for high-precision multimodal search by mapping diverse modalities, including text, images, document images, and video, into a unified representation space. The Qwen3-VL-Embedding model employs a multi-stage training paradigm, progressing from large-scale contrastive pre-training to reranking model distillation, to generate semantically rich high-dimensional vectors. It supports Matryoshka Representation Learning, enabling flexible embedding dimensions, and handles inputs up to 32k tokens. Complementing this, Qwen3-VL-Reranker performs fine-grained relevance estimation for query-document pairs using a cross-encoder architecture with cross-attention mechanisms. Both model series inherit the multilingual capabilities of Qwen3-VL, supporting more than 30 languages, and are released in $\textbf{2B}$ and $\textbf{8B}$ parameter sizes to accommodate diverse deployment requirements. Empirical evaluations demonstrate that the Qwen3-VL-Embedding series achieves state-of-the-art results across diverse multimodal embedding evaluation benchmarks. Specifically, Qwen3-VL-Embedding-8B attains an overall score of $\textbf{77.8}$ on MMEB-V2, ranking first among all models (as of January 8, 2025). This report presents the architecture, training methodology, and practical capabilities of the series, demonstrating their effectiveness on various multimodal retrieval tasks, including image-text retrieval, visual question answering, and video-text matching.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-08T08:36:06Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Mingxin Li</name>
+    </author>
+    <author>
+      <name>Yanzhao Zhang</name>
+    </author>
+    <author>
+      <name>Dingkun Long</name>
+    </author>
+    <author>
+      <name>Keqin Chen</name>
+    </author>
+    <author>
+      <name>Sibo Song</name>
+    </author>
+    <author>
+      <name>Shuai Bai</name>
+    </author>
+    <author>
+      <name>Zhibo Yang</name>
+    </author>
+    <author>
+      <name>Pengjun Xie</name>
+    </author>
+    <author>
+      <name>An Yang</name>
+    </author>
+    <author>
+      <name>Dayiheng Liu</name>
+    </author>
+    <author>
+      <name>Jingren Zhou</name>
+    </author>
+    <author>
+      <name>Junyang Lin</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2603.10910v2</id>
+    <title>GLM-OCR Technical Report</title>
+    <updated>2026-03-16T13:48:45Z</updated>
+    <link href="https://arxiv.org/abs/2603.10910v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2603.10910v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>GLM-OCR is an efficient 0.9B-parameter compact multimodal model designed for real-world document understanding. It combines a 0.4B-parameter CogViT visual encoder with a 0.5B-parameter GLM language decoder, achieving a strong balance between computational efficiency and recognition performance. To address the inefficiency of standard autoregressive decoding in deterministic OCR tasks, GLM-OCR introduces a Multi-Token Prediction (MTP) mechanism that predicts multiple tokens per step, significantly improving decoding throughput while keeping memory overhead low through shared parameters. At the system level, a two-stage pipeline is adopted: PP-DocLayout-V3 first performs layout analysis, followed by parallel region-level recognition. Extensive evaluations on public benchmarks and industrial scenarios show that GLM-OCR achieves competitive or state-of-the-art performance in document parsing, text and formula transcription, table structure recovery, and key information extraction. Its compact architecture and structured generation make it suitable for both resource-constrained edge deployment and large-scale production systems.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-03-11T15:55:47Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Shuaiqi Duan</name>
+    </author>
+    <author>
+      <name>Yadong Xue</name>
+    </author>
+    <author>
+      <name>Weihan Wang</name>
+    </author>
+    <author>
+      <name>Zhe Su</name>
+    </author>
+    <author>
+      <name>Huan Liu</name>
+    </author>
+    <author>
+      <name>Sheng Yang</name>
+    </author>
+    <author>
+      <name>Guobing Gan</name>
+    </author>
+    <author>
+      <name>Guo Wang</name>
+    </author>
+    <author>
+      <name>Zihan Wang</name>
+    </author>
+    <author>
+      <name>Shengdong Yan</name>
+    </author>
+    <author>
+      <name>Dexin Jin</name>
+    </author>
+    <author>
+      <name>Yuxuan Zhang</name>
+    </author>
+    <author>
+      <name>Guohong Wen</name>
+    </author>
+    <author>
+      <name>Yanfeng Wang</name>
+    </author>
+    <author>
+      <name>Yutao Zhang</name>
+    </author>
+    <author>
+      <name>Xiaohan Zhang</name>
+    </author>
+    <author>
+      <name>Wenyi Hong</name>
+    </author>
+    <author>
+      <name>Yukuo Cen</name>
+    </author>
+    <author>
+      <name>Da Yin</name>
+    </author>
+    <author>
+      <name>Bin Chen</name>
+    </author>
+    <author>
+      <name>Wenmeng Yu</name>
+    </author>
+    <author>
+      <name>Xiaotao Gu</name>
+    </author>
+    <author>
+      <name>Jie Tang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2510.18234v1</id>
+    <title>DeepSeek-OCR: Contexts Optical Compression</title>
+    <updated>2025-10-21T02:41:44Z</updated>
+    <link href="https://arxiv.org/abs/2510.18234v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2510.18234v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We present DeepSeek-OCR as an initial investigation into the feasibility of compressing long contexts via optical 2D mapping. DeepSeek-OCR consists of two components: DeepEncoder and DeepSeek3B-MoE-A570M as the decoder. Specifically, DeepEncoder serves as the core engine, designed to maintain low activations under high-resolution input while achieving high compression ratios to ensure an optimal and manageable number of vision tokens. Experiments show that when the number of text tokens is within 10 times that of vision tokens (i.e., a compression ratio &lt; 10x), the model can achieve decoding (OCR) precision of 97%. Even at a compression ratio of 20x, the OCR accuracy still remains at about 60%. This shows considerable promise for research areas such as historical long-context compression and memory forgetting mechanisms in LLMs. Beyond this, DeepSeek-OCR also demonstrates high practical value. On OmniDocBench, it surpasses GOT-OCR2.0 (256 tokens/page) using only 100 vision tokens, and outperforms MinerU2.0 (6000+ tokens per page on average) while utilizing fewer than 800 vision tokens. In production, DeepSeek-OCR can generate training data for LLMs/VLMs at a scale of 200k+ pages per day (a single A100-40G). Codes and model weights are publicly accessible at http://github.com/deepseek-ai/DeepSeek-OCR.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-10-21T02:41:44Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Haoran Wei</name>
+    </author>
+    <author>
+      <name>Yaofeng Sun</name>
+    </author>
+    <author>
+      <name>Yukun Li</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2601.20552v1</id>
+    <title>DeepSeek-OCR 2: Visual Causal Flow</title>
+    <updated>2026-01-28T12:46:07Z</updated>
+    <link href="https://arxiv.org/abs/2601.20552v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.20552v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We present DeepSeek-OCR 2 to investigate the feasibility of a novel encoder-DeepEncoder V2-capable of dynamically reordering visual tokens upon image semantics. Conventional vision-language models (VLMs) invariably process visual tokens in a rigid raster-scan order (top-left to bottom-right) with fixed positional encoding when fed into LLMs. However, this contradicts human visual perception, which follows flexible yet semantically coherent scanning patterns driven by inherent logical structures. Particularly for images with complex layouts, human vision exhibits causally-informed sequential processing. Inspired by this cognitive mechanism, DeepEncoder V2 is designed to endow the encoder with causal reasoning capabilities, enabling it to intelligently reorder visual tokens prior to LLM-based content interpretation. This work explores a novel paradigm: whether 2D image understanding can be effectively achieved through two-cascaded 1D causal reasoning structures, thereby offering a new architectural approach with the potential to achieve genuine 2D reasoning. Codes and model weights are publicly accessible at http://github.com/deepseek-ai/DeepSeek-OCR-2.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-28T12:46:07Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Haoran Wei</name>
+    </author>
+    <author>
+      <name>Yaofeng Sun</name>
+    </author>
+    <author>
+      <name>Yukun Li</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.07141v1</id>
+    <title>Qwen3-VL-Seg: Unlocking Open-World Referring Segmentation with Vision-Language Grounding</title>
+    <updated>2026-05-08T02:20:40Z</updated>
+    <link href="https://arxiv.org/abs/2605.07141v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.07141v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Open-world referring segmentation requires grounding unconstrained language expressions to precise pixel-level regions. Existing multimodal large language models (MLLMs) exhibit strong open-world visual grounding, but their outputs remain limited to sparse bounding-box coordinates and are insufficient for dense visual prediction. Recent MLLM-based segmentation methods either directly predict sparse contour coordinates, struggling to reconstruct continuous object boundaries, or rely on external segmentation foundation models such as the Segment Anything Model (SAM), introducing substantial architectural and deployment overhead. We present Qwen3-VL-Seg, a parameter-efficient framework that treats the MLLM-predicted box as a semantically grounded structural prior and decodes it into pixel-level referring segmentation. At its core, a lightweight box-guided mask decoder combines multi-scale spatial feature injection, spatial-semantic query construction, box-guided high-resolution pixel fusion, and iterative mask-aware query refinement, introducing only 17M parameters (about 0.4\% of the base model). For scalable open-world training, we construct SA1B-ORS, an SA-1B-derived dataset with two subsets: SA1B-CoRS (category-oriented samples) and SA1B-DeRS (descriptive, instance-specific samples). For evaluation, we curate ORS-Bench, a manually screened benchmark with in-distribution and out-of-distribution subsets covering diverse referring expression types. Extensive experiments on referring expression segmentation, visual grounding, and ORS-Bench show that Qwen3-VL-Seg performs strongly across closed-set and open-world settings, with clear advantages on language-intensive instructions and strong out-of-distribution generalization. Evaluations on general multimodal benchmarks further show that the model broadly preserves general-purpose multimodal competence after segmentation-oriented adaptation.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-08T02:20:40Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Yuan Yao</name>
+    </author>
+    <author>
+      <name>Qiushi Yang</name>
+    </author>
+    <author>
+      <name>Humen Zhong</name>
+    </author>
+    <author>
+      <name>Jiangning Wei</name>
+    </author>
+    <author>
+      <name>Yifang Men</name>
+    </author>
+    <author>
+      <name>Shuai Bai</name>
+    </author>
+    <author>
+      <name>Miaomiao Cui</name>
+    </author>
+    <author>
+      <name>Zhibo Yang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2601.03714v2</id>
+    <title>Visual Merit or Linguistic Crutch? A Close Look at DeepSeek-OCR</title>
+    <updated>2026-01-08T08:37:59Z</updated>
+    <link href="https://arxiv.org/abs/2601.03714v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.03714v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>DeepSeek-OCR utilizes an optical 2D mapping approach to achieve high-ratio vision-text compression, claiming to decode text tokens exceeding ten times the input visual tokens. While this suggests a promising solution for the LLM long-context bottleneck, we investigate a critical question: "Visual merit or linguistic crutch - which drives DeepSeek-OCR's performance?" By employing sentence-level and word-level semantic corruption, we isolate the model's intrinsic OCR capabilities from its language priors. Results demonstrate that without linguistic support, DeepSeek-OCR's performance plummets from approximately 90% to 20%. Comparative benchmarking against 13 baseline models reveals that traditional pipeline OCR methods exhibit significantly higher robustness to such semantic perturbations than end-to-end methods. Furthermore, we find that lower visual token counts correlate with increased reliance on priors, exacerbating hallucination risks. Context stress testing also reveals a total model collapse around 10,000 text tokens, suggesting that current optical compression techniques may paradoxically aggravate the long-context bottleneck. This study empirically defines DeepSeek-OCR's capability boundaries and offers essential insights for future optimizations of the vision-text compression paradigm. We release all data, results and scripts used in this study at https://github.com/dududuck00/DeepSeekOCR.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-07T09:01:23Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Yunhao Liang</name>
+    </author>
+    <author>
+      <name>Ruixuan Ying</name>
+    </author>
+    <author>
+      <name>Bo Li</name>
+    </author>
+    <author>
+      <name>Hong Li</name>
+    </author>
+    <author>
+      <name>Kai Yan</name>
+    </author>
+    <author>
+      <name>Qingwen Li</name>
+    </author>
+    <author>
+      <name>Min Yang</name>
+    </author>
+    <author>
+      <name>Okamoto Satoshi</name>
+    </author>
+    <author>
+      <name>Zhe Cui</name>
+    </author>
+    <author>
+      <name>Shiwen Ni</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2604.03476v2</id>
+    <title>Fine-tuning DeepSeek-OCR-2 for Molecular Structure Recognition</title>
+    <updated>2026-04-21T00:23:18Z</updated>
+    <link href="https://arxiv.org/abs/2604.03476v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2604.03476v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Optical Chemical Structure Recognition (OCSR) is critical for converting 2D molecular diagrams from printed literature into machine-readable formats. While Vision-Language Models have shown promise in end-to-end OCR tasks, their direct application to OCSR remains challenging, and direct full-parameter supervised fine-tuning often fails. In this work, we adapt DeepSeek-OCR-2 for molecular optical recognition by formulating the task as image-conditioned SMILES generation. To overcome training instabilities, we propose a two-stage progressive supervised fine-tuning strategy: starting with parameter-efficient LoRA and transitioning to selective full-parameter fine-tuning with split learning rates. We train our model on a large-scale corpus combining synthetic renderings from PubChem and realistic patent images from USPTO-MOL to improve coverage and robustness. Our fine-tuned model, MolSeek-OCR, demonstrates competitive capabilities, achieving exact matching accuracies comparable to the best-performing image-to-sequence model. However, it remains inferior to state-of-the-art image-to-graph modelS. Furthermore, we explore reinforcement-style post-training and data-curation-based refinement, finding that they fail to improve the strict sequence-level fidelity required for exact SMILES matching.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-04-03T21:42:54Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Haocheng Tang</name>
+    </author>
+    <author>
+      <name>Xingyu Dang</name>
+    </author>
+    <author>
+      <name>Junmei Wang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2601.21957v2</id>
+    <title>PaddleOCR-VL-1.5: Towards a Multi-Task 0.9B VLM for Robust In-the-Wild Document Parsing</title>
+    <updated>2026-04-03T06:49:11Z</updated>
+    <link href="https://arxiv.org/abs/2601.21957v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.21957v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We introduce PaddleOCR-VL-1.5, an upgraded model achieving a new state-of-the-art (SOTA) accuracy of 94.5% on OmniDocBench v1.5. To rigorously evaluate robustness against real-world physical distortions, including scanning, skew, warping, screen-photography, and illumination, we propose the Real5-OmniDocBench benchmark. Experimental results demonstrate that this enhanced model attains SOTA performance on the newly curated benchmark. Furthermore, we extend the model's capabilities by incorporating seal recognition and text spotting tasks, while remaining a 0.9B ultra-compact VLM with high efficiency. Code: https://github.com/PaddlePaddle/PaddleOCR</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-29T16:35:04Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Cheng Cui</name>
+    </author>
+    <author>
+      <name>Ting Sun</name>
+    </author>
+    <author>
+      <name>Suyin Liang</name>
+    </author>
+    <author>
+      <name>Tingquan Gao</name>
+    </author>
+    <author>
+      <name>Zelun Zhang</name>
+    </author>
+    <author>
+      <name>Jiaxuan Liu</name>
+    </author>
+    <author>
+      <name>Xueqing Wang</name>
+    </author>
+    <author>
+      <name>Changda Zhou</name>
+    </author>
+    <author>
+      <name>Hongen Liu</name>
+    </author>
+    <author>
+      <name>Manhui Lin</name>
+    </author>
+    <author>
+      <name>Yue Zhang</name>
+    </author>
+    <author>
+      <name>Yubo Zhang</name>
+    </author>
+    <author>
+      <name>Yi Liu</name>
+    </author>
+    <author>
+      <name>Dianhai Yu</name>
+    </author>
+    <author>
+      <name>Yanjun Ma</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.00392v3</id>
+    <title>RTPrune: Reading-Twice Inspired Token Pruning for Efficient DeepSeek-OCR Inference</title>
+    <updated>2026-05-21T12:40:15Z</updated>
+    <link href="https://arxiv.org/abs/2605.00392v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.00392v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>DeepSeek-OCR leverages visual-text compression to reduce long-text processing costs and accelerate inference, yet visual tokens remain prone to redundant textual and structural information. Moreover, current token pruning methods for conventional vision-language models (VLMs) fail to preserve textual fidelity due to improper compression mechanisms. By analyzing the decoding process of DeepSeek-OCR, we find that a distinct two-stage reading trajectory: the model initially prioritizes the majority of high-norm tokens, then subsequently redistributes its attention to the remaining ones. Motivated by this insight, we propose RTPrune, a two-stage token pruning method tailored for DeepSeek-OCR. In the first stage, we prioritize high-norm visual tokens that capture salient textual and structural information. In the second stage, the remaining tokens are paired and merged based on optimal transport theory to achieve efficient feature aggregation. We further introduce a dynamic pruning ratio that adapts to token similarity and textual density for OCR tasks, enabling a better efficiency-accuracy trade-off. Extensive experiments demonstrate state-of-the-art performance, as evidenced by 99.47% accuracy and 1.23$\times$ faster prefill on OmniDocBench, achieved with 84.25% token retention when applied to DeepSeek-OCR-Large.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-01T04:30:16Z</published>
+    <arxiv:comment>21 pages, accepted by ICML2026</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Ben Wan</name>
+    </author>
+    <author>
+      <name>Yan Feng</name>
+    </author>
+    <author>
+      <name>Zihan Tang</name>
+    </author>
+    <author>
+      <name>Weizhe Huang</name>
+    </author>
+    <author>
+      <name>Yuting Zeng</name>
+    </author>
+    <author>
+      <name>Jia Wang</name>
+    </author>
+    <author>
+      <name>Tongxuan Liu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2510.14528v4</id>
+    <title>PaddleOCR-VL: Boosting Multilingual Document Parsing via a 0.9B Ultra-Compact Vision-Language Model</title>
+    <updated>2025-11-25T03:01:03Z</updated>
+    <link href="https://arxiv.org/abs/2510.14528v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2510.14528v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this report, we propose PaddleOCR-VL, a SOTA and resource-efficient model tailored for document parsing. Its core component is PaddleOCR-VL-0.9B, a compact yet powerful vision-language model (VLM) that integrates a NaViT-style dynamic resolution visual encoder with the ERNIE-4.5-0.3B language model to enable accurate element recognition. This innovative model efficiently supports 109 languages and excels in recognizing complex elements (e.g., text, tables, formulas, and charts), while maintaining minimal resource consumption. Through comprehensive evaluations on widely used public benchmarks and in-house benchmarks, PaddleOCR-VL achieves SOTA performance in both page-level document parsing and element-level recognition. It significantly outperforms existing solutions, exhibits strong competitiveness against top-tier VLMs, and delivers fast inference speeds. These strengths make it highly suitable for practical deployment in real-world scenarios. Code is available at https://github.com/PaddlePaddle/PaddleOCR .</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-10-16T10:18:48Z</published>
+    <arxiv:comment>Github Repo: https://github.com/PaddlePaddle/PaddleOCR</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Cheng Cui</name>
+    </author>
+    <author>
+      <name>Ting Sun</name>
+    </author>
+    <author>
+      <name>Suyin Liang</name>
+    </author>
+    <author>
+      <name>Tingquan Gao</name>
+    </author>
+    <author>
+      <name>Zelun Zhang</name>
+    </author>
+    <author>
+      <name>Jiaxuan Liu</name>
+    </author>
+    <author>
+      <name>Xueqing Wang</name>
+    </author>
+    <author>
+      <name>Changda Zhou</name>
+    </author>
+    <author>
+      <name>Hongen Liu</name>
+    </author>
+    <author>
+      <name>Manhui Lin</name>
+    </author>
+    <author>
+      <name>Yue Zhang</name>
+    </author>
+    <author>
+      <name>Yubo Zhang</name>
+    </author>
+    <author>
+      <name>Handong Zheng</name>
+    </author>
+    <author>
+      <name>Jing Zhang</name>
+    </author>
+    <author>
+      <name>Jun Zhang</name>
+    </author>
+    <author>
+      <name>Yi Liu</name>
+    </author>
+    <author>
+      <name>Dianhai Yu</name>
+    </author>
+    <author>
+      <name>Yanjun Ma</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.03264v1</id>
+    <title>PaddleOCR-VL-1.6: Expanding the Frontier of Document Parsing with Under-Optimized Region Refinement and Progressive Post-Training</title>
+    <updated>2026-06-02T07:27:03Z</updated>
+    <link href="https://arxiv.org/abs/2606.03264v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.03264v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We introduce PaddleOCR-VL-1.6, an upgraded compact document parsing model built upon PaddleOCR-VL-1.5. Although PaddleOCR-VL-1.5 establishes a strong 0.9B baseline, its remaining errors concentrate in under-optimized regions where model behavior is unstable, data coverage is sparse, or supervision is unreliable. Rather than expanding the training corpus indiscriminately, PaddleOCR-VL-1.6 introduces a region-aware data optimization framework that identifies weak regions from the previous model, applies targeted enhancement to these regions, and improves the reliability of supervision signals. It further adopts a progressive post-training recipe based on curated data selection and reinforcement learning, pushing model performance to a higher level through staged optimization. PaddleOCR-VL-1.6 achieves a new state-of-the-art score of 96.33% on OmniDocBench v1.6, demonstrates strong competitiveness against top-tier VLMs, and provides a practical post-training recipe for the PaddleOCR-VL series.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-02T07:27:03Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Zelun Zhang</name>
+    </author>
+    <author>
+      <name>Hongen Liu</name>
+    </author>
+    <author>
+      <name>Suyin Liang</name>
+    </author>
+    <author>
+      <name>Yubo Zhang</name>
+    </author>
+    <author>
+      <name>Yiqing Xiang</name>
+    </author>
+    <author>
+      <name>Jiaxuan Liu</name>
+    </author>
+    <author>
+      <name>Ting Sun</name>
+    </author>
+    <author>
+      <name>Manhui Lin</name>
+    </author>
+    <author>
+      <name>Yue Zhang</name>
+    </author>
+    <author>
+      <name>Changda Zhou</name>
+    </author>
+    <author>
+      <name>Tingquan Gao</name>
+    </author>
+    <author>
+      <name>Cheng Cui</name>
+    </author>
+    <author>
+      <name>Yi Liu</name>
+    </author>
+    <author>
+      <name>Dianhai Yu</name>
+    </author>
+    <author>
+      <name>Yanjun Ma</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2601.10527v2</id>
+    <title>A Safety Report on GPT-5.2, Gemini 3 Pro, Qwen3-VL, Grok 4.1 Fast, Nano Banana Pro, and Seedream 4.5</title>
+    <updated>2026-01-16T15:04:58Z</updated>
+    <link href="https://arxiv.org/abs/2601.10527v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.10527v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The rapid evolution of Large Language Models (LLMs) and Multimodal Large Language Models (MLLMs) has driven major gains in reasoning, perception, and generation across language and vision, yet whether these advances translate into comparable improvements in safety remains unclear, partly due to fragmented evaluations that focus on isolated modalities or threat models. In this report, we present an integrated safety evaluation of six frontier models--GPT-5.2, Gemini 3 Pro, Qwen3-VL, Grok 4.1 Fast, Nano Banana Pro, and Seedream 4.5--assessing each across language, vision-language, and image generation using a unified protocol that combines benchmark, adversarial, multilingual, and compliance evaluations. By aggregating results into safety leaderboards and model profiles, we reveal a highly uneven safety landscape: while GPT-5.2 demonstrates consistently strong and balanced performance, other models exhibit clear trade-offs across benchmark safety, adversarial robustness, multilingual generalization, and regulatory compliance. Despite strong results under standard benchmarks, all models remain highly vulnerable under adversarial testing, with worst-case safety rates dropping below 6%. Text-to-image models show slightly stronger alignment in regulated visual risk categories, yet remain fragile when faced with adversarial or semantically ambiguous prompts. Overall, these findings highlight that safety in frontier models is inherently multidimensional--shaped by modality, language, and evaluation design--underscoring the need for standardized, holistic safety assessments to better reflect real-world risk and guide responsible deployment.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-15T15:52:52Z</published>
+    <arxiv:comment>41 pages, 22 figures</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Xingjun Ma</name>
+    </author>
+    <author>
+      <name>Yixu Wang</name>
+    </author>
+    <author>
+      <name>Hengyuan Xu</name>
+    </author>
+    <author>
+      <name>Yutao Wu</name>
+    </author>
+    <author>
+      <name>Yifan Ding</name>
+    </author>
+    <author>
+      <name>Yunhan Zhao</name>
+    </author>
+    <author>
+      <name>Zilong Wang</name>
+    </author>
+    <author>
+      <name>Jiabin Hua</name>
+    </author>
+    <author>
+      <name>Ming Wen</name>
+    </author>
+    <author>
+      <name>Jianan Liu</name>
+    </author>
+    <author>
+      <name>Ranjie Duan</name>
+    </author>
+    <author>
+      <name>Yifeng Gao</name>
+    </author>
+    <author>
+      <name>Yingshui Tan</name>
+    </author>
+    <author>
+      <name>Yunhao Chen</name>
+    </author>
+    <author>
+      <name>Hui Xue</name>
+    </author>
+    <author>
+      <name>Xin Wang</name>
+    </author>
+    <author>
+      <name>Wei Cheng</name>
+    </author>
+    <author>
+      <name>Jingjing Chen</name>
+    </author>
+    <author>
+      <name>Zuxuan Wu</name>
+    </author>
+    <author>
+      <name>Bo Li</name>
+    </author>
+    <author>
+      <name>Yu-Gang Jiang</name>
+    </author>
+  </entry>
+</feed>

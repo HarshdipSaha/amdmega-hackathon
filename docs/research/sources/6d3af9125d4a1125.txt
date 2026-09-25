@@ -1,0 +1,252 @@
+---
+library_name: transformers
+pipeline_tag: image-text-to-text
+license: cc-by-nc-4.0
+language:
+  - multilingual
+tags:
+  - multimodal
+  - multilingual
+  - ocr
+  - vision-language
+  - document-intelligence
+inference: false
+model-index:
+  - name: Jina-OCR-v1
+    results:
+      - task:
+          type: document-parsing
+          name: Document Parsing
+        dataset:
+          name: OmniDocBench v1.6
+          type: opendatalab/OmniDocBench
+        metrics:
+          - type: overall
+            value: 91.14
+            name: Overall Score
+      - task:
+          type: ocr
+          name: OCR
+        dataset:
+          name: OlmOCR Bench
+          type: allenai/olmOCR-bench
+        metrics:
+          - type: accuracy
+            value: 83.4
+            name: Overall Score
+---
+
+<p align="center">
+<img src="https://huggingface.co/datasets/jinaai/documentation-images/resolve/main/logo.webp" alt="Jina AI: Your Search Foundation, Supercharged!" width="150px">
+</p>
+
+# Jina-OCR-v1: Efficient Document Parsing with Speculative Decoding and Reward-Dense Post-Training
+
+[Blog](https://jina.ai/news/jina-ocr-v1-faster-document-parsing-on-low-budget-gpus/) | [Reader](https://jina.ai/reader) | [Playground](https://jina.ai/api-dashboard/document-ocr-test) | AWS | Azure | GCP | [Arxiv](https://arxiv.org/abs/2609.03181)
+
+`jina-ocr-v1` is an end-to-end document parsing model designed for high-quality OCR at an _efficient serving point_. The model builds on `DeepSeek-OCR` and inherits two of its efficiency-oriented components: a **DeepEncoder** vision tower that represents a **1024×1024** global view with **256 visual tokens** and augments it with dynamic local tiles, and a **3B-parameter mixture-of-experts** decoder with approximately **570M active parameters** per token. On top of this backbone, we add a **FastMTP** speculative decoding head that recursively shares one dense draft block across **K=3** prediction steps. _Greedy verification_ accepts the longest token-equality prefix, preserving the verifier’s greedy output sequence _by construction_.
+
+This repository ships the model weights **and** the custom code needed to load them (`trust_remote_code=True`). There is no separate training or serving package to install. Transformers uses the modeling files in this snapshot; vLLM needs a one-time architecture registration from `deepseek_ocr_mtp.py` (see [Using vLLM](#vllm-fastmtp)). A single script covers both backends: [`example.py`](example.py).
+
+|                   |                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Backbone          | DeepSeek-OCR (DeepEncoder + 3B MoE, ~570M active)                                                                                           |
+| Acceleration      | FastMTP, one dense draft head, K=3 (vLLM only)                                                                                              |
+| OmniDocBench v1.6 | 91.14 overall                                                                                                                               |
+| olmOCR-Bench      | 83.4 overall (+7.4 vs DeepSeek-OCR)                                                                                                         |
+| Throughput        | 2.57 pages/s on olmOCR-Bench (A100, concurrency 32)                                                                                         |
+| Local run         | [`example.py`](example.py) — Transformers or vLLM                                                                                           |
+| Hosted            | [Jina Reader](https://jina.ai/reader), OpenAI-compatible chat/completions, or [Playground](https://jina.ai/api-dashboard/document-ocr-test) |
+
+```bash
+python example.py --backend transformers --image document.png
+python example.py --backend vllm --image document.png
+```
+
+## Performance
+
+At the default dynamic-resolution setting, `jina-ocr-v1` scores **91.14** on OmniDocBench v1.6 and **83.4** on olmOCR-Bench, and has the highest page throughput of the fourteen systems we measured: **2.57 pages/s**. Post-training adds 7.4 points on olmOCR-Bench over the DeepSeek-OCR backbone. On an NVIDIA L4, FastMTP nearly doubles decoding speed over greedy autoregressive decoding. Scores below use the [eval prompt](#prompt).
+
+<p align="center">
+<img src="https://cms.jina.ai/content/images/size/w1600/2026/09/jina-ocr-v1-overview.png" alt="jina-ocr-v1 on three deployment-cost axes: pixels per visual token, page throughput, and accuracy versus active parameters">
+</p>
+
+Three axes that determine deployment cost. **(a)** Pixels per visual token, log scale. DeepEncoder maps a 1024×1024 view from 4,096 patches to 256 tokens (3,887 pixels per visual token vs 783–1,022 for 28–32 px patch encoders). **(b)** Page throughput on olmOCR-Bench, one A100, concurrency 32. **(c)** Benchmark overall vs active parameters (log scale); the solid line joins Pareto-optimal systems. `jina-ocr-v1` sits on both frontiers at 570M active parameters.
+
+<p align="center">
+<img src="https://cms.jina.ai/content/images/size/w1600/2026/09/jina-ocr-v1-efficiency.png" alt="olmOCR-Bench efficiency: output tokens per second, tokens per page, and pages per second">
+</p>
+
+The same fourteen systems on olmOCR-Bench (one A100, concurrency 32), ranked by **(a)** output tokens/s, **(b)** output tokens/page, and **(c)** pages/s. Surya OCR 2 leads on tokens/s (3,760) but emits 3,568 tokens/page and finishes 1.05 pages/s. `jina-ocr-v1` combines 2,792 tokens/s with 1,085 tokens/page and reaches 2.57 pages/s — the shortest outputs of any system scoring above 83.
+
+Per-category breakdowns on olmOCR-Bench and OmniDocBench v1.6, FastMTP measurements on L4, and the full comparison set are in the [technical report](https://arxiv.org/abs/2609.03181) and the [blog](https://jina.ai/news/jina-ocr-v1-faster-document-parsing-on-low-budget-gpus/).
+
+## Prompt
+
+Recommended default:
+
+```text
+Transcribe the provided document image into a clean Markdown format, preserving the natural reading order.
+```
+
+The OmniDocBench and OlmOCR Bench scores on this card were measured with a stricter instruction (LaTeX math, HTML tables, drop headers/footers and figures):
+
+```text
+Just return the plain text representation of this document as if you were reading it naturally.
+Turn equations and math symbols into a LaTeX representation, make sure to use $ and $ as a delimiter for inline math, and $$ and $$ for block math. Do NOT use ascii or unicode math symbols such as ∈ ∉ ⊂ ⊃ ⊆ ⊇ ∅ ∪ ∩ ∀ ∃ ¬, just use LaTeX syntax, ex $ \in $ $ \notin $ etc. If you were going to surround a math expression in \( \) or \[ \] delimiters, surround it with $ $ or $$ $$ instead.
+Convert tables into HTML format. Keep the syntax simple, but use <th> for header rows, and use rowspan and colspans appropriately. Don't use <br> inside of table cells, just split that into new rows as needed. Do NOT use LaTeX or Markdown table syntax.
+Ignore all graphical content in the image document. Do not attempt to describe or convert the images.
+Remove the headers and footers, but keep references and footnotes.
+Read any natural handwriting.
+This is likely one page out of several in the document, so be sure to preserve any sentences that come from the previous page, or continue onto the next page, exactly as they are.
+If there is no text at all that you think you should read, you can output null.
+```
+
+## Jina Reader
+
+The quickest way to run the model: point [`r.jina.ai`](https://r.jina.ai) at a URL. Reader fetches the page or PDF, renders it, runs `jina-ocr-v1`, and returns Markdown. Nothing to deploy, no image plumbing, same API key as the rest of the platform.
+
+```bash
+curl "https://r.jina.ai/https://example.com/document.pdf" \
+  -H "Authorization: Bearer $JINA_API_KEY" \
+  -H "X-Respond-With: jina-ocr-v1"
+```
+
+Add `X-Page` (1-indexed) to transcribe one page of a multi-page upload:
+
+```bash
+curl "https://r.jina.ai/https://example.com/document.pdf" \
+  -H "Authorization: Bearer $JINA_API_KEY" \
+  -H "X-Respond-With: jina-ocr-v1" \
+  -H "X-Page: 2"
+```
+
+Both headers are in the [Reader API editor](https://jina.ai/reader); the toggle writes them for you. Key from [jina.ai](https://jina.ai).
+
+## Hosted API
+
+For a single image (URL or `data:image/...;base64,...`), the OpenAI-compatible endpoint talks to the model directly. Same key from [jina.ai](https://jina.ai). Add `"stream": true` to stream.
+
+```bash
+curl https://api.jina.ai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $JINA_API_KEY" \
+  -d '{
+    "model": "jina-ocr-v1",
+    "messages": [{
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "Transcribe the provided document image into a clean Markdown format, preserving the natural reading order."},
+        {"type": "image_url", "image_url": {"url": "https://example.com/document.png"}}
+      ]
+    }]
+  }'
+```
+
+Local file:
+
+```bash
+"url": "data:image/jpeg;base64,'$(base64 -i document.png)'"
+```
+
+A cold start returns HTTP 503 — retry after 30–60s.
+
+## Playground
+
+Upload a page and inspect the Markdown in the [Document OCR playground](https://jina.ai/api-dashboard/document-ocr-test). No local setup; same key from [jina.ai](https://jina.ai).
+
+## Transformers
+
+Install `transformers`, `torch`, `torchvision`, `Pillow`. One PIL image per call. `eos` / `pad` come from `generation_config.json`; do not pass a fresh `GenerationConfig`.
+
+```python
+import torch
+from PIL import Image
+from transformers import AutoModelForCausalLM, AutoProcessor
+
+MODEL_ID = 'jinaai/jina-ocr-v1'
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+processor = AutoProcessor.from_pretrained(MODEL_ID, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_ID, dtype=torch.bfloat16, trust_remote_code=True,
+).to(device)
+
+image = Image.open('document.png').convert('RGB')
+inputs = processor.prepare_ocr_inputs(image, device=device)
+output = model.generate(**inputs, max_new_tokens=4096, do_sample=False)
+print(processor.decode_ocr(output, inputs['input_ids']))
+```
+
+`prepare_ocr_inputs(image, prompt=..., device=...)` overrides the default prompt.
+
+`generate()` attaches `SlidingWindowNoRepeatNgramProcessor` with defaults `no_repeat_ngram_size=35`, `ngram_window=1024`, and whitelist `{128821, 128822}` (`<td>`, `</td>`). Override with those keyword arguments, or disable with `no_repeat_ngram_size=0`.
+
+**No FastMTP here.** `generate()` is the 3B MoE decoder only. MTP keys (`mtp_module.*`, `mtp_embed_tokens.*`) are ignored on load.
+
+## vLLM (FastMTP)
+
+Requires [vLLM](https://github.com/vllm-project/vllm) ≥ 0.21. Call `register()` once per process **before** `LLM(...)`. The snapshot directory must be on `sys.path` so worker processes can import `deepseek_ocr_mtp`.
+
+```python
+import sys
+from huggingface_hub import snapshot_download
+from PIL import Image
+from vllm import LLM
+
+sys.path.insert(0, snapshot_download('jinaai/jina-ocr-v1'))
+# local checkout: sys.path.insert(0, '/path/to/jina-ocr-v1')
+
+from deepseek_ocr_mtp import DEFAULT_OCR_PROMPT, log_spec_stats, register, vllm_llm_kwargs, vllm_sampling_params
+
+register()
+
+llm = LLM(
+    **vllm_llm_kwargs(
+        'jinaai/jina-ocr-v1',
+        num_speculative_tokens=3,  # K; 0 disables MTP
+        mtp_heads=1,
+        mtp_recursive=True,
+    )
+)
+
+image = Image.open('document.png').convert('RGB')
+outputs = llm.chat(
+    [{
+        'role': 'user',
+        'content': [
+            {'type': 'image_pil', 'image_pil': image},
+            {'type': 'text', 'text': DEFAULT_OCR_PROMPT},
+        ],
+    }],
+    sampling_params=vllm_sampling_params(max_tokens=4096),
+)
+log_spec_stats(llm)
+print(outputs[0].outputs[0].text)
+```
+
+`vllm_llm_kwargs()` sets `trust_remote_code`, the OCR architecture override, and `speculative_config.method="eagle"`. FastMTP was trained with recursive hidden-state feedback; vLLM's default `method="mtp"` re-grounds every draft step on the target and breaks that. `register()` also maps `EagleDeepSeekMTPModel` (vLLM prepends `Eagle` when `method="eagle"`).
+
+`vllm_sampling_params()` sets `temperature=0.0`, `repetition_penalty=1.05`, and `repetition_detection` (`max_pattern_size=35`, `min_pattern_size=35`, `min_count=10`). That uses vLLM's built-in n-gram stop instead of a custom logits processor, so it works with FastMTP. Pass `repetition_detection=None` to disable.
+
+`log_spec_stats(llm)` flushes `SpecDecoding metrics` after a short run — vLLM otherwise prints them on a ~10s interval.
+
+Chat content types `image`, `image_pil`, and `image_url` all insert `<image>`. Do not pass `use_fast=False`; this checkpoint is `LlamaTokenizerFast`.
+
+## Citation
+
+```bibtex
+@misc{garcía2026jinaocr,
+    title={Jina-OCR-v1: Efficient Document Parsing with Speculative Decoding and Dense Verifiable Rewards},
+    author={Alejandro Barón García and Feng Wang and Emilia Garcia Casademont and Han Xiao},
+    year={2026},
+    eprint={2609.03181},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2609.03181},
+}
+```
+
+## License
+
+CC BY-NC 4.0. Commercial use: [contact](https://jina.ai/contact-sales/).

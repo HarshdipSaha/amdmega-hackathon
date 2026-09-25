@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/datasets?search=license%20plate&sort=downloads&direction=-1&limit=10",
+  "retrieved_at": "2026-09-22T12:33:54.670257+00:00",
+  "http_status": 200,
+  "final_url": "https://huggingface.co/api/datasets?search=license%20plate&sort=downloads&direction=-1&limit=10",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\dc84ceb9ca542542.json",
+  "chars": 8215
+}

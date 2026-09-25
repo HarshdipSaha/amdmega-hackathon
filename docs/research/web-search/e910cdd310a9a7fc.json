@@ -1,0 +1,65 @@
+{
+  "query": "Qwen3.5 OCRBench scene text",
+  "mode": "text",
+  "region": "wt-wt",
+  "retrieved_at": "2026-09-22T12:33:11.725190+00:00",
+  "attempts": [
+    {
+      "endpoint": "ddgs.text(backend=duckduckgo)",
+      "http_status": null,
+      "outcome": "error",
+      "error": "No results found."
+    },
+    {
+      "endpoint": "https://html.duckduckgo.com/html/",
+      "url": "https://html.duckduckgo.com/html/?q=Qwen3.5+OCRBench+scene+text",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://lite.duckduckgo.com/lite/",
+      "url": "https://lite.duckduckgo.com/lite/?q=Qwen3.5+OCRBench+scene+text",
+      "http_status": 202,
+      "outcome": "failed_http"
+    },
+    {
+      "endpoint": "https://www.bing.com/search",
+      "url": "https://www.bing.com/search?q=Qwen3.5+OCRBench+scene+text",
+      "http_status": 200,
+      "outcome": "success"
+    }
+  ],
+  "results": [
+    {
+      "title": "Member Home",
+      "href": "https://www.bing.com/ck/a?!&&p=e147813cdbf323672bbdffd6715af7966d6870bdff090d8d618c9e4cadde3776JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=0137cfe5-fd79-6488-184f-d839fc7a655f&u=a1aHR0cHM6Ly91bmlmaWVkcG9ydGFsLW1lbS5lcGZpbmRpYS5nb3YuaW4vbWVtYmVyaW50ZXJmYWNlLw&ntb=1",
+      "body": "Keep system updated and patched. Maintain a complex password. Do not share passwords. EPFO never requests personal …"
+    },
+    {
+      "title": "EPFO | Member Passbook",
+      "href": "https://www.bing.com/ck/a?!&&p=79ef9276d2ca036ecc943c6327ad50315e40ac5ff8ea5da5f0353468df871c6eJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=0137cfe5-fd79-6488-184f-d839fc7a655f&u=a1aHR0cHM6Ly9wYXNzYm9vay5lcGZpbmRpYS5nb3YuaW4vTWVtYmVyUGFzc0Jvb2svTG9naW4uanNw&ntb=1",
+      "body": "Jan 2, 2025 · Please never respond to any call for sharing any personal details like Aadhaar, PAN, Bank details, OTP or request for …"
+    },
+    {
+      "title": "Member Home",
+      "href": "https://www.bing.com/ck/a?!&&p=4ada9c660ee5413f8cb72e84e6f0e20be15397c86fcf91e4b84dc78acadb450cJmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=0137cfe5-fd79-6488-184f-d839fc7a655f&u=a1aHR0cHM6Ly91bmlmaWVkcG9ydGFsLW1lbS5lcGZpbmRpYS5nb3YuaW4vbWVtYmVySW50ZXJmYWNlUG9ody9tZW1iZXI&ntb=1",
+      "body": "Jul 10, 2026 · Unified Member Portal Pension on Higher Wages Track application status for Pension on Higher Wages Click Here"
+    },
+    {
+      "title": "EPFO: Home",
+      "href": "https://www.bing.com/ck/a?!&&p=621e44320c02783b4bb0cd58e95f0e8a611633f32dee010ce5450cf40de75df2JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=0137cfe5-fd79-6488-184f-d839fc7a655f&u=a1aHR0cHM6Ly91bmlmaWVkcG9ydGFsLWVtcC5lcGZpbmRpYS5nb3YuaW4v&ntb=1",
+      "body": "Install a licensed Anti-Virus/ Anti-Malware on your systems (Computer/Laptop /Smartphone). Keep system updated and patched. …"
+    },
+    {
+      "title": "EPFO Member Login – PF Balance, Passbook, UAN & Claim Status",
+      "href": "https://www.bing.com/ck/a?!&&p=58d9e92301ecaa26c9e92724ad435862fc5f76bef638263a72e2fc7eea9a3d22JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=0137cfe5-fd79-6488-184f-d839fc7a655f&u=a1aHR0cHM6Ly9lZXBmby5jb20v&ntb=1",
+      "body": "Apr 21, 2026 · EPFO member portal for login, passbook, UAN, KYC & online claims. Access EPFO member home, employer login & …"
+    },
+    {
+      "title": "EPFO: Home",
+      "href": "https://www.bing.com/ck/a?!&&p=117d56e3e106544d140303c6eafc54f6377ec52920b447ffcbbcb0ebfbff7283JmltdHM9MTc5MDAzNTIwMA&ptn=3&ver=2&hsh=4&fclid=0137cfe5-fd79-6488-184f-d839fc7a655f&u=a1aHR0cHM6Ly91bmlmaWVkcG9ydGFsLWVtcC5lcGZpbmRpYS5nb3YuaW4vcHVibGljUG9ydGFsLw&ntb=1",
+      "body": "Best viewed in 1280 x 1024 screen resolution."
+    }
+  ],
+  "source": "Bing HTML (non-DDG fallback)"
+}

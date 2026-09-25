@@ -1,0 +1,51 @@
+[
+  {
+    "query": "license plate recognition vision language model benchmark",
+    "endpoint": "ddgs.text(backend=bing)",
+    "source": "bing non-DDG fallback after DDG 202 and irrelevant Bing HTML",
+    "http_status": null,
+    "retrieved_at": "2026-09-22T12:35:32.441616+00:00",
+    "results": [
+      {
+        "title": "Multitasking vision language models for vehicle plate ...",
+        "href": "https://www.nature.com/articles/s41598-025-10774-9.pdf",
+        "body": "We compared our proposed VehiclePaliGemma with state-of-the-art methods and other VLMs using a dataset of Malaysian license plates collected under complex conditions. The results indicate that..."
+      },
+      {
+        "title": "Advancing Vehicle Plate Recognition: Multitasking Visual ...",
+        "href": "https://arxiv.org/html/2412.14197v1",
+        "body": "Dec 14, 2024 \u00b7 We compared our proposed VehiclePaliGemma with state-of-the-art methods and other VLMs using a dataset of Malaysian license plates collected under complex conditions. The results indicate that VehiclePaliGemma achieved superior performance with an accuracy of 87.6%."
+      },
+      {
+        "title": "Multitasking vision language models for vehicle plate ...",
+        "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12274586/",
+        "body": "We compared our proposed VehiclePaliGemma with state-of-the-art methods and other VLMs using a dataset of Malaysian license plates collected under complex conditions. The results indicate that VehiclePaliGemma achieved superior performance with an accuracy of 87.6%."
+      },
+      {
+        "title": "[2412.14197] Advancing Vehicle Plate Recognition ...Car-plate-detection-and-recognition - GitHubHierarchical Vision\u2013Language Fusion with Structural ... - MDPIViLaBench - Vision-Language Model Benchmark",
+        "href": "https://arxiv.org/abs/2412.14197",
+        "body": "Dec 14, 2024 \u00b7 We compared our proposed VehiclePaliGemma with state-of-the-art methods and other VLMs using a dataset of Malaysian license plates collected under complex conditions. Project \"Car Plate Recognition and Reconstruction with Deep Learning\" for the 2024/2025 Computer Vision course. This repository aims to reimplement the PDLPR paper and compare its performance with a CRNN model using CTC loss. Jul 5, 2026 \u00b7 This paper presents a hierarchical multi-stage framework that combines deep-learning-based detection, geometric normalization, dual-channel recognition, and structured post-correction to improve recognition robustness under diverse real-world conditions. This collection provides researchers and developers with a comprehensive, standardized multimodal model evaluation benchmark comparison platform, helping to advance the development and research in the vision-language model field."
+      },
+      {
+        "title": "Car-plate-detection-and-recognition - GitHub",
+        "href": "https://github.com/alessiainf/Car-plate-detection-and-recognition",
+        "body": "Project \"Car Plate Recognition and Reconstruction with Deep Learning\" for the 2024/2025 Computer Vision course. This repository aims to reimplement the PDLPR paper and compare its performance with a CRNN model using CTC loss."
+      },
+      {
+        "title": "Hierarchical Vision\u2013Language Fusion with Structural ... - MDPI",
+        "href": "https://www.mdpi.com/2076-3417/16/13/6792",
+        "body": "Jul 5, 2026 \u00b7 This paper presents a hierarchical multi-stage framework that combines deep-learning-based detection, geometric normalization, dual-channel recognition, and structured post-correction to improve recognition robustness under diverse real-world conditions."
+      },
+      {
+        "title": "ViLaBench - Vision-Language Model Benchmark",
+        "href": "https://antresearchnlp.github.io/vilabench/",
+        "body": "This collection provides researchers and developers with a comprehensive, standardized multimodal model evaluation benchmark comparison platform, helping to advance the development and research in the vision-language model field."
+      }
+    ]
+  },
+  {
+    "query": "license plate recognition vision language model benchmark",
+    "endpoint": "google",
+    "error": "No results found."
+  }
+]

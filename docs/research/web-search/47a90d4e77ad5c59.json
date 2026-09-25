@@ -1,0 +1,47 @@
+{
+  "query": "scene text OCR benchmark Qwen3 VL GLM OCR PaddleOCR VL 2026",
+  "mode": "text",
+  "region": "wt-wt",
+  "retrieved_at": "2026-09-22T12:31:39.731495+00:00",
+  "attempts": [
+    {
+      "endpoint": "ddgs.text(backend=duckduckgo)",
+      "http_status": null,
+      "status_note": "Library does not expose HTTP status",
+      "outcome": "success"
+    }
+  ],
+  "results": [
+    {
+      "title": "Best Open-Source OCR Models in 2026, Ranked by Benchmark",
+      "href": "https://blog.roboflow.com/best-open-source-ocr-models/",
+      "body": "Explore some of the best open-source OCR models including PaddleOCR-VL, GLM-OCR, and MinerU which beat 235B VLMs on OmniDocBench at 0.9B params."
+    },
+    {
+      "title": "OCRBench Leaderboard",
+      "href": "https://llm-stats.com/benchmarks/ocrbench",
+      "body": "About this benchmark What is OCRBench? OCRBench: Comprehensive evaluation benchmark for assessing Optical Character Recognition (OCR) capabilities in Large Multimodal Models across text recognition, scene text VQA, and document understanding tasks OCRBench is a multimodal benchmark evaluating models on image to text and vision tasks."
+    },
+    {
+      "title": "OCR Benchmark Leaderboard 2026 - Best Models and Workflow Fit - Instavar",
+      "href": "https://instavar.com/research/ocr/open-document-ocr-models",
+      "body": "OCR benchmark leaderboard for 2026 with our 1,651-page OmniDocBench v1.6 results for Jina OCR v1, OvisOCR2, GLM, FireRed, Qwen and other local models on an RTX 3090 Ti, plus reported scores, VRAM and workflow fit."
+    },
+    {
+      "title": "GLM-OCR vs Qwen3-VL-8B - OCR Model Comparison | OCR Arena",
+      "href": "https://www.ocrarena.ai/compare/glm-ocr/qwen3-vl-8b",
+      "body": "Qwen3-VL-8B wins 67% of OCR battles against GLM-OCR. Compare accuracy, speed, and performance across 9 head-to-head document parsing tests on OCR Arena."
+    },
+    {
+      "title": "OCRBench V2 Leaderboard & Scores — September 2026",
+      "href": "https://benchlm.ai/benchmarks/ocrbenchv2",
+      "body": "OCRBench V2 accuracy snapshot across 5 AI models. Display only on BenchLM and excluded from overall rankings. A native OCR benchmark for reading text from images across multilingual scripts, low-quality scans, handwriting, structured layouts, charts, and screenshots."
+    },
+    {
+      "title": "Qwen3-VL-8B vs GLM-OCR - OCR Model Comparison | OCR Arena",
+      "href": "https://www.ocrarena.ai/compare/qwen3-vl-8b/glm-ocr",
+      "body": "Qwen3-VL-8B wins 67% of OCR battles against GLM-OCR. Compare accuracy, speed, and performance across 9 head-to-head document parsing tests on OCR Arena."
+    }
+  ],
+  "source": "DuckDuckGo via ddgs"
+}

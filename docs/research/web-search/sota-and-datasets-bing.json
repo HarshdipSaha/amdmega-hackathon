@@ -1,0 +1,119 @@
+[
+  {
+    "query": "Qwen3.5 Qwen3 VL scene text OCRBench benchmark",
+    "endpoint": "ddgs.text(backend=bing)",
+    "source": "Bing non-DDG fallback",
+    "http_status": null,
+    "retrieved_at": "2026-09-22T12:36:43.315358+00:00",
+    "results": [
+      {
+        "title": "OCRBench Leaderboard",
+        "href": "https://llm-stats.com/benchmarks/ocrbench",
+        "body": "About this benchmark What is OCRBench? OCRBench: Comprehensive evaluation benchmark for assessing Optical Character Recognition (OCR) capabilities in Large Multimodal Models across text recognition, scene text VQA, and document understanding tasks OCRBench is a multimodal benchmark evaluating models on image to text and vision tasks."
+      },
+      {
+        "title": "OCRBench V2 Leaderboard & Scores \u2014 September 2026",
+        "href": "https://benchlm.ai/benchmarks/ocrbenchv2",
+        "body": "OCRBench V2 accuracy snapshot across 5 AI models. Display only on BenchLM and excluded from overall rankings. A native OCR benchmark for reading text from images across multilingual scripts, low-quality scans, handwriting, structured layouts, charts, and screenshots."
+      },
+      {
+        "title": "OCRBench v2 - 99franklin.github.io",
+        "href": "https://99franklin.github.io/ocrbench_v2/",
+        "body": "To bridge this gap, we introduce OCRBench v2, a large-scale bilingual text-centric benchmark with currently the most comprehensive set of tasks (4X more tasks than the previous multi-scene benchmark OCRBench), the widest coverage of scenarios (31 diverse scenarios), and thorough evaluation metrics, with 10,000 human-verified question-answering ..."
+      },
+      {
+        "title": "OCRBench-V2 (en) Leaderboard - llm-stats.com",
+        "href": "https://llm-stats.com/benchmarks/ocrbench-v2-(en)",
+        "body": "OCRBench-V2 (en) leaderboard \u2014 Qwen3 VL 32B Thinking leads 14 AI models at 0.684. OCRBench v2 English subset: Enhanced benchmark for evaluating Large Multimoda\u2026"
+      },
+      {
+        "title": "OCRBench \u2014 papers and benchmarks | Papers with Code",
+        "href": "https://paperswithcode.co/benchmark/ocrbench",
+        "body": "OCRBench is a comprehensive evaluation benchmark designed to assess the OCR capabilities of Large Multimodal Models. It comprises five components: Text Recognition, SceneText-Centric VQA, Document-Oriented VQA, Key Information Extraction, and Handwritten Mathematical Expression Recognition. The benchmark includes 1000 question-answer pairs, and all the answers undergo manual verification and ..."
+      },
+      {
+        "title": "[2511.21631] Qwen3-VL Technical Report - arXiv.org",
+        "href": "https://arxiv.org/abs/2511.21631",
+        "body": "We introduce Qwen3-VL, the most capable vision-language model in the Qwen series to date, achieving superior performance across a broad range of multimodal benchmarks. It natively supports interleaved contexts of up to 256K tokens, seamlessly integrating text, images, and video. The model family includes both dense (2B/4B/8B/32B) and mixture-of-experts (30B-A3B/235B-A22B) variants to ..."
+      }
+    ]
+  },
+  {
+    "query": "license plate recognition US Chinese benchmark dataset",
+    "endpoint": "ddgs.text(backend=bing)",
+    "source": "Bing non-DDG fallback",
+    "http_status": null,
+    "retrieved_at": "2026-09-22T12:36:49.338899+00:00",
+    "results": [
+      {
+        "title": "License Plate Recognition Cam - Advanced Plate Recognition",
+        "href": "https://www.bing.com/aclick?ld=e8mVX6JtAc09EaMf-Jrt3lFzVUCUze1UO-sse4WuYA_NdjkEf_6aTcw7skJYPYasYgXcqn2dUFHsgJSuvLWtXoPaDNWmy8LWRrtDspUiP-34p7M3pHmFax_qhoPGtwEgY6O3VVfo90u3M2DeuFvqtJJ5rGfx85_lPIMpLweAH5pPxzTgOPhsu23Rqyfd3zR7AGpr2REmM6aMlrYIkU5F6Fi6_wpN0&u=aHR0cHMlM2ElMmYlMmZ3d3cuZmxvY2tzYWZldHkuY29tJTJmbm90LWFsbC1scHJzLWFyZS1jcmVhdGVkLWVxdWFsJTNmdXRtX3RoZW1lJTNkZXZlcmdyZWVuJTI2dXRtX3RhY3RpYyUzZGV2ZXJncmVlbiUyNnV0bV9tZWRpdW0lM2RwcGMlMjZ1dG1fc291cmNlJTNkYmluZyUyNnV0bV9jYW1wYWlnbiUzZGJ5bl9uYmRfc2VtX2xwci1jb3JlX214JTI2dXRtX2NvbnRlbnQlM2QlMjZ1dG1fdGVybSUzZGxpY2Vuc2UlMjUyMHBsYXRlJTI1MjByZWNvZ25pdGlvbiUyNTIwY2FtZXJhJTI2bXNjbGtpZCUzZDYxZTI5NDI2MDQ2NzExNWFmZmFkZmU5NDcyMDczNThj&rlid=61e294260467115affadfe947207358c",
+        "body": "Built-in audit trails and searchable vehicle data for reliable investigations. No plate required. Use Vehicle Signature to search beyond plates. Models: Flock Nova, FlockOS, Flock911, Flock FreeForm, Investigations Manager"
+      },
+      {
+        "title": "China-Balanced-License-Plate-Recognition-Dataset-330k",
+        "href": "https://github.com/SunlifeV/CBLPRD-330k",
+        "body": "The dataset is generated using Generative Adversarial Networks (GANs), ensuring excellent image quality and a balanced distribution of different license plate types. This dataset is perfect for training and evaluating license plate recognition models."
+      },
+      {
+        "title": "CCPD (Chinese City Parking Dataset, ECCV) - GitHub",
+        "href": "https://github.com/detectRecog/CCPD",
+        "body": "Sep 16, 2020 \u00b7 This repository is designed to provide an open-source dataset for license plate detection and recognition, described in \u300aTowards End-to-End License Plate Detection and Recognition: A Large Dataset and Baseline\u300b."
+      },
+      {
+        "title": "Chinese License Plate Object Detection Model (v1, 2024-11-21 ...",
+        "href": "https://universe.roboflow.com/pai-peng-qcgda/chinese-license-plate-cyqk8/dataset/1",
+        "body": "1223 open source License-plate-detection images and annotations in multiple formats for training computer vision models. Chinese License Plate (v1, 2024-11-21 2:39pm), created by Pai Peng."
+      },
+      {
+        "title": "Global License Plate Dataset - arXiv.org",
+        "href": "https://arxiv.org/html/2405.10949v1",
+        "body": "Mar 22, 2024 \u00b7 We include a statistical analysis of the dataset, and provide baseline efficient and accurate models. The GLPD aims to be the primary benchmark dataset for model development and finetuning for license plate recognition."
+      },
+      {
+        "title": "CCPD Dataset Chinese License Plate Detection Dataset ...",
+        "href": "https://hyper.ai/en/datasets/33099",
+        "body": "The CCPD dataset, short for Chinese City Parking Dataset, is a large-scale, diverse, and meticulously labeled license plate recognition dataset. It was established in 2018 by a team from the University of Science and Technology of China (USTC)."
+      }
+    ]
+  },
+  {
+    "query": "September 2026 OCR model scene text SOTA Jina PaddleOCR",
+    "endpoint": "ddgs.text(backend=bing)",
+    "source": "Bing non-DDG fallback",
+    "http_status": null,
+    "retrieved_at": "2026-09-22T12:36:57.692736+00:00",
+    "results": [
+      {
+        "title": "Elastic Introduces jina-ocr-v1: End-to-End Document Processing in a ...",
+        "href": "https://finance.yahoo.com/technology/ai/articles/elastic-introduces-jina-ocr-v1-225300120.html",
+        "body": "SAN FRANCISCO, September 21, 2026--Elastic (NYSE: ESTC) today announced the launch of jina-ocr-v1, a new optical character recognition (OCR) model for end-to-end document processing. At 574M ..."
+      },
+      {
+        "title": "OCR Benchmark Leaderboard 2026 - Best Models and Workflow Fit - Instavar",
+        "href": "https://instavar.com/research/ocr/open-document-ocr-models",
+        "body": "OCR benchmark leaderboard for 2026 with our 1,651-page OmniDocBench v1.6 results for Jina OCR v1, OvisOCR2, GLM, FireRed, Qwen and other local models on an RTX 3090 Ti, plus reported scores, VRAM and workflow fit."
+      },
+      {
+        "title": "GitHub - tncyysl/paddleocr: Turn any PDF or image document into ...",
+        "href": "https://github.com/tncyysl/paddleocr",
+        "body": "SOTA Document VLM: Featuring PaddleOCR-VL-1.6 (0.9B), the industry's leading lightweight vision-language model for document parsing. It achieves 96.3% accuracy on OmniDocBench v1.6, leads in text, formula, and table recognition, and shows significantly enhanced capabilities in ancient documents, rare characters, seals, and charts, with ..."
+      },
+      {
+        "title": "Jina AI Releases jina-ocr-v1: A 3.4B MoE Document Parser With Built-In ...",
+        "href": "https://www.marktechpost.com/2026/09/18/jina-ai-releases-jina-ocr-v1-a-3-4b-moe-document-parser-with-built-in-speculative-decoding-for-low-budget-gpus/",
+        "body": "Jina AI's jina-ocr-v1 is a 3.4B MoE document parser with lossless FastMTP speculative decoding, built for low-budget GPUs."
+      },
+      {
+        "title": "GitHub - PaddlePaddle/PaddleOCR: Turn any PDF or image document into ...",
+        "href": "https://github.com/PaddlePaddle/PaddleOCR",
+        "body": "Transforming messy visuals into structured data for the LLM era. SOTA Document VLM: Featuring PaddleOCR-VL-1.6 (0.9B), the industry's leading lightweight vision-language model for document parsing. It achieves 96.3% accuracy on OmniDocBench v1.6, leads in text, formula, and table recognition, and shows significantly enhanced capabilities in ancient documents, rare characters, seals, and charts ..."
+      },
+      {
+        "title": "Elastic Introduces jina-ocr-v1: End-to-End Document Processing in a ...",
+        "href": "https://www.financialcontent.com/article/bizwire-2026-9-21-elastic-introduces-jina-ocr-v1-end-to-end-document-processing-in-a-single-frontier-grade-model",
+        "body": "Elastic (NYSE: ESTC) today announced the launch of jina-ocr-v1, a new optical character recognition (OCR) model for end-to-end document processing. At 574M active parameters, it delivers frontier-grade accuracy in a model roughly one tenth the size of the benchmark leader. Jina-ocr-v1 accurately converts complex visual documents into structured, machine-readable text, such as Markdown, in a ..."
+      }
+    ]
+  }
+]

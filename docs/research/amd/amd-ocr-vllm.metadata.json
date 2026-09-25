@@ -1,0 +1,11 @@
+{
+  "id": "amd-ocr-vllm",
+  "url": "https://rocm.docs.amd.com/projects/ai-developer-hub/en/latest/notebooks/inference/ocr_vllm.html",
+  "retrieved_utc": "2026-09-22T12:31:55.598760+00:00",
+  "status": 200,
+  "final_url": "https://rocm.docs.amd.com/projects/ai-developer-hub/en/latest/notebooks/inference/ocr_vllm.html",
+  "content_type": "text/html; charset=utf-8",
+  "server_date": "Tue, 22 Sep 2026 12:31:56 GMT",
+  "title": "OCR with vision-language models with vLLM \u2014 Tutorials for AI developers 15.0",
+  "response_bytes": 71959
+}

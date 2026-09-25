@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/models/zai-org/GLM-OCR?blobs=true",
+  "retrieved_at": "2026-09-22T12:33:13.266355+00:00",
+  "http_status": 200,
+  "final_url": "https://huggingface.co/api/models/zai-org/GLM-OCR?blobs=true",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\14d1f213158ea1b3.json",
+  "chars": 9897
+}

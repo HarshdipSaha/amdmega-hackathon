@@ -1,0 +1,12 @@
+{"url": "https://export.arxiv.org/api/query?search_query=ti%3AQwen3-VL+OR+ti%3APaddleOCR-VL+OR+ti%3AGLM-OCR+OR+ti%3ADeepSeek-OCR&start=0&max_results=14&sortBy=relevance&sortOrder=descending", "status": 200, "retrieved_at": "2026-09-22T12:31:19.807839+00:00", "path": "search-acc32b6adf2d.xml"}
+{"url": "https://export.arxiv.org/api/query?search_query=ti%3AOCRBench+OR+ti%3ACC-OCR+OR+ti%3APP-OCRv5+OR+ti%3ACCPD&start=0&max_results=12&sortBy=relevance&sortOrder=descending", "status": 200, "retrieved_at": "2026-09-22T12:31:57.332926+00:00", "path": "search-96283e035061.xml"}
+{"url": "https://export.arxiv.org/api/query?search_query=ti%3AQwen3.5+OR+ti%3ACCPD+OR+%28ti%3Alicense+AND+ti%3Aplate+AND+ti%3Adataset%29+OR+%28ti%3ATextZoom%29&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending", "status": 200, "retrieved_at": "2026-09-22T12:32:34.480771+00:00", "path": "search-713e88861ba7.xml"}
+{"url": "https://arxiv.org/pdf/2511.21631v2", "status": 200, "retrieved_at": "2026-09-22T12:33:21.400949+00:00", "path": "2511.21631v2.pdf"}
+{"url": "https://arxiv.org/pdf/2603.24373v1", "status": 200, "retrieved_at": "2026-09-22T12:33:28.091004+00:00", "path": "2603.24373v1.pdf"}
+{"url": "https://arxiv.org/pdf/2601.21957v2", "status": 200, "retrieved_at": "2026-09-22T12:34:26.222945+00:00", "path": "2601.21957v2.pdf"}
+{"url": "https://arxiv.org/pdf/2606.03264v1", "status": 200, "retrieved_at": "2026-09-22T12:34:36.737157+00:00", "path": "2606.03264v1.pdf"}
+{"url": "https://arxiv.org/pdf/2603.10910v2", "status": 200, "retrieved_at": "2026-09-22T12:34:49.460476+00:00", "path": "2603.10910v2.pdf"}
+{"url": "https://arxiv.org/pdf/2501.00321v2", "status": 200, "retrieved_at": "2026-09-22T12:35:10.692349+00:00", "path": "2501.00321v2.pdf"}
+{"url": "https://arxiv.org/pdf/2605.03903v2", "status": 200, "retrieved_at": "2026-09-22T12:36:10.192174+00:00", "path": "2605.03903v2.pdf"}
+{"url": "https://arxiv.org/pdf/2601.03714v2", "status": 200, "retrieved_at": "2026-09-22T12:36:15.553781+00:00", "path": "2601.03714v2.pdf"}
+{"url": "https://arxiv.org/pdf/2404.13677v2", "status": 200, "retrieved_at": "2026-09-22T12:36:23.779581+00:00", "path": "2404.13677v2.pdf"}

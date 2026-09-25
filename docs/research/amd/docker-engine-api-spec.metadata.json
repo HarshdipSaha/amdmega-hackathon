@@ -1,0 +1,10 @@
+{
+  "id": "docker-engine-api-spec",
+  "url": "https://docs.docker.com/reference/api/engine/version/v1.53.yaml",
+  "retrieved_utc": "2026-09-22T12:33:01.267254+00:00",
+  "status": 200,
+  "final_url": "https://docs.docker.com/reference/api/engine/version/v1.53.yaml",
+  "content_type": "application/yaml",
+  "server_date": "Tue, 22 Sep 2026 12:33:01 GMT",
+  "response_bytes": 467895
+}

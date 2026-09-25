@@ -1,0 +1,10 @@
+{
+  "id": "docker-registry-exact-tag",
+  "url": "https://registry-1.docker.io/v2/rocm/pytorch/manifests/rocm10.0_ubuntu26.04_py3.14_pytorch_release_2.13.0",
+  "retrieved_utc": "2026-09-22T12:31:59.154850+00:00",
+  "unauthenticated_status": 401,
+  "anonymous_token_status": 200,
+  "status": 200,
+  "server_date": "Tue, 22 Sep 2026 12:32:00 GMT",
+  "docker_content_digest": "sha256:3174cb7061d94c427da96c0edef4adea28046fa3f3b2ff3948dc4e995665ff8c"
+}

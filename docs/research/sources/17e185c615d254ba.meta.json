@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/models?search=OCR&filter=image-text-to-text&sort=trendingScore&direction=-1&limit=15",
+  "retrieved_at": "2026-09-22T12:33:54.665285+00:00",
+  "http_status": 200,
+  "final_url": "https://huggingface.co/api/models?search=OCR&filter=image-text-to-text&sort=trendingScore&direction=-1&limit=15",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\17e185c615d254ba.json",
+  "chars": 8017
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://api.github.com/repos/openalpr/benchmarks/contents",
+  "retrieved_at": "2026-09-22T12:39:12.731228+00:00",
+  "http_status": 200,
+  "final_url": "https://api.github.com/repos/openalpr/benchmarks/contents",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\c2ba6d0bb5318388.json",
+  "chars": 6447
+}

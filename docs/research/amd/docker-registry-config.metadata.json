@@ -1,0 +1,8 @@
+{
+  "id": "docker-registry-config",
+  "url": "https://registry-1.docker.io/v2/rocm/pytorch/blobs/sha256:75287c3f4d5eba32d8b91797639a20df134e8d1a8167e9abed77d78f330fd0f3",
+  "retrieved_utc": "2026-09-22T12:33:03.198226+00:00",
+  "digest": "sha256:75287c3f4d5eba32d8b91797639a20df134e8d1a8167e9abed77d78f330fd0f3",
+  "status": 200,
+  "response_bytes": 11531
+}

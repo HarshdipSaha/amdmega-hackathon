@@ -1,0 +1,1 @@
+vllm-0.30.0+rocm723-cp312-cp312-manylinux_2_39_x86_64.whl

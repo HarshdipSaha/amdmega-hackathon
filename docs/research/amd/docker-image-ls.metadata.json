@@ -1,0 +1,11 @@
+{
+  "id": "docker-image-ls",
+  "url": "https://docs.docker.com/reference/cli/docker/image/ls/",
+  "retrieved_utc": "2026-09-22T12:31:57.335368+00:00",
+  "status": 200,
+  "final_url": "https://docs.docker.com/reference/cli/docker/image/ls/",
+  "content_type": "text/html",
+  "server_date": "Tue, 22 Sep 2026 07:13:49 GMT",
+  "title": "docker image ls | Docker Docs",
+  "response_bytes": 497548
+}

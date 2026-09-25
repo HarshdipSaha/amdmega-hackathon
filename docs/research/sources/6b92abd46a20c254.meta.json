@@ -1,0 +1,9 @@
+{
+  "url": "https://huggingface.co/api/models/FireRedTeam/FireRed-OCR-2B?blobs=true",
+  "retrieved_at": "2026-09-22T12:33:54.353332+00:00",
+  "http_status": 401,
+  "final_url": "https://huggingface.co/api/models/FireRedTeam/FireRed-OCR-2B?blobs=true",
+  "content_type": "application/json; charset=utf-8",
+  "path": "sources\\6b92abd46a20c254.json",
+  "chars": 41
+}

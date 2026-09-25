@@ -1,0 +1,974 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>OCR with vision-language models with vLLM &#8212; Tutorials for AI developers 15.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/selector.css?v=264fe0b3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=22b90084" />
+    <link rel="stylesheet" type="text/css" href="../../_static/rocm_header.css?v=037afccf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/rocm_footer.css?v=7095035a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/fonts.css?v=fcff5274" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=06c08fbf"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=91c4cb68"></script>
+    <script defer="defer" type="module" src="../../_static/selector.js?v=a30d277f"></script>
+    <script async="async" src="../../_static/code_word_breaks.js?v=327952c4"></script>
+    <script async="async" src="../../_static/renameVersionLinks.js?v=929fe5e4"></script>
+    <script async="async" src="../../_static/rdcMisc.js?v=01f88d96"></script>
+    <script async="async" src="../../_static/theme_mode_captions.js?v=15f4ec5d"></script>
+    <script defer="defer" src="../../_static/search.js?v=90a4452c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/inference/ocr_vllm';</script>
+    <script async="async" src="https://download.amd.com/js/analytics/analyticsinit.js"></script>
+    <link rel="icon" href="https://www.amd.com/content/dam/code/images/favicon/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Building AI pipelines for voice assistants using ROCm, LlamaIndex, and RAG" href="voice_pipeline_rag_ollama.html" />
+    <link rel="prev" title="Constructing a RAG system using LlamaIndex and Ollama" href="rag_ollama_llamaindex.html" />
+    <meta name="google-site-verification" content="vo35SZt_GASsTHAEmdww7AYKPCvZyzLvOXBl8guBME4" />
+
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="advanced-micro-devices-ai-developer-hub" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/notebooks/inference/ocr_vllm.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="common-header" >
+        <nav class="navbar navbar-expand-xl">
+            <div class="container-fluid main-nav rocm-header">
+                <div class="header-logo">
+                    <div class="header-logo-title">
+                        
+                            <button class="navbar-toggler collapsed" id="nav-icon" data-tracking-information="mainMenuToggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                        
+                        <a class="navbar-brand" href="https://www.amd.com/">
+                            <img src="../../_static/images/amd-header-logo.svg" alt="AMD Logo" title="AMD Logo" width="90" class="d-inline-block align-text-top hover-opacity"/>
+                        </a>
+                        <div class="vr mx-40 my-25"></div>
+                        
+        
+    
+    <a class="klavika-font hover-opacity" href="https://rocm.docs.amd.com/projects/ai-developer-hub/en/latest">AI Tutorials v15.0</a>
+                    </div>
+                    <a class="header-all-versions hover-opacity" href="https://rocm.docs.amd.com/projects/ai-developer-hub/en/latest/release/versions.html">Version List</a>
+                </div>
+                <div class="icon-nav text-center d-flex ms-auto"></div>
+            </div>
+        </nav>
+        
+        <nav class="navbar navbar-expand-xl second-level-nav">
+            <div class="container-fluid main-nav">
+                <div class="navbar-nav-container collapse navbar-collapse" id="navbarSupportedContent">
+                    
+                    <ul class="navbar-nav nav-mega me-auto mb-2 mb-lg-0 col-xl-10">
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://github.com/ROCm/gpuaidev" id="navgithub" role="button" aria-expanded="false" target="_blank" >
+                                        GitHub
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://github.com/ROCm/ROCm/discussions" id="navcommunity" role="button" aria-expanded="false" target="_blank" >
+                                        Community
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://rocm.blogs.amd.com/" id="navblogs" role="button" aria-expanded="false" target="_blank" >
+                                        Blogs
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://rocm.docs.amd.com" id="navrocm&#8482;-docs" role="button" aria-expanded="false" target="_blank" >
+                                        ROCm&#8482; Docs
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://www.amd.com/en/developer/resources/rocm-hub.html" id="navrocm-developer-hub" role="button" aria-expanded="false" target="_blank" >
+                                        ROCm Developer Hub
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://instinct.docs.amd.com" id="navsystems-and-infra-docs" role="button" aria-expanded="false" target="_blank" >
+                                        Systems and Infra Docs
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://www.amd.com/en/developer/resources/infinity-hub.html" id="navinfinity-hub" role="button" aria-expanded="false" target="_blank" >
+                                        Infinity Hub
+                                    </a>
+                                
+                            </li>
+                        
+                            <li class="nav-item">
+                                
+                                    <a class="nav-link top-level header-menu-links" href="https://github.com/ROCm/gpuaidev/issues/new/choose" id="navsupport" role="button" aria-expanded="false" target="_blank" >
+                                        Support
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                    
+                </div>
+            </div>
+        </nav>
+        
+    </header>
+    
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<a class="navbar-brand logo" href="https://rocm.docs.amd.com/projects/ai-developer-hub/en/latest">
+    <p>AI Developer</p>
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Tutorials for AI developers 15.0</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial-selector.html">Tutorial selector</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Inference tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="opea_deployment_and_evaluation.html">ChatQnA vLLM deployment and performance evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="t2v_comfyui_radeon.html">Text-to-video generation with ComfyUI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="t2v_comfyui_api_mode_instinct.html">Running ComfyUI generative workflows from Python on AMD Instinct GPUs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deepseek_janus_cpu_gpu.html">DeepSeek Janus Pro on CPU or GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vllm_v1_DSR1.html">DeepSeek-R1 with vLLM V1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_airbnb_agent_mcp.html">AI agent with MCPs using vLLM and PydanticAI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_inference_ver3_HF_transformers.html">Hugging Face Transformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_inference_ver3_HF_vllm.html">Deploying with vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rapbot_vllm.html">From chatbot to rap bot with vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rag_ollama_llamaindex.html">RAG with LlamaIndex and Ollama</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">OCR with vision-language models with vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="voice_pipeline_rag_ollama.html">Building AI pipelines for voice assistants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="speculative_decoding_deep_dive.html">Speculative decoding with vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deepseekr1_sglang.html">DeepSeek-R1 with SGLang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SGlang_PD_Disagg_On_AMD_GPU.html">PD disaggregation with SGLang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mtp.html">Accelerating DeepSeek-V3 inference using multi-token prediction in SGLang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="power-Google-ADK-on-AMD-platform-and-local-LLMs.html">Multi-agents with Google ADK and A2A protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openclaw_vllm.html">Deploy OpenClaw with Qwen3.5 and vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_multiagent_openclaw.html">Multi-agent incident triage with OpenClaw</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Fine-tuning tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../fine_tune/qwen_image.html">Customize Qwen-Image with DiffSynth-Studio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fine_tune/fine_tuning_lora_qwen2vl.html">VLM with PEFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fine_tune/torchtune_llama3.html">Llama-3.1 8B with torchtune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fine_tune/llama_factory_llama3.html">Llama-3.1 8B with Llama Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fine_tune/unsloth_Llama3_1_8B_GRPO.html">GRPO with Unsloth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fine_tune/slime_qwen3_4B_GRPO.html">GRPO with slime</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pretraining tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/setup_tutorial.html">Training configuration with Megatron-LM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/train_llama_mock_data.html">LLM with Megatron-LM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/torchtitan_llama3.html">Llama-3.1 8B with torchtitan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/ddim_pretrain.html">Custom diffusion model with PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/SpecForge_SGlang.html">Speculative decoding draft model with SpecForge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/torchtitan_deepseek.html">Pretraining with TorchTitan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/training_with_primus.html">Training a model with Primus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/se3transform_intro.html">SE(3)-Transformer overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pretrain/triton_inference_server_benchmark.html">Training and Serving a FinalNet CTR model with Triton Inference Server</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">GPU development and optimization tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/mxfp4_quantization_quark_vllm.html">Quark MXFP4 quantization for vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/helion_gpu_kernel_dev.html">GPU kernel development and assessment with Helion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/aiter_mla_decode_kernel.html">MLA decoding kernel of AITER library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/triton_kernel_dev.html">Kernel development and optimization with Triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/llama4_profiling_vllm.html">Profiling Llama-4 inference with vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/fp8_quantization_quark_vllm.html">FP8 quantization with AMD Quark for vLLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpu_dev_optimize/fp8_gemm_hip_cdna4.html">FP8 GEMM optimization on AMD CDNA4-based GPUs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">Licensing and support information</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-angle-right"></span>
+  </label></div>
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">OCR with...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>OCR with vision-language models with vLLM</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operating-system">Operating system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware">Hardware</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software">Software</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hugging-face-api-access">Hugging Face API access</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-with-docker-and-rocm">1. Environment setup with Docker and ROCm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-jupyter-notebooks-in-the-container">2. Launch Jupyter Notebooks in the container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-dependencies">3. Installing dependencies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#provide-your-hugging-face-token">Provide your Hugging Face token</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-an-ocr-with-vllm">4. Building an OCR with vLLM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-the-ocr-system">Testing the OCR system</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transforming-the-ocr-to-a-gui-enabled-system-with-multiple-model-choices">5. Transforming the OCR to a GUI-enabled system with multiple model choices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-gradio-and-define-a-list-of-vlm-models-to-access">Import Gradio and define a list of VLM models to access</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-gradio-interface">Create the Gradio interface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-gradio-application">Run the Gradio application</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ocr-with-vision-language-models-with-vllm">
+<h1>OCR with vision-language models with vLLM<a class="headerlink" href="#ocr-with-vision-language-models-with-vllm" title="Link to this heading">#</a></h1>
+<p><strong>Author</strong>: Mahdi Ghodsi<br />
+<strong>Knowledge level</strong>: Beginner</p>
+<p>This notebook provides a step-by-step guide to building an OCR system
+using vision-language models with vLLM and Gradio for inference.</p>
+<p>Optical Character Recognition (OCR) is essential for extracting text from images, scanned documents, and handwritten content.
+Vision-language models (VLMs) enhance OCR by leveraging transformer-based architectures, enabling context-aware text recognition.</p>
+<p>This tutorial explores how to use models like LLaVA, BLIP-2, and Qwen-VL for OCR. It covers the following topics:</p>
+<p><a class="reference external" href="https://rocm.docs.amd.com/projects/install-on-windows/en/latest/install/install.html#env-setup" title="HIP SDK for Windows 7.2.0"><span class="xref myst">Environment setup with Docker and ROCm</span></a><br />
+<a class="reference internal" href="#launch-jupyter"><span class="xref myst">Launch Jupyter Notebooks in the container</span></a><br />
+<a class="reference internal" href="#install-deps"><span class="xref myst">Installing dependencies</span></a><br />
+<a class="reference internal" href="#cli-ocr"><span class="xref myst">Building an OCR with vLLM</span></a><br />
+<a class="reference internal" href="#gradio-gui"><span class="xref myst">Transforming the OCR to a GUI-enabled system with multiple model choices</span></a></p>
+<p>The tutorial uses vLLM for large language model (LLM) inference. vLLM optimizes text generation workloads by effectively batching requests and utilizing GPU resources, offering high throughput and low latency, which is perfect for chatbots.</p>
+<section id="id1">
+<h2><img alt="OCR Example" src="../../_images/ocr.gif" /><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<p>This tutorial was developed and tested using the following setup.</p>
+<section id="operating-system">
+<h3>Operating system<a class="headerlink" href="#operating-system" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Ubuntu 22.04</strong>: Ensure your system is running Ubuntu version 22.04.</p></li>
+</ul>
+</section>
+<section id="hardware">
+<h3>Hardware<a class="headerlink" href="#hardware" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>AMD Instinct™ GPUs</strong>: This tutorial was tested on an AMD Instinct MI300X GPU. Ensure you are using an AMD Instinct GPU or compatible hardware with ROCm support and that your system meets the <a class="reference external" href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html">official requirements</a>.</p></li>
+</ul>
+</section>
+<section id="software">
+<h3>Software<a class="headerlink" href="#software" title="Link to this heading">#</a></h3>
+<ul>
+<li><p><strong>ROCm 6.2 or 6.3</strong>: Install and verify ROCm by following the <a class="reference external" href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/quick-start.html">ROCm install guide</a>. After installation, confirm your setup using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amd-smi
+</pre></div>
+</div>
+<p>This command lists your AMD GPUs with relevant details.</p>
+<p><strong>Note</strong>: For ROCm 6.4 and earlier, use the <code class="docutils literal notranslate"><span class="pre">rocm-smi</span></code> command instead.</p>
+</li>
+<li><p><strong>Docker</strong>: Ensure Docker is installed and configured correctly. Follow the Docker installation guide for your operating system.</p>
+<p><strong>Note</strong>: Ensure the Docker permissions are correctly configured. To configure permissions to allow non-root access, run the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+newgrp<span class="w"> </span>docker
+</pre></div>
+</div>
+<p>Verify Docker is working correctly with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>hello-world
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="hugging-face-api-access">
+<h3>Hugging Face API access<a class="headerlink" href="#hugging-face-api-access" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Obtain an API token from <a class="reference external" href="https://huggingface.co">Hugging Face</a> for downloading models.</p></li>
+<li><p>Ensure the Hugging Face API token has the necessary permissions and approval to access the <a class="reference external" href="https://huggingface.co/meta-llama/Llama-3.1-8B">Meta Llama checkpoints</a>.</p></li>
+</ul>
+<p><a id="env-setup"></a></p>
+</section>
+</section>
+<section id="environment-setup-with-docker-and-rocm">
+<h2>1. Environment setup with Docker and ROCm<a class="headerlink" href="#environment-setup-with-docker-and-rocm" title="Link to this heading">#</a></h2>
+<p>Launch the Docker container. From your host machine, run this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--network<span class="o">=</span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/kfd<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/dri<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--group-add<span class="o">=</span>video<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ipc<span class="o">=</span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cap-add<span class="o">=</span>SYS_PTRACE<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--security-opt<span class="w"> </span><span class="nv">seccomp</span><span class="o">=</span>unconfined<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--shm-size<span class="w"> </span>8G<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hostname<span class="o">=</span>ROCm-FT<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">HUGGINGFACE_HUB_CACHE</span><span class="o">=</span>/workspace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/workspace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-w<span class="w"> </span>/workspace/notebooks<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--entrypoint<span class="w"> </span>/bin/bash<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>rocm/vllm-dev:main
+</pre></div>
+</div>
+<p><strong>Note</strong>: This command mounts the current directory to the <code class="docutils literal notranslate"><span class="pre">/workspace</span></code> directory in the container. Ensure the notebook file is either copied to this directory before running the Docker command or uploaded into the Jupyter Notebook environment after it starts. Save the token or URL provided in the terminal output to access the notebook from your web browser. You can download this notebook from the <a class="reference external" href="https://github.com/ROCm/gpuaidev">AI Developer Hub GitHub repository</a>.</p>
+<p><a id="launch-jupyter"></a></p>
+</section>
+<section id="launch-jupyter-notebooks-in-the-container">
+<h2>2. Launch Jupyter Notebooks in the container<a class="headerlink" href="#launch-jupyter-notebooks-in-the-container" title="Link to this heading">#</a></h2>
+<p>Inside the Docker container, install Jupyter using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>jupyter
+</pre></div>
+</div>
+<p>Start the Jupyter server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter-lab<span class="w"> </span>--ip<span class="o">=</span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="o">=</span><span class="m">8888</span><span class="w"> </span>--no-browser<span class="w"> </span>--allow-root
+</pre></div>
+</div>
+<p><strong>Note</strong>: Ensure port <code class="docutils literal notranslate"><span class="pre">8888</span></code> is not already in use on your system before running the above command. If it is, you can specify a different port by replacing <code class="docutils literal notranslate"><span class="pre">--port=8888</span></code> with another port number, for example, <code class="docutils literal notranslate"><span class="pre">--port=8890</span></code>.</p>
+<p><a id="install-deps"></a></p>
+</section>
+<section id="installing-dependencies">
+<h2>3. Installing dependencies<a class="headerlink" href="#installing-dependencies" title="Link to this heading">#</a></h2>
+<p>Install the libraries needed for this tutorial. Run the following commands inside the Jupyter notebook running within the Docker container:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>gradio<span class="w"> </span>requests
+</pre></div>
+</div>
+</div>
+</div>
+<section id="provide-your-hugging-face-token">
+<h3>Provide your Hugging Face token<a class="headerlink" href="#provide-your-hugging-face-token" title="Link to this heading">#</a></h3>
+<p>You’ll require a Hugging Face API token to access Llama-3.1-8B. Generate your token at <a class="reference external" href="https://huggingface.co/settings/tokens">Hugging Face Tokens</a> and request access for <a class="reference external" href="https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct">Llama-3.2-11B-Vision-Instruct</a>. Tokens typically start with “hf_”.</p>
+<p>Run the following interactive block in your Jupyter notebook to set up the token:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">notebook_login</span><span class="p">,</span> <span class="n">HfApi</span>
+
+<span class="c1"># Prompt the user to log in</span>
+<span class="n">notebook_login</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Verify that your token was accepted correctly:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Validate the token</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">HfApi</span><span class="p">()</span>
+    <span class="n">user_info</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">whoami</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Token validated successfully! Logged in as: </span><span class="si">{</span><span class="n">user_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Token validation failed. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><a id="cli-ocr"></a></p>
+</section>
+</section>
+<section id="building-an-ocr-with-vllm">
+<h2>4. Building an OCR with vLLM<a class="headerlink" href="#building-an-ocr-with-vllm" title="Link to this heading">#</a></h2>
+<p>First, define the <code class="docutils literal notranslate"><span class="pre">ImageInference</span></code> inference class. This class provides a constructor to initialize a model for inference. Additionally, it defines another function that runs inference on an image that you provide.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vllm.multimodal.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">current_model</span> <span class="o">=</span> <span class="s2">&quot;meta-llama/Llama-3.2-11B-Vision-Instruct&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ImageInference</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">current_model</span><span class="p">):</span>
+        <span class="c1"># Initialize the model and tokenizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">max_model_len</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span> <span class="n">max_num_seqs</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">enforce_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_image_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># Prepare the prompt and the image for the model</span>
+        <span class="n">messages_og</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s2">&quot;&lt;|image|&gt; What is in this image?&quot;</span><span class="p">}]</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Act as an OCR assistant. Analyze the provided &lt;|image|&gt; image and:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;1. Identify and transcribe all visible text in the image exactly as it appears.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;2. Preserve the original line breaks, spacing, and formatting from the image.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;3. Output only the transcribed text, line by line, without adding any commentary or explanations or special characters.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="p">}]</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span><span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+        <span class="c1"># Generate output from the model</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">({</span>
+            <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
+            <span class="s2">&quot;multi_modal_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
+        <span class="p">},</span> <span class="n">sampling_params</span><span class="o">=</span><span class="n">sampling_params</span><span class="p">)</span>
+
+        <span class="c1"># Extract and return generated text</span>
+        <span class="n">generated_text</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">outputs</span> <span class="k">else</span> <span class="s2">&quot;No output generated.&quot;</span>
+        <span class="k">return</span> <span class="n">generated_text</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="testing-the-ocr-system">
+<h3>Testing the OCR system<a class="headerlink" href="#testing-the-ocr-system" title="Link to this heading">#</a></h3>
+<p>Download <a class="reference external" href="https://github.com/ROCm/gpuaidev/tree/main/docs/notebooks/assets/together_we_advance_.png">this test image</a> by running the following command:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/ROCm/gpuaidev/main/docs/notebooks/assets/together_we_advance_.png&quot;</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;together_we_advance_.png&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Download complete:&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it’s time to test your OCR system. First read the image, then view it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pil_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;together_we_advance_.png&quot;</span><span class="p">)</span>
+<span class="n">pil_image</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>  <span class="c1"># Ensure the image is in RGB format</span>
+<span class="n">pil_image</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, initialize an instance of the <code class="docutils literal notranslate"><span class="pre">ImageInference</span></code> class.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the inference class</span>
+<span class="n">inference</span> <span class="o">=</span> <span class="n">ImageInference</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now pass the image to the model for inference and print the results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate output for the image</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">generate_image_output</span><span class="p">(</span><span class="n">pil_image</span><span class="p">)</span>
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model Output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Congratulations. You’ve just built an OCR system. That’s how simple it is to create an OCR-like system that transcribes the text in a given image.</p>
+<p><a id="gradio-gui"></a></p>
+</section>
+</section>
+<section id="transforming-the-ocr-to-a-gui-enabled-system-with-multiple-model-choices">
+<h2>5. Transforming the OCR to a GUI-enabled system with multiple model choices<a class="headerlink" href="#transforming-the-ocr-to-a-gui-enabled-system-with-multiple-model-choices" title="Link to this heading">#</a></h2>
+<p>To provide a graphical interface for your chatbot, use <a class="reference external" href="https://www.gradio.app/">Gradio</a> to create an interactive web-based UI.</p>
+<section id="import-gradio-and-define-a-list-of-vlm-models-to-access">
+<h3>Import Gradio and define a list of VLM models to access<a class="headerlink" href="#import-gradio-and-define-a-list-of-vlm-models-to-access" title="Link to this heading">#</a></h3>
+<p>You’re going to create a shortlist of handpicked models that can analyze images. The full list is available <a class="reference external" href="https://docs.vllm.ai/en/latest/models/supported_models.html">here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gradio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gr</span>
+
+<span class="c1"># Define available models and their Hugging Face model IDs</span>
+<span class="n">MODEL_OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Llama-3.2-11B-Vision-Instruct&quot;</span><span class="p">:</span> <span class="s2">&quot;meta-llama/Llama-3.2-11B-Vision-Instruct&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BLIP-2 (2.7B)&quot;</span><span class="p">:</span> <span class="s2">&quot;Salesforce/blip2-opt-2.7b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BLIP-2 (6.7B)&quot;</span><span class="p">:</span> <span class="s2">&quot;Salesforce/blip2-opt-6.7b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Fuyu (8B)&quot;</span><span class="p">:</span> <span class="s2">&quot;adept/fuyu-8b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GLM-4V (9B)&quot;</span><span class="p">:</span> <span class="s2">&quot;THUDM/glm-4v-9b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;H2OVL Mississippi (2B)&quot;</span><span class="p">:</span> <span class="s2">&quot;h2oai/h2ovl-mississippi-2b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;H2OVL Mississippi (800M)&quot;</span><span class="p">:</span> <span class="s2">&quot;h2oai/h2ovl-mississippi-800m&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;InternVL2 (4B)&quot;</span><span class="p">:</span> <span class="s2">&quot;OpenGVLab/InternVL2-4B&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;InternVL2 (2B)&quot;</span><span class="p">:</span> <span class="s2">&quot;OpenGVLab/Mono-InternVL-2B&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LLaVA 1.5 (7B)&quot;</span><span class="p">:</span> <span class="s2">&quot;llava-hf/llava-1.5-7b-hf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LLaVA 1.5 (13B)&quot;</span><span class="p">:</span> <span class="s2">&quot;llava-hf/llava-1.5-13b-hf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MiniCPM-V (2_5)&quot;</span><span class="p">:</span> <span class="s2">&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MiniCPM-V (2)&quot;</span><span class="p">:</span> <span class="s2">&quot;openbmb/MiniCPM-V-2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Molmo (7B)&quot;</span><span class="p">:</span> <span class="s2">&quot;allenai/Molmo-7B-D-0924&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PaliGemma (3B PT)&quot;</span><span class="p">:</span> <span class="s2">&quot;google/paligemma-3b-pt-224&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PaliGemma (3B Mix)&quot;</span><span class="p">:</span> <span class="s2">&quot;google/paligemma-3b-mix-224&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Phi-3 Vision (128K)&quot;</span><span class="p">:</span> <span class="s2">&quot;microsoft/Phi-3-vision-128k-instruct&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Phi-3.5 Vision&quot;</span><span class="p">:</span> <span class="s2">&quot;microsoft/Phi-3.5-vision-instruct&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pixtral (12B)&quot;</span><span class="p">:</span> <span class="s2">&quot;mistralai/Pixtral-12B-2409&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Qwen-VL&quot;</span><span class="p">:</span> <span class="s2">&quot;Qwen/Qwen-VL&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Qwen-VL-Chat&quot;</span><span class="p">:</span> <span class="s2">&quot;Qwen/Qwen-VL-Chat&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Qwen2-VL (2B)&quot;</span><span class="p">:</span> <span class="s2">&quot;Qwen/Qwen2-VL-2B-Instruct&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Qwen2-VL (7B)&quot;</span><span class="p">:</span> <span class="s2">&quot;Qwen/Qwen2-VL-7B-Instruct&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-the-gradio-interface">
+<h3>Create the Gradio interface<a class="headerlink" href="#create-the-gradio-interface" title="Link to this heading">#</a></h3>
+<p>Next, define two simple helper functions for switching models and running inference using your previously defined class, followed by Gradio blocks:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">switch_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">inference</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">inference</span> <span class="o">=</span> <span class="n">ImageInference</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Switched to model: </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Failed to switch model: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_image</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pil_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">generate_image_output</span><span class="p">(</span><span class="n">pil_image</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Error processing the image: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">()</span> <span class="k">as</span> <span class="n">interface</span><span class="p">:</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;## Multimodal OCR &amp; Image Analysis&quot;</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="n">gr</span><span class="o">.</span><span class="n">Row</span><span class="p">():</span>
+        <span class="n">model_dropdown</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+            <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">MODEL_OPTIONS</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Llama-3.2-11B-Vision-Instruct&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Select Model&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">switch_button</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Switch Model&quot;</span><span class="p">)</span>
+
+    <span class="n">model_status</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Textbox</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Current Model: </span><span class="si">{</span><span class="n">current_model</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model Status&quot;</span><span class="p">)</span>
+
+    <span class="n">image_input</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;pil&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upload Image&quot;</span><span class="p">)</span>
+    <span class="n">analyze_button</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Analyze Image&quot;</span><span class="p">)</span>
+    <span class="c1"># output_box = gr.Textbox(label=&quot;Model Output&quot;, lines=10)</span>
+    <span class="n">output_box</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model Output&quot;</span><span class="p">)</span>
+
+    <span class="n">switch_button</span><span class="o">.</span><span class="n">click</span><span class="p">(</span>
+        <span class="n">fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">selected_model</span><span class="p">:</span> <span class="p">(</span><span class="n">switch_model</span><span class="p">(</span><span class="n">MODEL_OPTIONS</span><span class="p">[</span><span class="n">selected_model</span><span class="p">]),</span> <span class="sa">f</span><span class="s2">&quot;Current Model: </span><span class="si">{</span><span class="n">MODEL_OPTIONS</span><span class="p">[</span><span class="n">selected_model</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">model_dropdown</span><span class="p">],</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">model_status</span><span class="p">,</span> <span class="n">model_status</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">analyze_button</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">analyze_image</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">image_input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">output_box</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-the-gradio-application">
+<h3>Run the Gradio application<a class="headerlink" href="#run-the-gradio-application" title="Link to this heading">#</a></h3>
+<p>Execute the code block below to launch the GUI. The interface displays in your browser, letting you interact with the OCR system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interface</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>In this tutorial, you accomplished the following tasks:</p>
+<ul class="simple">
+<li><p>Configured a Docker environment with ROCm 6.2 or 6.3 and vLLM.</p></li>
+<li><p>Built an OCR class using vLLM.</p></li>
+<li><p>Extended the functionality by adding a GUI and a selection of multiple different models.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="rag_ollama_llamaindex.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Constructing a RAG system using LlamaIndex and Ollama</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="voice_pipeline_rag_ollama.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Building AI pipelines for voice assistants using ROCm, LlamaIndex, and RAG</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+    
+        
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operating-system">Operating system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware">Hardware</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software">Software</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hugging-face-api-access">Hugging Face API access</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-with-docker-and-rocm">1. Environment setup with Docker and ROCm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-jupyter-notebooks-in-the-container">2. Launch Jupyter Notebooks in the container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-dependencies">3. Installing dependencies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#provide-your-hugging-face-token">Provide your Hugging Face token</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-an-ocr-with-vllm">4. Building an OCR with vLLM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-the-ocr-system">Testing the OCR system</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transforming-the-ocr-to-a-gui-enabled-system-with-multiple-model-choices">5. Transforming the OCR to a GUI-enabled system with multiple model choices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-gradio-and-define-a-list-of-vlm-models-to-access">Import Gradio and define a list of VLM models to access</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-gradio-interface">Create the Gradio interface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-gradio-application">Run the Gradio application</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+    
+
+          </div>
+          <footer class="bd-footer-content">
+            <p>
+  </p>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    
+<footer class="rocm-footer">
+    <div class="container-lg">
+        <section class="bottom-menu menu py-45">
+            <div class="row d-flex align-items-center">
+                <div class="col-12 text-center">
+                    <ul>
+                        <li><a href="https://www.amd.com/en/corporate/copyright" target="_blank">Terms and Conditions</a></li>
+                        
+                        <li><a href="https://www.amd.com/en/corporate/privacy" target="_blank">Privacy</a></li>
+                        <li><a href="https://www.amd.com/en/corporate/trademarks" target="_blank">Trademarks</a></li>
+                        <li><a href="https://www.amd.com/content/dam/amd/en/documents/corporate/cr/supply-chain-transparency.pdf" target="_blank">Supply Chain Transparency</a></li>
+                        <li><a href="https://www.amd.com/en/corporate/competition" target="_blank">Fair and Open Competition</a></li>
+                        <li><a href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf" target="_blank">UK Tax Strategy</a></li>
+                        <li><a href="https://www.amd.com/en/corporate/cookies" target="_blank">Cookie Policy</a></li>
+                        <!-- OneTrust Cookies Settings button start -->
+                        <li><a href="#cookie-settings" id="ot-sdk-btn" class="ot-sdk-show-settings">Cookie Settings</a></li>
+                        <!-- OneTrust Cookies Settings button end -->
+                    </ul>
+                </div>
+            </div>
+            <div class="row d-flex align-items-center">
+                <div class="col-12 text-center">
+                    <div>
+                        <span class="copyright">© 2026 Advanced Micro Devices, Inc</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</footer>
+
+<!-- <div id="rdc-watermark-container">
+    <img id="rdc-watermark" src="../../_static/images/alpha-watermark.svg" alt="DRAFT watermark"/>
+</div> -->
+    
+  </body>
+</html>
