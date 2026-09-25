@@ -43,26 +43,63 @@ def _get_font(size, cjk=False):
         except: pass
     return ImageFont.load_default()
 
-def _draw_centered(img, text, font_size=60, color=(0,0,0), cjk=False):
+def _draw_centered(img, text, font_size=60, color=(0,0,0), cjk=False, margin=36):
     draw = ImageDraw.Draw(img)
-    font = _get_font(font_size, cjk=cjk)
+    max_w = img.width - 2 * margin
+    max_h = img.height - 2 * margin
     words = text.split()
-    if len(words) > 3:
-        mid = len(words)//2
-        lines = [' '.join(words[:mid]), ' '.join(words[mid:])]
-    else:
-        lines = [text]
-    line_h = font_size + 8
-    total_h = len(lines) * line_h
+    
+    best_lines, best_font = [text], _get_font(font_size, cjk=cjk)
+    for sz in range(font_size, 18, -2):
+        f = _get_font(sz, cjk=cjk)
+        if len(words) <= 1:
+            lines = [text]
+        else:
+            lines = []
+            cur = []
+            for w in words:
+                cand = " ".join(cur + [w]) if cur else w
+                try:
+                    w_cand = draw.textbbox((0, 0), cand, font=f)[2] - draw.textbbox((0, 0), cand, font=f)[0]
+                except Exception:
+                    w_cand = len(cand) * (sz // 2)
+                if w_cand <= max_w:
+                    cur.append(w)
+                else:
+                    if cur:
+                        lines.append(" ".join(cur))
+                        cur = [w]
+                    else:
+                        lines.append(w)
+                        cur = []
+            if cur:
+                lines.append(" ".join(cur))
+        
+        line_widths = []
+        for l in lines:
+            try:
+                lw = draw.textbbox((0, 0), l, font=f)[2] - draw.textbbox((0, 0), l, font=f)[0]
+            except Exception:
+                lw = len(l) * (sz // 2)
+            line_widths.append(lw)
+        
+        line_h = sz + int(sz * 0.2)
+        total_h = len(lines) * line_h
+        if all(lw <= max_w for lw in line_widths) and total_h <= max_h:
+            best_lines, best_font, font_size = lines, f, sz
+            break
+
+    line_h = font_size + int(font_size * 0.2)
+    total_h = len(best_lines) * line_h
     y = (img.height - total_h) // 2
-    for line in lines:
+    for line in best_lines:
         try:
-            bbox = draw.textbbox((0,0), line, font=font)
+            bbox = draw.textbbox((0, 0), line, font=best_font)
             tw = bbox[2] - bbox[0]
-        except:
+        except Exception:
             tw = len(line) * (font_size // 2)
         x = (img.width - tw) // 2
-        draw.text((x, y), line, font=font, fill=color)
+        draw.text((x, y), line, font=best_font, fill=color)
         y += line_h
 
 def _render(slice_name, text, r):

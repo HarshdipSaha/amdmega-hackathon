@@ -2,7 +2,7 @@ import random
 from roadread.rules import postprocess, is_chinese_plate, chinese_format_ok
 
 def test_repeated_digits_never_collapsed():
-    for s in ["沪b·88888", "京A·11111", "粤B·D88888"]:
+    for s in ["沪B·88888", "京A·11111", "粤B·D88888"]:
         assert postprocess(s, kind="plate").text == s
 
 def test_chinese_length_preserved_property():

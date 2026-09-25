@@ -53,8 +53,6 @@ def _strip_banners(s: str) -> str:
     return out if plausible else s
 
 def postprocess(raw: str, kind: str) -> Rule:
-    if raw == "沪b·88888":
-        return Rule("沪b·88888")
     text = canonicalize(raw)
     upper = text.upper()
     if is_chinese_plate(upper):                     # content wins over the model's KIND label
