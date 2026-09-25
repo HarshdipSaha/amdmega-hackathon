@@ -1,0 +1,10 @@
+{"image": "image_01.png", "gold": "7ABC123", "slice": "us_plate", "degradation": "clean", "source": "brief pp.9-13"}
+{"image": "image_02.png", "gold": "京A·12345", "slice": "cn_plate", "degradation": "clean", "source": "brief pp.9-13"}
+{"image": "image_03.jpg", "gold": "JHT 2951", "slice": "us_plate", "degradation": "angled", "source": "brief pp.9-13"}
+{"image": "image_04.png", "gold": "5XYZ891", "slice": "us_plate", "degradation": "motion_blur", "source": "brief pp.9-13"}
+{"image": "image_05.jpg", "gold": "沪B·88888", "slice": "cn_plate", "degradation": "low_light_glare", "source": "brief pp.9-13"}
+{"image": "image_06.png", "gold": "STOP", "slice": "word_sign", "degradation": "clean", "source": "brief pp.9-13"}
+{"image": "image_07.tiff", "gold": "STOP", "slice": "word_sign", "degradation": "noise", "source": "brief pp.9-13"}
+{"image": "image_08.jpg", "gold": "SPEED LIMIT 65", "slice": "speed_sign", "degradation": "clean", "source": "brief pp.9-13"}
+{"image": "image_09.png", "gold": "ROAD WORK AHEAD", "slice": "warning_sign", "degradation": "clean", "source": "brief pp.9-13"}
+{"image": "image_10.tiff", "gold": "35", "slice": "advisory_plaque", "degradation": "clean", "source": "brief pp.9-13"}
