@@ -44,3 +44,21 @@ def test_app_does_not_import_torch():
     code = "import sys; import app.app; print('torch' in sys.modules, 'transformers' in sys.modules, 'PIL' in sys.modules)"
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, cwd=Path.cwd()).stdout
     assert out.strip() == "False False False"
+
+def test_worker_roundtrip_and_survives_bad_request(tmp_path):
+    from PIL import Image
+    img = tmp_path / "s.png"; Image.new("RGB", (32, 16)).save(img)
+    ready = tmp_path / "ready"
+    env = {**os.environ, "ROADREAD_ENGINE": "fake", "ROADREAD_FAKE_REPLY": "KIND: sign\nTEXT: STOP",
+           "ROADREAD_PORT": "47902", "ROADREAD_READY_FILE": str(ready), "PYTHONPATH": str(Path.cwd())}
+    p = subprocess.Popen([sys.executable, "-m", "roadread.worker"], env=env)
+    try:
+        for _ in range(100):
+            if ready.exists(): break
+            time.sleep(0.1)
+        assert json.loads(ready.read_text())["engine"] == "fake"
+        assert protocol.request(str(tmp_path / "missing.png"), 10, port=47902)["text"] == ""   # error -> empty
+        assert protocol.request(str(img), 10, port=47902)["text"] == "STOP"                     # still serving
+    finally:
+        p.terminate()
+
