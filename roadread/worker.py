@@ -15,6 +15,11 @@ def make_engine():
 
 def main() -> None:
     t0 = time.monotonic()
+    try:
+        with open("/tmp/roadread.pid", "w") as f:
+            f.write(str(os.getpid()))
+    except Exception:
+        pass
     engine = make_engine()
     pipe = Pipeline(engine)
     pipe.run(Image.new("RGB", (256, 128), "white"), deadline_s=60)            # warm-up: kernels, allocator, caches

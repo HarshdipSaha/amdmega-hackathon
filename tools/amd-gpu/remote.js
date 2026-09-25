@@ -41,7 +41,7 @@ async function upload(relPaths, remoteDir) {
   if (size > 40e6) throw new Error(`archive is ${(size / 1e6).toFixed(1)} MB; split it (put goes through page.evaluate)`);
   return withLab(async (page, base) => {
     await put(page, base, path.join(REPO, rel), 'upload.tgz');
-    const r = await sh(page, base, `mkdir -p ${remoteDir} && tar -xzf /workspace/upload.tgz -C ${remoteDir} && rm /workspace/upload.tgz && ls ${remoteDir}`);
+    const r = await sh(page, base, `mkdir -p ${remoteDir} && tar -xzf /workspace/upload.tgz --no-same-owner -C ${remoteDir} && rm /workspace/upload.tgz && ls ${remoteDir}`);
     process.stdout.write(r.output);
   });
 }
@@ -71,11 +71,15 @@ ln -sfn /workspace/models/$N /workspace/models/current && du -sh /workspace/mode
     fs.writeFileSync(file, line);
     console.log('saved', file);
   },
-  'worker-start': () => run(`${ENV} cd ${R} && pkill -f roadread.worker; sleep 1; rm -f /tmp/roadread.ready; \
-(nohup python -m roadread.worker > /workspace/worker.log 2>&1 &) ; \
-for i in $(seq 1 300); do [ -f /tmp/roadread.ready ] && cat /tmp/roadread.ready && echo && exit 0; \
-pgrep -f roadread.worker >/dev/null || break; sleep 2; done; tail -40 /workspace/worker.log; exit 1`, 12 * 60_000),
-  'worker-stop': () => run(`pkill -f roadread.worker; echo stopped`),
+  'worker-start': () => run(`${ENV} cd ${R} && [ -f /tmp/roadread.pid ] && kill -9 $(cat /tmp/roadread.pid 2>/dev/null) 2>/dev/null || true; sleep 1; rm -f /tmp/roadread.ready /tmp/roadread.pid; \
+nohup python -m roadread.worker > /workspace/worker.log 2>&1 & \
+WPID=$!; echo "spawned worker pid $WPID"; \
+for i in $(seq 1 120); do \
+  if [ -f /tmp/roadread.ready ]; then cat /tmp/roadread.ready; echo; exit 0; fi; \
+  if ! kill -0 $WPID 2>/dev/null; then echo "worker exited early:"; tail -40 /workspace/worker.log; exit 1; fi; \
+  sleep 2; \
+done; echo "timeout waiting for ready file"; tail -40 /workspace/worker.log; exit 1`, 12 * 60_000),
+  'worker-stop': () => run(`[ -f /tmp/roadread.pid ] && kill -9 $(cat /tmp/roadread.pid 2>/dev/null) 2>/dev/null || true; rm -f /tmp/roadread.ready /tmp/roadread.pid; echo stopped`),
   'worker-log': () => run(`tail -60 /workspace/worker.log`),
   eval: () => run(`${ENV} cd ${R} && mkdir -p results && rm -f results/${b}.jsonl results/${b}.diag.jsonl && \
 (nohup python eval/run_eval.py --manifest ${a} --out results/${b}.jsonl > results/${b}.summary 2> results/${b}.err &) && echo started ${b}`),

@@ -72,7 +72,11 @@ async function openInfo(page) {
 // Navigates `page` into JupyterLab and returns the server base URL (".../instances/<id>/").
 async function openLab(page) {
   const info = await openInfo(page);
-  await page.goto(info.url, { waitUntil: 'domcontentloaded' });
+  try {
+    await page.goto(info.url, { waitUntil: 'commit' });
+  } catch (e) {
+    if (!/ERR_ABORTED/i.test(e.message)) throw e;
+  }
   await page.waitForURL(/\/instances\/[^/]+\/lab/, { timeout: 90_000 });
   await page.locator('#jp-main-dock-panel, .jp-LabShell').first().waitFor({ timeout: 90_000 });
   const base = page.url().replace(/\/lab.*$/, '/');

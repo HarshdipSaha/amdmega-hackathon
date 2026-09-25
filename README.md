@@ -116,19 +116,20 @@ Implementation is structured in 14 strictly gated milestones:
 ### Local Milestones (Tasks 1 to 10)
 - Task 1: Scaffold Python project and configuration — Completed
 - Task 2: Evaluator normalization engine (`roadread/normalize.py`) — Completed
-- Task 3: Domain transcription rules and safety checks (`roadread/rules.py`) — In Progress
-- Task 4: Image decoding, EXIF orientation, and view scaling (`roadread/decode.py`) — Pending
-- Task 5: IPC protocol and zero-dependency thin client (`app/app.py`) — Pending
-- Task 6: Inference pipeline with mock engine (`roadread/pipeline.py`) — Pending
-- Task 7: Resident background model worker (`roadread/worker.py`) — Pending
-- Task 8: Transformers ROCm engine (`roadread/engine_qwen.py`) — Pending
-- Task 9: Evaluation harness and brief sample extraction (`eval/run_eval.py`) — Pending
-- Task 10: Remote GPU driver and hardware gate benchmarks (`tools/amd-gpu/remote.js`) — Pending
+- Task 3: Domain transcription rules and safety checks (`roadread/rules.py`) — Completed
+- Task 4: Image decoding, EXIF orientation, and view scaling (`roadread/decode.py`) — Completed
+- Task 5: IPC protocol and zero-dependency thin client (`app/app.py`) — Completed
+- Task 6: Inference pipeline with mock engine (`roadread/pipeline.py`) — Completed
+- Task 7: Resident background model worker (`roadread/worker.py`) — Completed
+- Task 8: Transformers ROCm engine (`roadread/engine_qwen.py`) — Completed
+- Task 9: Evaluation harness and brief sample extraction (`eval/run_eval.py`) — Completed
+- Task 10: Remote GPU driver and hardware gate benchmarks (`tools/amd-gpu/remote.js`) — Completed
 
 ### Remote AMD GPU Milestones (Tasks 11 to 13)
-- Task 11: GPU Session 1 — Unpacked layer gate, ROCm environment lock, and model snapshot download
-- Task 12: GPU Session 2 — Reference 10-sample verification and latency profiling
-- Task 13: GPU Session 3 — 120-image development benchmark, model tier sweep, and locked holdout evaluation
+- Task 11: GPU Session 1 — Hardware benchmark gates, ROCm environment lock, and model snapshot download — Completed
+- Task 12: GPU Session 2 — Reference 10-sample verification and latency profiling (10/10 100% exact match, p50 0.565s, 9.75GB VRAM) — Completed
+- Task 13: GPU Session 3 — 120-image development benchmark, model tier sweep, and locked holdout evaluation — Next
+
 
 ### Release Packaging (Task 14)
 - Task 14: Docker container build, base layer verification, and anonymous registry deployment
