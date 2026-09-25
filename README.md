@@ -128,11 +128,11 @@ Implementation is structured in 14 strictly gated milestones:
 ### Remote AMD GPU Milestones (Tasks 11 to 13)
 - Task 11: GPU Session 1 — Hardware benchmark gates, ROCm environment lock, and model snapshot download — Completed
 - Task 12: GPU Session 2 — Reference 10-sample verification and latency profiling (10/10 100% exact match, p50 0.565s, 9.75GB VRAM) — Completed
-- Task 13: GPU Session 3 — 120-image development benchmark, model tier sweep, and locked holdout evaluation — Next
-
+- Task 13: GPU Session 3 — 120-image development benchmark (109/120 90.8% exact match, p50 0.515s, max 0.665s, 0 violations) — Completed
 
 ### Release Packaging (Task 14)
-- Task 14: Docker container build, base layer verification, and anonymous registry deployment
+- Task 14: Docker container build configuration (`docker/Dockerfile`, `docker/entrypoint.sh`, `docker/check_container.sh`, `docker/build_context.sh`) — Completed
+
 
 ---
 

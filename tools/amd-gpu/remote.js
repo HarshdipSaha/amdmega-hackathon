@@ -34,9 +34,10 @@ async function run(shell, timeoutMs) {
   });
 }
 
-async function upload(relPaths, remoteDir) {
+async function upload(relPaths, remoteDir, { excludes = ['__pycache__', 'eval/data'] } = {}) {
   const rel = path.relative(REPO, path.join(OUT_DIR, 'upload.tgz'));
-  execFileSync(TAR, ['-czf', rel, '--exclude=__pycache__', '--exclude=eval/data', ...relPaths], { cwd: REPO });
+  const excludeArgs = excludes.flatMap(e => ['--exclude=' + e]);
+  execFileSync(TAR, ['-czf', rel, ...excludeArgs, ...relPaths], { cwd: REPO });
   const size = fs.statSync(path.join(REPO, rel)).size;
   if (size > 40e6) throw new Error(`archive is ${(size / 1e6).toFixed(1)} MB; split it (put goes through page.evaluate)`);
   return withLab(async (page, base) => {
@@ -48,7 +49,7 @@ async function upload(relPaths, remoteDir) {
 
 const cmds = {
   sync: () => upload(['roadread', 'app', 'eval', 'pyproject.toml'], R),
-  data: () => upload([a], R),
+  data: () => upload([a], R, { excludes: ['__pycache__'] }),
   async setup() {
     await run(`${ENV} cd ${R} && H=$(sha1sum app/requirements.txt | cut -c1-12); \
 if [ "$(cat /workspace/pylib/.req 2>/dev/null)" != "$H" ]; then rm -rf /workspace/pylib && \
