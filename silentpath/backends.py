@@ -11,6 +11,9 @@ BACKEND_ALIASES: dict[str, set[str]] = {
     "TRITON_ATTN": {"tritonattentionbackend", "tritonattention"},
     "TRITON_MLA": {"tritonmlabackend", "tritonmla"},
     "AITER_MLA": {"aitermlabackend", "aitermla"},
+    "FLASH_ATTENTION": {"flashattention", "pytorchsdpbackendflashattention", "sdpbackendflashattention"},
+    "MATH": {"math", "pytorchsdpbackendmath", "sdpbackendmath"},
+    "EFFICIENT_ATTENTION": {"efficientattention", "pytorchsdpbackendefficientattention", "sdpbackendefficientattention"},
 }
 ALL_KNOWN_NAMES = {name for names in BACKEND_ALIASES.values() for name in names}
 VERSION_RE = re.compile(r"v[123]")
