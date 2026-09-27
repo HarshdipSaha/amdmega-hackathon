@@ -1,0 +1,18 @@
+# Smallest useful sweep. This is the one that must work before any larger
+# matrix is worth paying for.
+model: Qwen/Qwen2.5-1.5B-Instruct
+seed: 0
+max_tokens: 64
+repetitions: 3
+backends:
+  - ROCM_ATTN
+  - TRITON_ATTN
+workloads:
+  - id: invoice_01
+    prompt: |
+      Invoice 7781. Line items: 3 units at 14.99, 2 units at 249.50, 1 unit at 8.25.
+      Shipping 12.00. Tax 8.875%. What is the invoice total? Answer with the number only.
+  - id: invoice_02
+    prompt: |
+      Invoice 9002. Line items: 7 units at 3.15, 1 unit at 1999.00.
+      Discount 12.5%. Tax 6.25%. What is the invoice total? Answer with the number only.
