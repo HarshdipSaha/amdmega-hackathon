@@ -6,7 +6,7 @@ Use these verified details when the signed-in LabLab form confirms the project c
 
 - **Title:** SILENTPATH: See Which Attention Path Ran on AMD ROCm
 - **Tagline:** Measure the attention operator your AMD inference actually used, compare its output and latency, and keep the profiler evidence with every run.
-- **Source:** https://github.com/HarshdipSaha/amdmega-hackathon (release branch: `feat/silentpath-w7900`)
+- **Source:** https://github.com/HarshdipSaha/amdmega-hackathon/tree/feat/silentpath-w7900
 - **Demo video:** Pending a 2-3 minute recording.
 - **Category / challenge theme:** Confirm in the signed-in participant form before selecting.
 - **AMD technology:** AMD ROCm, PyTorch ROCm, AMD Radeon Pro W7900D (`gfx1100`).

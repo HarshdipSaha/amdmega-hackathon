@@ -86,7 +86,7 @@ python -m pytest -q
 
 ## License and source
 
-The repository is licensed under the [MIT License](LICENSE). Source: [github.com/HarshdipSaha/amdmega-hackathon](https://github.com/HarshdipSaha/amdmega-hackathon).
+The repository is licensed under the [MIT License](LICENSE). SILENTPATH source: [feat/silentpath-w7900](https://github.com/HarshdipSaha/amdmega-hackathon/tree/feat/silentpath-w7900).
 
 ## Project status
 
