@@ -42,8 +42,11 @@ def compare(a: RunRecord, b: RunRecord) -> Divergence:
                       else a.output.decision == b.output.decision)
 
     la, lb = a.output.chosen_logprobs, b.output.chosen_logprobs
-    max_delta = (max((abs(x - y) for x, y in zip(la, lb)), default=0.0)
-                 if len(la) == len(lb) else None)
+    # A zero-length pair contains no measurements, so a default value of 0.0
+    # would claim equality without evidence. Equal nonempty vectors are measured;
+    # unequal vectors have no element-wise maximum delta.
+    max_delta = (max(abs(x - y) for x, y in zip(la, lb))
+                 if la and len(la) == len(lb) else None)
 
     # Decision level dominates. An explicit decision mismatch counts even when
     # the surrounding text is identical.
