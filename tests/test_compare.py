@@ -63,6 +63,24 @@ def test_differing_token_counts_report_no_delta_rather_than_infinity():
     json.loads(json.dumps({"delta": d.max_abs_logprob_delta}))   # must not raise
 
 
+def test_empty_logprob_vectors_have_no_measured_delta():
+    d = compare(make("ok", [1, 2], [], "ok", "DEFAULT"),
+                make("ok", [1, 2], [], "ok", "FLASH_ATTENTION"))
+    assert d.max_abs_logprob_delta is None
+
+
+def test_one_missing_logprob_vector_has_no_measured_delta():
+    d = compare(make("ok", [1, 2], [], "ok", "DEFAULT"),
+                make("ok", [1, 2], [-0.5, -0.25], "ok", "FLASH_ATTENTION"))
+    assert d.max_abs_logprob_delta is None
+
+
+def test_equal_nonempty_logprob_vectors_preserve_measured_zero_delta():
+    d = compare(make("ok", [1, 2], [-0.5, -0.25], "ok", "DEFAULT"),
+                make("ok", [1, 2], [-0.5, -0.25], "ok", "FLASH_ATTENTION"))
+    assert d.max_abs_logprob_delta == 0.0
+
+
 def test_comparing_different_workloads_raises():
     try:
         compare(make("42", [1], [-0.5], "42", "ROCM_ATTN", workload="w1"),

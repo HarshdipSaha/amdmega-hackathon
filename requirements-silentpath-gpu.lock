@@ -1,0 +1,5 @@
+# W7900D-only additions. Install inside the pinned AMD ROCm image.
+# PyTorch, NumPy, and other numerical runtime packages come from that image;
+# this file pins the Transformers/Hugging Face dependencies used by D1.
+-r requirements-silentpath.lock
+-r app/requirements.lock

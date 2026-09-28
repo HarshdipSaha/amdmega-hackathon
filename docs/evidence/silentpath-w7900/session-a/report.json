@@ -1,0 +1,50 @@
+﻿[
+  {
+    "workload": "w7900_gate_a_invoice",
+    "a": "FLASH_ATTENTION",
+    "b": "FLASH_ATTENTION",
+    "level": "identical",
+    "is_finding": false,
+    "max_abs_logprob_delta": null,
+    "cost_ratio": 1.073,
+    "slower": "FLASH_ATTENTION",
+    "samples_min": 1,
+    "cost_ratio_admissible": false,
+    "a_wall_stdev": null,
+    "b_wall_stdev": null,
+    "silent_fallback": false,
+    "unresolved_path": true
+  },
+  {
+    "workload": "w7900_gate_a_invoice",
+    "a": "FLASH_ATTENTION",
+    "b": "MATH",
+    "level": "identical",
+    "is_finding": false,
+    "max_abs_logprob_delta": null,
+    "cost_ratio": 1.155,
+    "slower": "MATH",
+    "samples_min": 1,
+    "cost_ratio_admissible": false,
+    "a_wall_stdev": null,
+    "b_wall_stdev": null,
+    "silent_fallback": false,
+    "unresolved_path": true
+  },
+  {
+    "workload": "w7900_gate_a_invoice",
+    "a": "FLASH_ATTENTION",
+    "b": "MATH",
+    "level": "identical",
+    "is_finding": false,
+    "max_abs_logprob_delta": null,
+    "cost_ratio": 1.239,
+    "slower": "MATH",
+    "samples_min": 1,
+    "cost_ratio_admissible": false,
+    "a_wall_stdev": null,
+    "b_wall_stdev": null,
+    "silent_fallback": false,
+    "unresolved_path": false
+  }
+]

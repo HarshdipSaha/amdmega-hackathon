@@ -29,10 +29,16 @@ def test_cell_config_carries_model_and_seed():
     assert c.config["seed"] == 0
 
 
-def test_cell_config_excludes_the_prompt_text():
-    """Identity depends on the workload id, not the prompt body, so editing
-    whitespace in a prompt does not silently invalidate the whole cache."""
-    assert "prompt" not in expand(load_matrix(YAML))[0].config
+def test_cell_config_fingerprints_prompt_without_storing_its_text():
+    cell = expand(load_matrix(YAML))[0]
+    assert "prompt" not in cell.config
+    assert len(cell.config["prompt_sha256"]) == 64
+
+
+def test_changed_prompt_changes_cache_identity():
+    first = expand(load_matrix(YAML))[0]
+    changed = expand(load_matrix(YAML.replace("What is the total?", "What is the new total?")))[0]
+    assert first.config["prompt_sha256"] != changed.config["prompt_sha256"]
 
 
 def test_duplicate_workload_ids_are_rejected():
@@ -43,3 +49,13 @@ def test_duplicate_workload_ids_are_rejected():
 def test_empty_backends_rejected():
     with pytest.raises(ValueError, match="backend"):
         expand(load_matrix("model: m\nbackends: []\nworkloads: [{id: a, prompt: p}]"))
+
+
+def test_w7900_matrices_cover_default_and_two_prompt_lengths():
+    from pathlib import Path
+    for name, max_tokens in (("w7900-prefill.yaml", 1), ("w7900-decode.yaml", 128)):
+        matrix = load_matrix((Path("configs") / name).read_text(encoding="utf-8"))
+        assert matrix["max_tokens"] == max_tokens
+        assert matrix["repetitions"] >= 5
+        assert "DEFAULT" in matrix["backends"]
+        assert len({len(w["prompt"]) for w in matrix["workloads"]}) >= 2

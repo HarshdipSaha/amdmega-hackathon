@@ -1,19 +1,14 @@
-"""Measured cost. HIP events for device time, amd-smi for memory, wall clock always.
-
-rocprofiler-sdk is deliberately not used: no first-class Python binding, and the
-LD_PRELOAD C++ pattern costs about two weeks for a need hackathon-grade timing
-already meets.
-
-This module is the single timing implementation. The vLLM worker imports it
-rather than keeping its own loop.
-"""
+"""Measured cost. HIP event timing is elapsed event-region time, not GPU busy time."""
 from __future__ import annotations
 
 import statistics
+import threading
 import time
 from typing import Any, Callable
 
 from silentpath.record import CostSample
+
+_TIMING_LOCK = threading.RLock()
 
 
 class Stopwatch:
@@ -26,44 +21,64 @@ class Stopwatch:
 
 
 def repeat_timed(fn: Callable[[], Any], repetitions: int = 3) -> tuple[CostSample, Any]:
-    """Run fn repeatedly; return the cost sample and the last returned value.
-
-    Variance matters: AITER has been reported to show 2-16x higher measurement
-    variability than other paths, so a single-shot timing is not an admissible
-    speed claim, and report rows carry `samples` so that can be enforced.
-    """
     if repetitions < 1:
         raise ValueError("repetitions must be >= 1")
-
     torch = _torch_with_gpu()
     wall: list[float] = []
     device: list[float] = []
     value: Any = None
-
-    for _ in range(repetitions):
-        start = end = None
+    with _TIMING_LOCK:
         if torch is not None:
-            start, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
-            start.record()
-        with Stopwatch() as sw:
-            value = fn()
+            try:
+                torch.cuda.synchronize()
+                torch.cuda.reset_peak_memory_stats()
+            except Exception:
+                pass
+        for _ in range(repetitions):
+            start = end = None
+            if torch is not None:
+                try:
+                    torch.cuda.synchronize()
+                    start = torch.cuda.Event(enable_timing=True)
+                    end = torch.cuda.Event(enable_timing=True)
+                    start.record()
+                except Exception:
+                    start = end = None
+            with Stopwatch() as sw:
+                value = fn()
+                if torch is not None:
+                    try:
+                        # Wall timing includes completion of async HIP work.
+                        torch.cuda.synchronize()
+                    except Exception:
+                        pass
+            if start is not None and end is not None:
+                try:
+                    end.record()
+                    torch.cuda.synchronize()
+                    device.append(start.elapsed_time(end) / 1000.0)
+                except Exception:
+                    pass
+            wall.append(sw.seconds)
+        peak = None
         if torch is not None:
-            end.record()
-            torch.cuda.synchronize()
-            device.append(start.elapsed_time(end) / 1000.0)   # ms -> s
-        wall.append(sw.seconds)
-
+            try:
+                peak = int(torch.cuda.max_memory_allocated())
+            except Exception:
+                pass
     sample = CostSample(
         wall_seconds=statistics.fmean(wall),
         device_seconds=statistics.fmean(device) if device else None,
         samples=repetitions,
         wall_stdev=statistics.stdev(wall) if len(wall) > 1 else None,
-        **_device_memory())
+        peak_memory_bytes=peak,
+        **_amd_smi_memory_sample(),
+    )
     return sample, value
 
 
 def _torch_with_gpu():
-    """torch.cuda maps to HIP on ROCm builds. Absent on the dev laptop."""
+    """torch.cuda maps to HIP on ROCm builds. Absent on machines without GPU."""
     try:
         import torch
     except ImportError:
@@ -74,23 +89,22 @@ def _torch_with_gpu():
         return None
 
 
-def _device_memory() -> dict:
-    """Best-effort VRAM reading; absent on non-ROCm machines."""
+def _amd_smi_memory_sample() -> dict:
+    """Best-effort one-time AMD-SMI memory usage sample (not a peak)."""
+    amdsmi = None
     try:
         import amdsmi
-    except ImportError:
-        return {}
-    try:
         amdsmi.amdsmi_init()
         handles = amdsmi.amdsmi_get_processor_handles()
         if not handles:
             return {}
         mem = amdsmi.amdsmi_get_gpu_memory_usage(handles[0], amdsmi.AmdSmiMemoryType.VRAM)
-        return {"peak_memory_bytes": int(mem)}
+        return {"memory_sample_bytes": int(mem)}
     except Exception:
-        return {}          # telemetry is never allowed to fail a measurement
+        return {}
     finally:
         try:
-            amdsmi.amdsmi_shut_down()
+            if amdsmi is not None:
+                amdsmi.amdsmi_shut_down()
         except Exception:
             pass
