@@ -13,6 +13,7 @@ def which_path(store_dir: str) -> dict[str, Any]:
         "records": len(records),
         "paths": [{"workload": r.workload_id, "requested": r.path.requested,
                    "observed": r.path.observed, "confidence": r.path.confidence.value,
+                   "artifacts": r.artifacts,
                    "device_seconds": r.cost.device_seconds or r.cost.wall_seconds,
                    "samples": r.cost.samples} for r in records],
         "silent_fallbacks": [{"workload": r.workload_id, "requested": r.path.requested,

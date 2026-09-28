@@ -49,3 +49,13 @@ def test_duplicate_workload_ids_are_rejected():
 def test_empty_backends_rejected():
     with pytest.raises(ValueError, match="backend"):
         expand(load_matrix("model: m\nbackends: []\nworkloads: [{id: a, prompt: p}]"))
+
+
+def test_w7900_matrices_cover_default_and_two_prompt_lengths():
+    from pathlib import Path
+    for name, max_tokens in (("w7900-prefill.yaml", 1), ("w7900-decode.yaml", 128)):
+        matrix = load_matrix((Path("configs") / name).read_text(encoding="utf-8"))
+        assert matrix["max_tokens"] == max_tokens
+        assert matrix["repetitions"] >= 5
+        assert "DEFAULT" in matrix["backends"]
+        assert len({len(w["prompt"]) for w in matrix["workloads"]}) >= 2

@@ -1,10 +1,14 @@
 model: Qwen/Qwen2.5-1.5B-Instruct
 seed: 0
 max_tokens: 1
-repetitions: 3
-backends: [FLASH_ATTENTION, MATH]
+repetitions: 5
+backends: [DEFAULT, FLASH_ATTENTION, MATH]
 workloads:
-  - id: w7900_prefill_01
+  - id: w7900_prefill_short
+    prompt: |
+      Summarize the request.
+  - id: w7900_prefill_long
     prompt: |
       Extract the invoice total. Invoice 7781 has 3 units at 14.99, 2 units at 249.50,
-      1 unit at 8.25, shipping 12.00, and tax 8.875%. Answer with the number only.
+      1 unit at 8.25, shipping 12.00, and tax 8.875%. Include the line item subtotal,
+      shipping amount, tax calculation, and final invoice total. Answer with the number only.

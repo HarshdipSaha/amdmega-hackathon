@@ -24,6 +24,26 @@ def setup_gpu_device(torch):
     return torch.device("cuda")
 
 
+def run_timed_and_profile(timed_fn, profiled_fn, profiler, repetitions):
+    """Time unprofiled repetitions, then profile one separate evidence call."""
+    sample, output = repeat_timed(timed_fn, repetitions=repetitions)
+    prof = None
+    try:
+        with profiler as prof:
+            profiled_fn()
+        operators = [event.key for event in prof.key_averages()]
+        return sample, output, operators, prof, None
+    except Exception as exc:
+        # A profiler failure means attribution is unresolved; it does not erase
+        # a successful inference or turn instrumentation overhead into cost.
+        return sample, output, [], prof, exc
+
+
+def resolve_sdpa_backend(choice: str, backend_enum):
+    """DEFAULT means let PyTorch dispatch; other names map to an enum value."""
+    return None if choice == "DEFAULT" else getattr(backend_enum, choice)
+
+
 def map_profiler_operators(operators: Iterable[str]) -> tuple[str | None, dict[str, str]]:
     """Map an unambiguous PyTorch SDPA operator set to a backend."""
     names = sorted({str(op) for op in operators if "scaled_dot_product" in str(op).lower()})
@@ -47,6 +67,7 @@ def parse_observed_backend(operators: Iterable[str]) -> str | None:
 
 
 _BACKENDS = {
+    "DEFAULT": "DEFAULT",
     "FLASH_ATTENTION": "FLASH_ATTENTION",
     "SDPA_FLASH": "FLASH_ATTENTION",
     "MATH": "MATH",
@@ -64,6 +85,7 @@ class SdpaProducer:
         operators: list[str] = []
         logs: list[str] = []
         trace_path: Path | None = None
+        prof = None
         sample = CostSample(wall_seconds=0.0, samples=1)
         output = Output(text="")
         error = None
@@ -87,7 +109,7 @@ class SdpaProducer:
             torch.manual_seed(seed)
             torch.cuda.manual_seed_all(seed)
             from torch.nn.attention import SDPBackend, sdpa_kernel
-            backend = getattr(SDPBackend, choice)
+            backend = resolve_sdpa_backend(choice, SDPBackend)
             model_name = cell.config["model"]
             tokenizer = AutoTokenizer.from_pretrained(model_name)
             model = AutoModelForCausalLM.from_pretrained(
@@ -100,8 +122,11 @@ class SdpaProducer:
 
             @contextlib.contextmanager
             def selected_backend():
-                with sdpa_kernel(backend):
+                if choice == "DEFAULT":
                     yield
+                else:
+                    with sdpa_kernel(backend):
+                        yield
 
             # Warm up kernels before collecting timing and profiler evidence.
             with selected_backend():
@@ -111,27 +136,29 @@ class SdpaProducer:
 
             # The profiler wraps generation so the resulting operator list is
             # runtime evidence from the actual inference call.
-            with torch.profiler.profile(
+            profiler = torch.profiler.profile(
                 activities=[torch.profiler.ProfilerActivity.CPU,
                             torch.profiler.ProfilerActivity.CUDA],
                 record_shapes=False, profile_memory=False,
-            ) as prof:
-                with selected_backend():
-                    sample, generated = repeat_timed(
-                        lambda: model.generate(
-                            **encoded,
-                            max_new_tokens=int(cell.config.get("max_tokens", 64)),
-                            do_sample=False,
-                        ),
-                        repetitions=max(1, int(cell.config.get("repetitions", 1))),
-                    )
-            operators = [event.key for event in prof.key_averages()]
+            )
+            generation = lambda: model.generate(
+                **encoded,
+                max_new_tokens=int(cell.config.get("max_tokens", 64)),
+                do_sample=False,
+            )
+            with selected_backend():
+                sample, generated, operators, prof, profiler_error = run_timed_and_profile(
+                    generation, generation, profiler,
+                    repetitions=max(1, int(cell.config.get("repetitions", 1))),
+                )
+            if profiler_error:
+                logs.append(f"Profiler evidence unavailable: {type(profiler_error).__name__}: {profiler_error}")
             prompt_len = encoded["input_ids"].shape[-1]
             token_ids = generated[0, prompt_len:].detach().cpu().tolist()
             output = Output(text=tokenizer.decode(token_ids, skip_special_tokens=True),
                              token_ids=token_ids)
             ok = True
-            if self.artifact_dir:
+            if self.artifact_dir and prof is not None:
                 self.artifact_dir.mkdir(parents=True, exist_ok=True)
                 trace_path = self._artifact_path(cell, "trace.json")
                 try:
@@ -158,12 +185,20 @@ class SdpaProducer:
             log_text = "\n".join(logs)
             if operators:
                 log_text += ("\n" if log_text else "") + "PROFILER_OPERATORS:\n" + "\n".join(operators)
-            (self._artifact_path(cell, "log.txt")).write_text(
+            log_path = self._artifact_path(cell, "log.txt")
+            log_path.write_text(
                 log_text or "No profiler operators captured.", encoding="utf-8")
+            artifacts = {"log": log_path.name}
+            if trace_path is not None and trace_path.exists():
+                artifacts["profiler_trace"] = trace_path.name
+        else:
+            artifacts = {}
         sample = sample.model_copy(update={"cell_wall_seconds": time.perf_counter() - cell_started})
         return RunRecord.build(config=cell.config, workload_id=cell.workload_id,
-                               path=path, cost=sample, output=output, ok=ok, error=error)
+                               path=path, cost=sample, output=output, ok=ok,
+                               error=error, artifacts=artifacts)
 
     def _artifact_path(self, cell: Cell, suffix: str) -> Path:
-        safe = f"{cell.backend}.{cell.workload_id}".replace("/", "_").replace("\\", "_")
+        record_id = RunRecord.compute_id(cell.config, cell.workload_id)
+        safe = f"{record_id}.{cell.backend}.{cell.workload_id}".replace("/", "_").replace("\\", "_")
         return self.artifact_dir / f"{safe}.{suffix}"

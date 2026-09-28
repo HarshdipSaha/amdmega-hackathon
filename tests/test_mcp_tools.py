@@ -11,6 +11,7 @@ def _record(backend, observed, workload="w", text="same"):
                           signals={"profiler": observed} if observed else {}),
         cost=CostSample(wall_seconds=1, device_seconds=1, samples=3, wall_stdev=.01),
         output=Output(text=text, token_ids=[1], chosen_logprobs=[-.5], decision=text),
+        artifacts={"log": "abc.log.txt"},
     )
 
 
@@ -22,6 +23,7 @@ def test_which_path_reads_jsonl_and_separates_unresolved(tmp_path):
     assert result["records"] == 2
     assert len(result["silent_fallbacks"]) == 1
     assert len(result["unresolved"]) == 1
+    assert result["paths"][0]["artifacts"] == {"log": "abc.log.txt"}
 
 
 def test_summarise_store_counts_comparisons_and_findings(tmp_path):

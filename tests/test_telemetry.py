@@ -86,3 +86,15 @@ def test_timed_function_is_bracketed_by_gpu_synchronization(monkeypatch):
     def fn(): calls.append("fn")
     t.repeat_timed(fn, repetitions=1)
     assert calls.index("sync") < calls.index("fn") < calls.index("sync", calls.index("fn"))
+
+
+def test_wall_timing_includes_post_call_gpu_synchronization(monkeypatch):
+    import silentpath.telemetry as t
+
+    class FakeCuda:
+        def synchronize(self): time.sleep(.01)
+    class FakeTorch:
+        cuda = FakeCuda()
+    monkeypatch.setattr(t, "_torch_with_gpu", lambda: FakeTorch())
+    sample, _ = t.repeat_timed(lambda: None, repetitions=1)
+    assert sample.wall_seconds >= .008

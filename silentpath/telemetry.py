@@ -46,6 +46,12 @@ def repeat_timed(fn: Callable[[], Any], repetitions: int = 3) -> tuple[CostSampl
                     start = end = None
             with Stopwatch() as sw:
                 value = fn()
+                if torch is not None:
+                    try:
+                        # Wall timing includes completion of async HIP work.
+                        torch.cuda.synchronize()
+                    except Exception:
+                        pass
             if start is not None and end is not None:
                 try:
                     end.record()

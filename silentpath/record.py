@@ -86,6 +86,7 @@ class RunRecord(BaseModel):
     path: ObservedPath
     cost: CostSample
     output: Output
+    artifacts: dict[str, str] = Field(default_factory=dict)
     ok: bool = True
     error: str | None = None
 
@@ -103,8 +104,9 @@ class RunRecord(BaseModel):
     @classmethod
     def build(cls, *, config: dict[str, Any], workload_id: str, path: ObservedPath,
               cost: CostSample, output: Output, ok: bool = True,
-              error: str | None = None) -> RunRecord:
+              error: str | None = None,
+              artifacts: dict[str, str] | None = None) -> RunRecord:
         return cls(record_id=cls.compute_id(config, workload_id),
                    created_at=datetime.now(timezone.utc), config=config,
                    workload_id=workload_id, path=path, cost=cost, output=output,
-                   ok=ok, error=error)
+                   artifacts=artifacts or {}, ok=ok, error=error)
