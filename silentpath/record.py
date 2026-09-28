@@ -56,13 +56,17 @@ class CostSample(BaseModel):
     load — and is what speed claims are made from. `cell_wall_seconds` is the
     whole cell including process start, engine init and model load, and is what
     the **budget is charged**; on a subprocess-per-cell design the two differ by
-    orders of magnitude. `device_seconds` is GPU time from HIP events.
+    orders of magnitude. `device_seconds` is elapsed event-region time from
+    HIP events, not active GPU busy time. `peak_memory_bytes` is the torch
+    allocated peak where available. `memory_sample_bytes` is a one-off AMD-SMI
+    sample and is not a peak.
     """
     wall_seconds: float
     cell_wall_seconds: float | None = None
     device_seconds: float | None = None
     energy_joules: float | None = None
     peak_memory_bytes: int | None = None
+    memory_sample_bytes: int | None = None
     samples: int = Field(ge=1)          # a timing with no repetitions is not admissible
     wall_stdev: float | None = None
 

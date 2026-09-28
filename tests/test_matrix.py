@@ -29,10 +29,16 @@ def test_cell_config_carries_model_and_seed():
     assert c.config["seed"] == 0
 
 
-def test_cell_config_excludes_the_prompt_text():
-    """Identity depends on the workload id, not the prompt body, so editing
-    whitespace in a prompt does not silently invalidate the whole cache."""
-    assert "prompt" not in expand(load_matrix(YAML))[0].config
+def test_cell_config_fingerprints_prompt_without_storing_its_text():
+    cell = expand(load_matrix(YAML))[0]
+    assert "prompt" not in cell.config
+    assert len(cell.config["prompt_sha256"]) == 64
+
+
+def test_changed_prompt_changes_cache_identity():
+    first = expand(load_matrix(YAML))[0]
+    changed = expand(load_matrix(YAML.replace("What is the total?", "What is the new total?")))[0]
+    assert first.config["prompt_sha256"] != changed.config["prompt_sha256"]
 
 
 def test_duplicate_workload_ids_are_rejected():

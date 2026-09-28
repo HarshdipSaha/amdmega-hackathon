@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 from typing import Any
 
 import yaml
@@ -35,5 +36,6 @@ def expand(matrix: dict[str, Any]) -> list[Cell]:
 
     base = {k: v for k, v in matrix.items() if k not in ("backends", "workloads")}
     return [Cell(backend=b, workload_id=w["id"], prompt=w["prompt"],
-                 config={**base, "backend": b})
+                 config={**base, "backend": b,
+                         "prompt_sha256": hashlib.sha256(w["prompt"].encode("utf-8")).hexdigest()})
             for b in backends for w in workloads]

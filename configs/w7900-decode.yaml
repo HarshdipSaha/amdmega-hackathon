@@ -1,0 +1,9 @@
+model: Qwen/Qwen2.5-1.5B-Instruct
+seed: 0
+max_tokens: 128
+repetitions: 3
+backends: [FLASH_ATTENTION, MATH]
+workloads:
+  - id: w7900_decode_01
+    prompt: |
+      Continue the sequence with a concise explanation: 2, 3, 5, 8, 13, 21, 34.
