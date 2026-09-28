@@ -1,0 +1,7 @@
+{
+  "verdict": "NUMERIC-ONLY",
+  "max_abs_logprob_delta": 0.00867152214050293,
+  "divergent_pairs": [],
+  "silent_fallbacks": [],
+  "notes": []
+}

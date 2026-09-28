@@ -1,0 +1,9 @@
+{
+  "backend_requested": "EFFICIENT_ATTENTION",
+  "backend_observed": null,
+  "ok": false,
+  "text": "",
+  "token_ids": [],
+  "chosen_logprobs": [],
+  "error": "RuntimeError: No available kernel. Aborting execution."
+}

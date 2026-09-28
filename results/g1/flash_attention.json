@@ -1,0 +1,33 @@
+{
+  "backend_requested": "FLASH_ATTENTION",
+  "backend_observed": "PyTorch SDPBackend.FLASH_ATTENTION",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "attention_implementation": "sdpa",
+  "ok": true,
+  "text": "1064.875",
+  "token_ids": [
+    16,
+    15,
+    21,
+    19,
+    13,
+    23,
+    22,
+    20,
+    151645
+  ],
+  "chosen_logprobs": [
+    -1.04964017868042,
+    -1.0794942378997803,
+    -0.8362429141998291,
+    -2.130967855453491,
+    -0.0028366113547235727,
+    -1.9968124628067017,
+    -0.5775296092033386,
+    -0.08857510983943939,
+    -0.013084503822028637
+  ],
+  "generation_seconds": 1.9021720895543694,
+  "wall_seconds": 73.79843817651272,
+  "peak_memory_bytes": 3177697280
+}

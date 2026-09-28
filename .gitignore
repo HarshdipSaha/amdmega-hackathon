@@ -18,3 +18,4 @@ node_modules/
 tools/amd-gpu/.profile/
 tools/amd-gpu/node_modules/
 tools/amd-gpu/out/
+.worktrees/

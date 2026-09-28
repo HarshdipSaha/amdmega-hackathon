@@ -1,0 +1,2 @@
+Invoice 7781. Line items: 3 units at 14.99, 2 units at 249.50, 1 unit at 8.25.
+Shipping 12.00. Tax 8.875%. What is the invoice total? Answer with the number only.

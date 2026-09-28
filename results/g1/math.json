@@ -1,0 +1,33 @@
+{
+  "backend_requested": "MATH",
+  "backend_observed": "PyTorch SDPBackend.MATH",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "attention_implementation": "sdpa",
+  "ok": true,
+  "text": "1064.875",
+  "token_ids": [
+    16,
+    15,
+    21,
+    19,
+    13,
+    23,
+    22,
+    20,
+    151645
+  ],
+  "chosen_logprobs": [
+    -1.0577707290649414,
+    -1.0731593370437622,
+    -0.8426185846328735,
+    -2.1222963333129883,
+    -0.0028336395043879747,
+    -2.0039663314819336,
+    -0.5741432905197144,
+    -0.08974381536245346,
+    -0.013238156214356422
+  ],
+  "generation_seconds": 1.6112932497635484,
+  "wall_seconds": 15.761720309965312,
+  "peak_memory_bytes": 3178857984
+}
