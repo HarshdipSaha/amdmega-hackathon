@@ -2,12 +2,12 @@
 
 **Which path did your AMD GPU silently take, what did it cost you, and did it change your answer?**
 
-Project for the **Lablab x AMD AI Academy Challenge**, Sept 1 – Dec 1 2026. Individual entry.
+Project for the **Lablab x AMD AI Academy Challenge**, Sept 1 - Dec 1 2026. Individual entry.
 Written in the `to-spec` format. No issue tracker is configured for this repo, so this file is the tracked spec; the triage label would be `ready-for-agent`.
 
 Status: `docs/STATUS.md`. Brief: `docs/hackathon-brief.md`. Council record: `docs/council/verdict.md`.
 
-> **This spec is conditional.** Three cheap verifications in Week 1 (G1–G3, see *Gating Verifications*) can each independently invalidate large parts of it. Nothing below Deliverable 1 should be built until they pass. The council's chairman was explicit: get the divergence result before writing another line of spec.
+> **Evidence update (2026-09-28):** G1 has been run on one Qwen 2.5 1.5B arithmetic prompt on a W7900D. Flash and Math returned identical output text and token IDs, with a maximum chosen-token log-probability delta of `0.0086715`. Explicit Efficient Attention failed on this model's GQA shape. This narrow result does not establish silent fallback or predict OCR answer changes. D1 implementation is in progress; keep further answer-divergence claims as hypotheses until measured.
 
 ---
 
@@ -15,17 +15,17 @@ Status: `docs/STATUS.md`. Brief: `docs/hackathon-brief.md`. Council record: `doc
 
 Someone runs a language model on an AMD GPU. They set no flags, read no release notes, and accept every default. Their stack quietly makes a decision on their behalf — which attention kernel to use, whether to use the GPU at all — and never tells them which decision it made.
 
-That silent decision is the single most-repeated failure mode in the AMD AI ecosystem, and it is documented across every major serving stack:
+Reports from AMD serving stacks describe cases where backend selection or GPU fallback was not apparent to users. These reports motivate SILENTPATH; they are background evidence, not measurements produced by this project:
 
 - vLLM v0.18.2 gated `ROCM_ATTN` behind a flag defaulting to `False` and silently fell back to `TRITON_ATTN`. Prefill attention ran **5.5x slower** and total GPU time **2.5x worse**. There was no warning. It was found only because someone went digging with `rocprof`.
 - ollama's own issue tracker states plainly that "GPU-to-CPU fallback happens silently with no user-visible warning" — layers reported as offloaded while the buffers actually landed in `CPU_Mapped`.
 - lemonade shipped a **7x** regression via silent CPU fallback on gfx1201. LM Studio silently drops to Vulkan on unsupported targets. ROCm itself has loaded models onto the CPU while reporting a GPU device.
 
-Two things follow, and only the first is understood.
+The project will investigate two questions; neither is assumed to be answered by the reports below.
 
-**The first is a cost problem.** You can be paying 5x for the same tokens and have no way to know. Every existing cost-optimization tool in this space — including the top-voted submission on this very hackathon — estimates cost from **token counts**. On AMD, token counts are a lie: the same token count can cost several times more GPU-seconds depending on which kernel silently got selected. The industry's cost metric is measuring the wrong thing on this hardware.
+**The first is a measurement question.** Published issue reports and benchmark writeups describe substantial slowdowns under some AMD backend and fallback configurations. SILENTPATH will measure GPU-seconds for its own specified workloads and configurations. The checked-in G1 run is one arithmetic prompt with one successful observation per backend; it does not establish a speed ratio or validate a general claim about token-count cost estimates.
 
-**The second is a correctness problem, and nobody has looked at it at all.** vLLM on ROCm routes among at least four attention backends — `ROCM_ATTN`, `ROCM_AITER_FA`, `TRITON_MLA`, `AITER_MLA` — chosen by model, shape, version and flags. Nobody has published whether those four backends produce the *same numbers*. Every paper on numerical determinism and batch-invariance in LLM inference is CUDA-specific; there is no ROCm work in that literature at all. AMD differs structurally in ways that matter — 64-wide wavefronts against 32-wide warps, different reduction trees in rocBLAS/hipBLASLt/Composable Kernel, hand-written AITER assembly kernels — so the CUDA findings cannot be assumed to transfer.
+**The second is a correctness question.** The tested Qwen prompt produced identical Flash/Math output text and token IDs with small log-probability differences. It did not test vLLM's backend set or OCR extraction. Whether other ROCm backends or workloads change a user-visible decision remains open; CUDA findings cannot settle that question for AMD.
 
 A 2026 paper on Kernel Contracts states the gap precisely: when a matmul on AMD produces a different result than the same matmul on NVIDIA, "there is no formal artifact to arbitrate the dispute." It publishes a specification. Nobody has built the suite.
 
@@ -39,13 +39,13 @@ The system runs the same input through a matrix of configurations that a user wo
 
 The thesis it tests is falsifiable and stated in advance:
 
-> On AMD, the same model on the same GPU with the same input silently runs on different kernel backends that differ measurably in speed — and, in at least some cases, in the answer they return. Token count is not a cost metric on this hardware. Measured GPU-seconds and decision-level output divergence are.
+> For selected AMD configurations and workloads, runtime path selection may be difficult to observe; backend choice may affect measured GPU time and, for some inputs, decision-level output. SILENTPATH tests these claims by recording available path evidence, repeated GPU-time measurements, and output comparisons.
 
 The demonstration that carries this is deliberately not the engineering. It is one sentence, and it needs no ROCm knowledge to land:
 
-> **The same scanned invoice returns a different dollar amount depending on a setting you never chose.**
+> **Hypothesis to test:** the same scanned invoice may return a different dollar amount under different attention settings. No checked-in OCR/VLM experiment currently demonstrates this answer divergence.
 
-If that holds, it is a correctness result with real consequences for anyone doing document extraction on AMD, and it makes the underlying instrumentation obviously worth having. If it does not hold — if the backends agree to the last bit — the project pivots to the cost half alone, which stands on its own on documented 5.5x evidence.
+If an OCR/VLM experiment shows the extracted amount changes, that would be a decision-level result with practical consequences. Until then, treat it as a motivating hypothesis. The measured G1 result is narrower: one arithmetic prompt produced identical Flash/Math text and token IDs, despite log-probability differences. Prior reports of backend slowdowns motivate measurement, but this repository's G1 single-run timings do not establish a speed or cost advantage. The D1 value proposition is to measure and report paths and costs; performance claims require repeated measurements on a defined workload.
 
 Six deliverables share one measurement core. Each is independently complete, independently demoable, and maps honestly onto one of the program's six bi-weekly themes. They are genuinely distinct artifacts, not one artifact relabelled six times; that distinction is deliberate and is discussed under *Further Notes*.
 
@@ -58,7 +58,7 @@ Six deliverables share one measurement core. Each is independently complete, ind
 | D5 | **Multi-agent triage loop** — diagnose, hypothesize, patch config, re-measure, verify | 5: multi-agent software engineering |
 | D6 | **Learned configuration policy** — GRPO-trained, rewarded on measured GPU-seconds subject to preserving output fidelity | 6: novel game + fine-tuning |
 
-D6 is also the deliberate hedge against the final Legend gate, which the research strongly suggests will be RL/fine-tuning shaped: AI Academy Course 6 is a GRPO workflow on a single MI300X, and AMD published *veRL: Production-Ready RL Post-Training on ROCm* on 2026-09-07.
+D6 may also serve as preparation if current official rules later confirm a final challenge involving RL or fine-tuning. That possibility is speculative: the public information checked on 2026-09-28 does not confirm the final challenge or its format. Course 6's GRPO material and AMD's *veRL: Production-Ready RL Post-Training on ROCm* (published 2026-09-07) provide technical context, not evidence about challenge requirements.
 
 ## Gating Verifications
 
@@ -97,7 +97,7 @@ Measured, not assumed. The machine is a Ryzen 5 5600H (Cezanne) with an **integr
 16. As a cost-conscious operator, I want a policy that picks a configuration per workload to minimise measured GPU-seconds subject to preserving output fidelity, so that I get savings without silently changing answers.
 17. As that operator, I want the policy to refuse configurations that change decisions even when they are faster, so that cost optimisation never trades away correctness.
 18. As a hackathon participant on a fixed credit budget, I want every experiment resumable and cached, so that a crashed run does not burn irreplaceable GPU-hours.
-19. As that participant, I want a hard spend ceiling enforced in the harness, so that I cannot accidentally exhaust the credit before the final challenge.
+19. As that participant, I want a hard spend ceiling enforced in the harness, so that I can reserve credit for later project work.
 20. As a reviewer of this project, I want each deliverable to stand alone with its own README, demo and result, so that I can evaluate it without running the other five.
 21. As a reviewer, I want the measurement methodology stated with repetition counts and variance, so that I can judge whether a reported speed difference is real.
 22. As a maintainer of an AMD serving stack, I want a reproducible script attached to any divergence report, so that I can confirm the finding without reconstructing the setup.
@@ -141,7 +141,7 @@ A `RunRecord` carries: the configuration requested; the path **actually observed
 - **Cache/resume** is tested by interrupting a matrix run and re-running it, asserting completed cells are not recomputed and results are identical.
 - **Scraper** is tested against saved HTML fixtures, asserting extracted version/target pairs and that every record carries a source URL and retrieval date. Live network calls do not appear in tests.
 - **RAG advisor** is tested for citation integrity: every claim in an answer must resolve to a chunk in the corpus. An uncited claim fails the test.
-- **Statistical claims** require a stated repetition count and reported variance. A single-shot timing difference is never reported as a speed result — a direct response to the finding that AITER shows 2–16x higher measurement variability.
+- **Statistical claims** require a stated repetition count and reported variance. A single-shot timing difference is never reported as a speed result — a direct response to the finding that AITER shows 2-16x higher measurement variability.
 
 **Prior art for the test style:** the fixture-driven, no-hardware-in-CI approach mirrors the harness tests in `H:/augsepthacks/apartresearch` (`docs/superpowers/plans/2026-09-05-attest-harness.md`), where provider adapters were tested against recorded responses rather than live APIs.
 
@@ -159,14 +159,14 @@ A `RunRecord` carries: the configuration requested; the path **actually observed
 
 ## Further Notes
 
-**On the six-deliverable structure and honesty.** The strategic case is that one measurement core yields six shippable artifacts. The failure mode is submitting one artifact six times with new labels — which risks disqualification, and which a skeptical reviewer will notice and then discount all six. The distinction the project holds to: each deliverable must have its own README, its own demo, its own result, and must be independently useful to someone who never runs the other five. That is ordinary good engineering. G3 exists to confirm the organizers see it the same way, and the answer should be obtained in writing.
+**On the six-deliverable structure and honesty.** The project plan proposes six artifacts built around one measurement core. Whether submissions sharing a codebase are eligible across multiple themes, and what degree of distinction is required, is unconfirmed; see [`hackathon-rules-2026-09-28.md`](hackathon-rules-2026-09-28.md). Treat the proposed six-deliverable structure as a product plan, not a confirmed eligibility strategy.
 
-**On the risk that there is no finding.** Different kernels producing different bits is expected floating-point behaviour, not news. The project is only interesting if divergence changes a decision. That is unknown today, which is why G1 runs before anything is built. Both outcomes are publishable — a clean null result on decision-level divergence is itself the first such measurement on AMD, and the cost half of the thesis stands regardless on documented 5.5x evidence.
+**On the risk that there is no finding.** Different kernels producing different floating-point values is expected; the project distinguishes numeric changes from decision changes. The checked-in G1 is a narrow numeric-only result for one arithmetic prompt, not evidence about invoice OCR. Whether backend choice changes an extracted field remains an open hypothesis. Cost or speed claims also remain open until repeated, comparable measurements support them; the single G1 timing observations do not establish them.
 
-**On timing.** Points update Fridays covering through the prior Wednesday, a lag of up to nine days. In a race for the *first three* to Legend, the effective deadline for creditable work is approximately **Nov 21**, not Dec 1. A deliberately small submission goes out in Week 1 purely to calibrate how the lag behaves in practice before it can cost anything.
+**On timing.** An earlier planning note assumed weekly Friday point updates and a first-three-to-Legend race, then estimated an effective Nov 21 deadline. The current public page and live dashboard reviewed on 2026-09-28 do not confirm the Legend threshold, prize ordering, or final-challenge rules. Do not use that estimated deadline for planning; check current participant-dashboard information instead.
 
 **On the credit.** $100 ≈ 50 hours on one MI300X at $1.99/hr, on DigitalOcean GPU Droplets. Credits expire 30 days after being claimed. They are not claimed until the harness runs unattended end to end.
 
 **On what the council overruled.** The Expansionist's cross-vendor conformance angle was judged the most defensible artifact in the whole plan and is retained, cheaply, because the seam makes it nearly free. The same advisor's proposals for a living dataset site, mid-race preprint and devrel outreach were rejected unanimously in peer review as scope that earns no XP. That judgement is recorded here so it is not silently reversed later.
 
-**On the final gate.** Three independent signals point at RL/GRPO post-training: theme 6 names fine-tuning, AI Academy Course 6 is a GRPO workflow on a single MI300X, and AMD published veRL on ROCm on 2026-09-07. D6 is scheduled deliberately early relative to its theme so that the skill exists before the gate opens. What remains unknown — flagged by peer review and unresolved — is the numeric Legend threshold and how long the final challenge itself takes once unlocked. Both must be read off the dashboard as soon as enrollment is approved, because the true deadline is *unlock date minus completion time minus nine days*.
+**On the final challenge.** Earlier strategy notes assumed an RL/GRPO-shaped final challenge and scheduled D6 accordingly. The current public information checked on 2026-09-28 does not confirm the final challenge's existence, requirements, unlock timing, or duration. D6 remains a project deliverable; its relationship to any final challenge is unconfirmed.

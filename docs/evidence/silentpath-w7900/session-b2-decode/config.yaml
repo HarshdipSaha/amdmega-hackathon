@@ -1,9 +1,12 @@
-model: Qwen/Qwen2.5-1.5B-Instruct
+model: /tmp/silentpath-model
+model_id: Qwen/Qwen2.5-1.5B-Instruct
 model_revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+code_commit: 800ab18cbea9183f0adb3d5f4780b716cec2f42f
+notebook_image: sha256:8ccd7b7e5a313596a0d431f28fcc0a9e008629243bae3a05905db18d6e9ffccb
 seed: 0
 max_tokens: 128
 repetitions: 5
-backends: [DEFAULT, FLASH_ATTENTION, MATH]
+backends: [MATH, FLASH_ATTENTION]
 workloads:
   - id: w7900_decode_short
     prompt: |

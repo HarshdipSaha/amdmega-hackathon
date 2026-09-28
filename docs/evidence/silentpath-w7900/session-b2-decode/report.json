@@ -1,0 +1,34 @@
+﻿[
+  {
+    "workload": "w7900_decode_long",
+    "a": "MATH",
+    "b": "FLASH_ATTENTION",
+    "level": "identical",
+    "is_finding": false,
+    "max_abs_logprob_delta": null,
+    "cost_ratio": 1.299,
+    "slower": "MATH",
+    "samples_min": 5,
+    "cost_ratio_admissible": true,
+    "a_wall_stdev": 0.008853985516162106,
+    "b_wall_stdev": 0.00895451550461224,
+    "silent_fallback": false,
+    "unresolved_path": false
+  },
+  {
+    "workload": "w7900_decode_short",
+    "a": "MATH",
+    "b": "FLASH_ATTENTION",
+    "level": "decision",
+    "is_finding": true,
+    "max_abs_logprob_delta": null,
+    "cost_ratio": 1.292,
+    "slower": "MATH",
+    "samples_min": 5,
+    "cost_ratio_admissible": true,
+    "a_wall_stdev": 0.004174040903883063,
+    "b_wall_stdev": 0.0042399080393068795,
+    "silent_fallback": false,
+    "unresolved_path": false
+  }
+]

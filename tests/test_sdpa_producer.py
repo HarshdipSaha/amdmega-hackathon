@@ -1,11 +1,18 @@
 import pytest
 from silentpath.producers.sdpa import (
     map_profiler_operators,
+    model_revision_kwargs,
     parse_observed_backend,
     resolve_sdpa_backend,
     setup_gpu_device,
     run_timed_and_profile,
 )
+
+
+def test_model_revision_is_passed_to_transformers_loaders():
+    revision = "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+    assert model_revision_kwargs({"model_revision": revision}) == {"revision": revision}
+    assert model_revision_kwargs({}) == {}
 
 
 def test_maps_flash_sdpa_operator():

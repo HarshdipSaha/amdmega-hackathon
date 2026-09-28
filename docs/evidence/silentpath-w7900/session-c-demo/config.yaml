@@ -1,5 +1,8 @@
-model: Qwen/Qwen2.5-1.5B-Instruct
+model: /tmp/silentpath-model
+model_id: Qwen/Qwen2.5-1.5B-Instruct
 model_revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+code_commit: a2895a933454938255ad847b5dff613026e4018c
+notebook_image: sha256:8ccd7b7e5a313596a0d431f28fcc0a9e008629243bae3a05905db18d6e9ffccb
 seed: 0
 max_tokens: 1
 repetitions: 5

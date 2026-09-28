@@ -44,6 +44,12 @@ def resolve_sdpa_backend(choice: str, backend_enum):
     return None if choice == "DEFAULT" else getattr(backend_enum, choice)
 
 
+def model_revision_kwargs(config: dict) -> dict[str, str]:
+    """Pin both tokenizer and model loads when a revision is configured."""
+    revision = config.get("model_revision")
+    return {"revision": str(revision)} if revision else {}
+
+
 def map_profiler_operators(operators: Iterable[str]) -> tuple[str | None, dict[str, str]]:
     """Map an unambiguous PyTorch SDPA operator set to a backend."""
     names = sorted({str(op) for op in operators if "scaled_dot_product" in str(op).lower()})
@@ -111,9 +117,11 @@ class SdpaProducer:
             from torch.nn.attention import SDPBackend, sdpa_kernel
             backend = resolve_sdpa_backend(choice, SDPBackend)
             model_name = cell.config["model"]
-            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            revision_kwargs = model_revision_kwargs(cell.config)
+            tokenizer = AutoTokenizer.from_pretrained(model_name, **revision_kwargs)
             model = AutoModelForCausalLM.from_pretrained(
-                model_name, attn_implementation="sdpa", torch_dtype="auto"
+                model_name, attn_implementation="sdpa", torch_dtype="auto",
+                **revision_kwargs,
             ).to(device)
             model.eval()
             encoded = tokenizer(cell.prompt, return_tensors="pt")
