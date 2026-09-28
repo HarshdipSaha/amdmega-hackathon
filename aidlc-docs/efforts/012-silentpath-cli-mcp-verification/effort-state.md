@@ -35,7 +35,7 @@ Implementation commits: `08b530a`, `800ab18`, `a2895a9` on `feat/silentpath-w790
 
 - Record a polished 2-3 minute demo video. `tools/demo-silentpath.ps1` is the runnable walkthrough; the video itself has not been captured.
 - Confirm the signed-in LabLab project form and D1 category/eligibility. The public live page says submissions are open; no LabLab platform draft or submission has been created.
-- Publish the reviewed branch and submit the project once the demo and signed-in requirements are complete.
+- The source branch is published at `c72683a`. Record the demo video and verify the signed-in LabLab form/category, then submit the project.
 - Participant-only Legend and final-challenge mechanics remain unverified.
 
 ## Deferred and limitations

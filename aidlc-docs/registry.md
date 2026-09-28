@@ -22,7 +22,7 @@
 | `009` | `silentpath-core-record-comparator-store` | Tasks 4-6 | `complete` | Pydantic v2 `RunRecord` seam, 3-level comparator (`IDENTICAL`/`NUMERIC`/`DECISION`), append-only JSONL store with resume |
 | `010` | `silentpath-budget-matrix-producer-runner` | Tasks 7-10 | `complete` | Adaptive GPU budget ceiling, YAML matrix expansion, `FakeProducer` for zero-GPU testing, matrix runner with cache |
 | `011` | `silentpath-report-telemetry` | Tasks 11-12 | `complete` | Orientation-independent tabular reporter with fallback & admissibility flags, HIP device event timing, AMD-SMI VRAM telemetry |
-| `012` | `silentpath-cli-mcp-verification` | Tasks 13-16 | `in-progress` | PyTorch SDPA producer, installable `silentpath` CLI, store-backed MCP functions, pinned W7900D evidence, clean isolated install/report verified; recorded demo and signed-in competition submission remain |
+| `012` | `silentpath-cli-mcp-verification` | Tasks 13-16 | `in-progress` | PyTorch SDPA producer, installable `silentpath` CLI, store-backed MCP functions, pinned W7900D evidence, isolated install verified, release branch published; recorded demo and signed-in competition submission remain |
 
 ---
 

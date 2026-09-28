@@ -24,3 +24,4 @@
 - Added a PowerShell demo walkthrough and ran it successfully: four fake records, two comparisons, and both MCP query functions reading the same store.
 - Fresh full suite: **162 passed in 20.19s**. An isolated Python 3.12 environment built and installed the wheel, invoked the console command outside the repository, ran four fake cells, and rendered the report.
 - The public Lablab live page currently displays “Submissions open”; that does not establish the signed-in form or D1 category eligibility. A local submission draft is at `docs/submission-d1-draft.md`; no LabLab platform draft or submission was created. The timed recording script is at `docs/demo-script.md`; video and account-specific review remain open.
+- Published the feature branch to `origin/feat/silentpath-w7900` at `c72683a`, so the README and draft source links resolve to the release contents. The participant account remains signed out in the visible browser.

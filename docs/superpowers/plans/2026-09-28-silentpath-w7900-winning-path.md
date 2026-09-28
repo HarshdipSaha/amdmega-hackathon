@@ -78,7 +78,8 @@ Optimize two independent outcomes: (1) a strong, finished technical submission w
 
 - [x] Complete release packaging: dual-track README, pinned core/GPU dependency locks, MIT license, source link, sample records, limitations, exact reproduction commands, and isolated installation/fake-run/report verification. G1 is explicitly labeled numeric-only with request-derived backend labels. The video is tracked separately below.
 - [ ] Record and upload a 2–3 minute D1 demo video using `tools/demo-silentpath.ps1` and the measured evidence; no video has been recorded yet.
-- [ ] Publish/submit **one** D1 project after signed-in form requirements and category eligibility are confirmed. The public live page says submissions are open; the project form remains inaccessible until signed in. Record the submission URL and timestamp if submitted.
+- [x] Publish the release source branch `feat/silentpath-w7900` at commit `c72683a`.
+- [ ] Submit **one** D1 project after signed-in form requirements and category eligibility are confirmed. The public live page says submissions are open; the project form remains inaccessible until signed in. Record the submission URL and timestamp if submitted.
 - [ ] Complete confirmed low-effort XP activities (account/profile, eligible Academy courses, ROCm certification, community help) independently of GPU work. Check the private dashboard before relying on the September 10 XP table or the guessed Legend threshold.
 - [ ] Only after D1 is submitted, choose the next distinct artifact from confirmed challenge rules: D2 OCR path/cost comparison using ROADREAD, or D4 support-matrix evidence if D2 yields no useful effect. Defer RAG, multi-agent triage, and GRPO until there is an independently useful underlying dataset and the relevant theme/final task is published.
 

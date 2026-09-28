@@ -4,7 +4,7 @@ Last updated: 2026-09-28. See the [specification](SPEC.md), [public rules check]
 
 ## Current state
 
-The W7900D implementation and measurements are complete. The root README now presents SILENTPATH and ROADREAD as separate challenge projects. The package, pinned user-space dependency files, MIT license, and GPU-free reproduction path have been verified in an isolated Python 3.12 environment. Fresh local verification passed **162 tests**. Effort 012 remains in progress for the short recorded demo, signed-in submission review, and submission.
+The W7900D implementation and measurements are complete. The release is published on [`feat/silentpath-w7900`](https://github.com/HarshdipSaha/amdmega-hackathon/tree/feat/silentpath-w7900). The root README presents SILENTPATH and ROADREAD as separate projects. The package, pinned user-space dependencies, MIT license, and GPU-free reproduction path were verified in an isolated Python 3.12 environment. Fresh local verification passed **162 tests**. Effort 012 remains in progress for the recorded demo, signed-in submission review, and submission.
 
 ## W7900D result
 
@@ -20,5 +20,5 @@ The fact-checked [D1 submission draft](submission-d1-draft.md) and [timed demo s
 
 - Capture and add a 2-3 minute demo video; the runnable walkthrough is `tools/demo-silentpath.ps1`.
 - Confirm the signed-in LabLab submission form and whether D1 qualifies for a main-track project entry. The public live page says submissions are open; no draft or submission has been made.
-- Publish the reviewed branch and submit after completing the demo and checking the signed-in fields.
+- Record the video, inspect the signed-in form, and submit the project. The release branch is already public.
 - Verify private Legend/final-challenge rules. Do not treat them as established from the public page.
