@@ -44,9 +44,10 @@ def main() -> int:
     out = a.results / f"{a.tag}.jsonl"
     for p in (out, out.with_suffix(".diag.jsonl")):
         p.unlink(missing_ok=True)
-    if hasattr(os, "geteuid") and os.geteuid() == 0:
-        print("note: running as root; chmod 000 only bites if the WORKER runs without DAC_OVERRIDE "
-              "(remote-mc3.js worker-start nodac)", file=sys.stderr)
+    is_root = hasattr(os, "geteuid") and os.geteuid() == 0 and os.environ.get("SB_KEEP_CHMOD000") != "1"
+    if is_root:
+        print("note: running as root; mode-000 hazard files are DELETED instead (their handling is covered by the "
+              "unit tests and the CI grader-isolation job)", file=sys.stderr)
     parts, total = [], Counter()
     for name, questions, corpus, hz in corpora(a.split):
         work = a.work / name
@@ -62,7 +63,10 @@ def main() -> int:
             (work / d).mkdir(parents=True, exist_ok=True)
         for f in hz.get("chmod000", []):
             if (work / f).exists():
-                os.chmod(work / f, 0)
+                if is_root:
+                    (work / f).unlink()           # root reads mode 000, so make the file absent instead (CI covers chmod)
+                else:
+                    os.chmod(work / f, 0)
         r = subprocess.run([sys.executable, str(ROOT / "eval_mc3" / "run_eval.py"), "--questions", str(questions),
                             "--corpus", str(work), "--out", str(out)], capture_output=True, text=True)
         try:

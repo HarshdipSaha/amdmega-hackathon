@@ -82,6 +82,8 @@ Rules:
 - A document whose status is WITHDRAWN or SUPERSEDED is not authoritative; use the current document.
 - In source code the assigned value is the answer; comments can mention old values.
 - When an identifier (ticket, error code, part number) found in one document leads to the value in another document, quote both: the value quote with role "value" and the identifier quote with role "link".
+- Check how you located the value. If it sits in a table row or passage keyed by an identifier (ticket, part number, code) that the question does NOT contain, that identifier came from another document in the list: find the document that states the same identifier in the situation the question describes (an incident, a replacement, a log entry) and quote that sentence too, with role "link". Never add a link quote for an identifier the question itself contains.
+- Check how you located the value. If it sits in a table row or passage keyed by an identifier (ticket, part number, code) that the question does NOT contain, that identifier came from another document in the list: find the document that states the same identifier in the situation the question describes (an incident, a replacement, a log entry) and quote that sentence too, with role "link". Never add a link quote for an identifier the question itself contains.
 - Quotes must be copied character for character from the documents.
 - If the documents do not state the answer, reply with status "not_found".
 - If a document names an identifier whose details are missing from these documents, reply with status "need_lookup" and list it in "lookup".

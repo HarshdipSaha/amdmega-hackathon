@@ -56,6 +56,21 @@ def segment_context(index, ev: Evidence) -> str:
     return "\n".join(index.segments[i].text for i in index.by_file.get(ev.rel, []) if q in plain(index.segments[i].text))
 
 
+def row_key(ev: Evidence, index) -> str:
+    """First identifier-like cell value of the table row (segment kind 'row') that contains the quote."""
+    q = plain(ev.quote)
+    for i in index.by_file.get(ev.rel, []):
+        seg = index.segments[i]
+        if seg.kind == "row" and q in plain(seg.text):
+            cells = [c for c in seg.text.split(" | ") if ": " in c]
+            for c in cells:
+                ids = identifiers(c.split(": ", 1)[1])
+                if ids:
+                    return ids[0]
+            return ""
+    return ""
+
+
 def resolve(ref: str, pack, index) -> str | None:
     ref = (ref or "").strip().strip("[]")
     if ref in pack.fids:
@@ -113,6 +128,15 @@ def judge(index, pack, question: str, reply: dict | None) -> Verdict:
         shared = [t for t in identifiers(l.quote) if id_key(t) in ctx_keys and id_key(t) not in qkey]
         if shared:
             cites.append(l.rel)
+    # Row key rule: a table row keyed by an identifier that the question and the answer both lack was found
+    # through another file that states that identifier, so that file is necessary (spec §7.5).
+    key = row_key(primary, index)
+    if key and id_key(key) not in qkey and id_key(key) not in official(answer):
+        files = {index.segments[i].file for i in index.ids.get(id_key(key), ())}
+        if len(files) <= 3:
+            for rel in sorted(files - {primary.rel}):
+                if rel not in cites and rel in set(pack.fids.values()):
+                    cites.append(rel)
     # a value segment that was reachable only through an identifier bridge implies its source file is a link
     for b in getattr(pack, "bridges", []):
         if (b.seg in pack.bridged_only and index.segments[b.seg].file == primary.rel and b.from_file

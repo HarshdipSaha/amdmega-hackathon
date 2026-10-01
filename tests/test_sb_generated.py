@@ -93,3 +93,18 @@ def test_oracle_evidence_passes_the_gates(gen, tmp_path):
         if not s["strict"]:
             bad.append((q["n"], q["category"], out["answer"], out["citations"], s["kind"], out["diag"].get("reason")))
     assert bad == []
+
+
+def test_row_key_rule_cites_chain_without_link_quotes(gen, tmp_path):
+    """Value-only replies (what the 4B reader produces): chains must still cite log + table, singles stay single."""
+    qs = json.loads((gen / "questions.json").read_text())["queries"]
+    for q in qs:
+        q["oracle"] = [e for e in q["oracle"] if e["role"] == "value"]
+    transcripts = json.loads((gen / "transcripts.json").read_text())
+    (gen / "corpus" / "vendor" / "internal_audit.txt").unlink(missing_ok=True)
+    idx = build_index(gen / "corpus", FakeEngine(transcripts=transcripts), tmp_path / "idx2", time.monotonic() + 300,
+                      workers=2, log=lambda *a: None)
+    eng = FakeEngine(replies=oracle_replies(qs))
+    bad = [(q["n"], pipeline.answer(idx, eng, q["query"], 20)["citations"]) for q in qs
+           if not score_one(pipeline.answer(idx, eng, q["query"], 20), q)["strict"]]
+    assert bad == []
