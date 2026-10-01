@@ -43,7 +43,7 @@ jobs:
           else
             cp release/rc.env /tmp/rc.env
           fi
-          cat /tmp/rc.env >> "$GITHUB_ENV"
+          grep -E "^[A-Z_]+=" /tmp/rc.env >> "$GITHUB_ENV"
           . /tmp/rc.env
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
       - name: Publish
