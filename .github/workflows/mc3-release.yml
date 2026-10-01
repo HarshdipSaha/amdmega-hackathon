@@ -1,6 +1,9 @@
 name: MC3 release (crane append, no docker build)
 
 on:
+  push:
+    branches: [feat/sourcebound-mc3]
+    paths: ['release/rc.env']
   workflow_dispatch:
     inputs:
       tag: { description: 'image tag', required: true }
@@ -26,16 +29,23 @@ jobs:
           pip install huggingface_hub
       - name: Registry login (Docker Hub; the base lives there too, so base blobs are mounted, not copied)
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | crane auth login index.docker.io -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Resolve release parameters (dispatch inputs, else release/rc.env)
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            printf 'TAG=%s
+READER_REPO=%s
+READER_REV=%s
+EMBEDDER_REPO=%s
+EMBEDDER_REV=%s
+' "${{ inputs.tag }}" "${{ inputs.reader_repo }}" "${{ inputs.reader_rev }}" "${{ inputs.embedder_repo }}" "${{ inputs.embedder_rev }}" > /tmp/rc.env
+          else cp release/rc.env /tmp/rc.env; fi
+          cat /tmp/rc.env >> "$GITHUB_ENV"; . /tmp/rc.env; echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+        id: rc
       - name: Publish
         env:
           MC3_IMAGE: ${{ secrets.MC3_IMAGE }}
-          TAG: ${{ inputs.tag }}
-          READER_REPO: ${{ inputs.reader_repo }}
-          READER_REV: ${{ inputs.reader_rev }}
-          EMBEDDER_REPO: ${{ inputs.embedder_repo }}
-          EMBEDDER_REV: ${{ inputs.embedder_rev }}
         run: bash release/publish.sh
       - name: Check the pushed image
         env:
-          MC3_IMAGE: ${{ secrets.MC3_IMAGE }}:${{ inputs.tag }}
+          MC3_IMAGE: ${{ secrets.MC3_IMAGE }}:${{ steps.rc.outputs.tag }}
         run: python release/check_image.py
