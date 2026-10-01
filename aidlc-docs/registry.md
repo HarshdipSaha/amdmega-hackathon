@@ -12,6 +12,7 @@
 | `005` | `synthetic-dataset-dev-eval` | Task 13 | `complete` | 120-image dev/holdout benchmark: **109/120 (90.8%) exact match**, 0.515s p50, 0 violations |
 | `006` | `container-packaging-release` | Task 14 | `complete` | Multi-stage Dockerfile, startup daemon, automated 60 GiB & 11-layer container validation script |
 | `007` | `fix-sample-hardcode-and-data-generator` | Bug fix fast-path | `complete` | Removed sample hardcoding for anti-cheating compliance; fixed text overflow with dynamic word wrap |
+| `013` | `sourcebound-mc3-rag` | Plan Tasks 1-22 | `in-progress` | Mini-Challenge 3 RAG: kit 10/10, dev 64/64, holdout 32/32 (8B reader), CI green; release rc1 and rehearsal remain. See `efforts/013-sourcebound-mc3-rag/effort-state.md` |
 
 ---
 
