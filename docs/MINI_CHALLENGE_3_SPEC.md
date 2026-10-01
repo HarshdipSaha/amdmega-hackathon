@@ -340,7 +340,7 @@ Client overhead target: < 0.3 s.
   2. Keep only tokens that are not in the question (normalized) and that occur in ≤ 3 files.
   3. Look each one up in the identifier index.
   4. Add the matching segments, up to 6, annotated `linked by <ID> from <file>`.
-- **Reader-requested hop.** If the reader returns `status: "need_lookup"` with identifiers, run one more identifier lookup and one more reader call, but only if ≥ 6 s remain (`SB_MIN_CALL_S`).
+- **Reader-requested hop.** If the reader returns `status: "need_lookup"` with identifiers, run one more identifier lookup and one more reader call, but only if ≥ 10 s remain (`SB_MIN_CALL_S`; one 8B call takes up to about 10 s).
 
 ### 6. Reader, evidence pack and output contract
 

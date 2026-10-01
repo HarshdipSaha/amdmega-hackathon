@@ -8,7 +8,7 @@ from .gates import judge
 from .reader import build_pack, parse_reply, reader_prompt, warrant_prompt
 from .retrieve import bridge, rank_files, search
 
-MIN_CALL_S = float(os.environ.get("SB_MIN_CALL_S", "6"))
+MIN_CALL_S = float(os.environ.get("SB_MIN_CALL_S", "10"))
 WARRANT = os.environ.get("SB_WARRANT", "1") == "1"
 MAX_NEW = int(os.environ.get("SB_MAX_NEW_TOKENS", "200"))
 BRIDGE = os.environ.get("SB_BRIDGE", "1") == "1"
