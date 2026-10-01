@@ -10,5 +10,5 @@ COPY eval_mc3/__init__.py eval_mc3/score.py eval_mc3/run_eval.py eval_mc3/vram.p
 COPY eval_mc3/kit /app/eval_mc3/kit
 COPY release/contract_check.sh /app/release/contract_check.sh
 ENV PYTHONPATH=/app SB_ENGINE=fake SB_INDEX_DIR=/tmp/sb-index SB_OUTPUT_DIR=/app/output \
-    SB_FAKE_REPLIES=/fake/replies.json SB_FAKE_TRANSCRIPTS=/fake/transcripts.json
+    SB_FAKE_WARRANT_NO='unit price' SB_FAKE_REPLIES=/fake/replies.json SB_FAKE_TRANSCRIPTS=/fake/transcripts.json
 CMD ["sh", "/app/release/contract_check.sh"]

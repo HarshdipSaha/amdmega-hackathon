@@ -35,7 +35,9 @@ class FakeEngine:
         def load(var):
             p = os.environ.get(var)
             return json.loads(Path(p).read_text(encoding="utf-8")) if p else None
-        return cls(replies=[tuple(x) for x in (load("SB_FAKE_REPLIES") or [])], transcripts=load("SB_FAKE_TRANSCRIPTS"))
+        no = [x.lower() for x in os.environ.get("SB_FAKE_WARRANT_NO", "").split("|") if x]   # questions the warrant rejects
+        return cls(replies=[tuple(x) for x in (load("SB_FAKE_REPLIES") or [])], transcripts=load("SB_FAKE_TRANSCRIPTS"),
+                   warrant=(lambda q, prompt: "NO" if any(k in q.lower() for k in no) else "YES"))
 
     def transcribe(self, paths):
         return [self.transcripts.get(Path(p).name, "") for p in paths]
