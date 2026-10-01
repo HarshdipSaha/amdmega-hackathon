@@ -1,0 +1,7 @@
+# SOURCEBOUND runtime dependencies (top level). `node tools/amd-gpu/remote-mc3.js setup` resolves these on the
+# GPU notebook (same base image as the release), purges anything that would shadow the base's ROCm torch,
+# numpy or Pillow, and freezes the exact set into mc3/requirements.lock. The release installs the LOCK with
+# --no-deps. NEVER add torch, torchvision, torchaudio, triton, numpy or pillow here.
+transformers==5.17.0
+pymupdf
+openpyxl

@@ -16,12 +16,12 @@ classifiers = [
 silentpath = "silentpath.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pymupdf>=1.24"]
+dev = ["pytest>=8", "pymupdf>=1.24", "openpyxl>=3.1", "numpy>=1.26"]
 gpu = ["amdsmi", "transformers==5.17.0"]
 mcp = ["mcp>=1.2"]
 
 [tool.setuptools.packages.find]
-include = ["roadread*", "silentpath*", "gate*"]
+include = ["roadread*", "silentpath*", "gate*", "sourcebound*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

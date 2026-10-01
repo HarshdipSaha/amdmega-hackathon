@@ -1,0 +1,16 @@
+# REFERENCE ONLY (spec §10). The release is assembled in the registry by release/publish.sh with crane, which
+# produces the same filesystem without a 50 GB local build. Use this file only on a Linux Docker host with
+# >= 70 GB free, after copying the two model snapshots to models/reader and models/embedder.
+FROM rocm/pytorch:rocm10.0_ubuntu26.04_py3.14_pytorch_release_2.13.0
+COPY mc3/requirements.lock /app/requirements.txt
+RUN pip install --no-cache-dir --no-deps --only-binary=:all: --target /app/pylib -r /app/requirements.txt \
+ && PYTHONPATH=/app/pylib python3 -c "import torch; assert 'rocm' in torch.__version__, torch.__version__"
+COPY models/reader /models/reader
+COPY models/embedder /models/embedder
+COPY sourcebound /app/sourcebound
+COPY mc3/app.py /app/app.py
+RUN mkdir -p /app/corpus /app/output /app/index
+ENV PYTHONPATH=/app/pylib:/app HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
+    SB_READER=/models/reader SB_EMBEDDER=/models/embedder SB_INDEX_DIR=/app/index
+WORKDIR /app
+CMD ["python3", "-m", "sourcebound.supervisor"]
