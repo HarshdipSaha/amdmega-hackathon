@@ -1,0 +1,33 @@
+name: MC3 contract (CPU)
+
+on:
+  push:
+    paths: ['sourcebound/**', 'mc3/**', 'eval_mc3/**', 'tests/**', 'release/**', 'docker/mc3-contract.Dockerfile', '.github/workflows/mc3-contract.yml']
+  workflow_dispatch:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.14' }
+      - run: pip install pytest pymupdf openpyxl numpy pillow
+      - name: Unit + contract tests as a NON-root user (real chmod 000 cases run here)
+        run: python -m pytest -q tests/test_sb_*.py
+
+  grader-isolation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare the kit corpus with both zip-proof hazards
+        run: |
+          cp -r eval_mc3/kit/mc3-corpus /tmp/corpus
+          mkdir -p /tmp/corpus/archive
+          chmod 000 /tmp/corpus/vendor/internal_audit.txt
+          python3 tests/fixtures/kit_fake.py /tmp/fake
+      - run: docker build -f docker/mc3-contract.Dockerfile -t sb-contract .
+      - name: Root, no network, DAC_OVERRIDE dropped (the grader's conditions)
+        run: |
+          docker run --rm --network none --cap-drop DAC_OVERRIDE \
+            -v /tmp/corpus:/app/corpus -v /tmp/fake:/fake:ro sb-contract

@@ -1,0 +1,41 @@
+name: MC3 release (crane append, no docker build)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag: { description: 'image tag', required: true }
+      reader_repo: { description: 'reader VLM repo', default: 'Qwen/Qwen3-VL-8B-Instruct' }
+      reader_rev: { description: 'reader revision (commit sha)', required: true }
+      embedder_repo: { description: 'embedding repo', default: 'Qwen/Qwen3-Embedding-0.6B' }
+      embedder_rev: { description: 'embedder revision (commit sha)', required: true }
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free runner disk (weights pass through it one <= 4 GiB layer at a time)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.14' }
+      - name: Install crane and huggingface_hub
+        run: |
+          curl -sL https://github.com/google/go-containerregistry/releases/latest/download/go-containerregistry_Linux_x86_64.tar.gz | sudo tar -xz -C /usr/local/bin crane
+          pip install huggingface_hub
+      - name: Registry login (Docker Hub; the base lives there too, so base blobs are mounted, not copied)
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | crane auth login index.docker.io -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Publish
+        env:
+          MC3_IMAGE: ${{ secrets.MC3_IMAGE }}
+          TAG: ${{ inputs.tag }}
+          READER_REPO: ${{ inputs.reader_repo }}
+          READER_REV: ${{ inputs.reader_rev }}
+          EMBEDDER_REPO: ${{ inputs.embedder_repo }}
+          EMBEDDER_REV: ${{ inputs.embedder_rev }}
+        run: bash release/publish.sh
+      - name: Check the pushed image
+        env:
+          MC3_IMAGE: ${{ secrets.MC3_IMAGE }}:${{ inputs.tag }}
+        run: python release/check_image.py
