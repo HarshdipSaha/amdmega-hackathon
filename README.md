@@ -1,10 +1,37 @@
-# AMD AI Challenge Projects: SILENTPATH and ROADREAD
+# AMD AI Challenge Projects: SILENTPATH, ROADREAD, and SOURCEBOUND
 
-This repository contains two distinct AMD challenge projects. **SILENTPATH** is the main-track inference-path measurement tool. **ROADREAD** is the separate Mini-Challenge 2 road-sign and license-plate OCR entry. Their goals, evidence, and evaluation results are separate.
+This repository contains three separate AMD challenge entries. **SILENTPATH** is the main-track inference-path measurement tool, **ROADREAD** is the Mini-Challenge 2 road-sign and license-plate OCR entry, and **SOURCEBOUND** is the Mini-Challenge 3 grounded RAG system. Each has its own implementation, evaluation evidence, and limitations.
+
+| Entry | Challenge | What it does | Evidence |
+|---|---|---|---|
+| [SILENTPATH](#silentpath--main-track-d1) | Main track | Measures PyTorch SDPA execution paths, output divergence, and runtime cost on AMD ROCm. | [W7900D evidence](docs/evidence/silentpath-w7900/README.md) |
+| [ROADREAD](#roadread--mini-challenge-2) | Mini Challenge 2 | Reads license plates and road signs from difficult images and returns normalized text. | [GPU results](results/dev.md) |
+| [SOURCEBOUND](#sourcebound--mini-challenge-3) | Mini Challenge 3 | Answers questions over mixed-format documents with grounded, exact citations. | [Release verification](results/mc3-release.md) |
 
 ## SILENTPATH — main-track D1
 
 SILENTPATH records which PyTorch SDPA attention operator ran, compares repeated inference results and timings, and keeps profiler evidence beside each record. D1 currently supports PyTorch ROCm SDPA on the AMD Radeon Pro W7900D. It does not claim that every silent fallback is detected, and it does not claim general answer-quality or speed improvements.
+
+### Architecture
+
+The same runner can drive the real ROCm producer or the deterministic fake producer. Both write the same run-record format, which feeds comparison, reporting, and optional MCP queries.
+
+```mermaid
+flowchart LR
+    C[Matrix configuration] --> CLI[SILENTPATH CLI]
+    CLI --> R[Matrix runner]
+    R --> B[GPU budget guard]
+    R --> P{Producer}
+    P -->|Hardware| G[PyTorch SDPA on W7900D]
+    G --> PR[Profiler and timing evidence]
+    PR --> RR[Run record]
+    P -->|CPU tests| F[Fake producer]
+    F --> RR
+    RR --> S[Append-only record store]
+    S --> CMP[Output and path comparator]
+    S --> REP[Report and cost summary]
+    S --> MCP[Optional MCP queries]
+```
 
 ### Current measured result
 
@@ -63,9 +90,61 @@ For the optional MCP transport, install the project extra with `python -m pip in
 
 ROADREAD is the separate AMD ROCm vision OCR project for license plates and road signs. It uses a thin evaluator client, resident model worker, and domain-specific normalization. Its implementation is in the `roadread/`, `app/`, and `docker/` directories. The preserved [ROADREAD project README](docs/roadread/README.md) describes its evaluation constraints; the challenge brief is in [`docs/hackathon-brief.md`](docs/hackathon-brief.md). Those results do not validate SILENTPATH's inference-path claims.
 
+### Architecture
+
+The evaluator starts a lightweight client for each image. The client sends the image path to a resident GPU worker, which decodes bounded image views, runs Qwen3-VL on ROCm, and escalates to a higher-resolution reread only when validation indicates the first result may be wrong.
+
+```mermaid
+flowchart LR
+    H[Challenge harness] --> A[app/app.py\nstdlib thin client]
+    A -->|localhost JSON socket| W[Resident worker]
+    W --> D[Decode and orient image]
+    D --> V[Bounded primary view]
+    V --> Q[Qwen3-VL on ROCm]
+    Q --> R{Domain and confidence checks}
+    R -->|Accept| N[Normalize plate or sign text]
+    R -->|Suspect and time remains| HI[High-resolution reread]
+    HI --> Q
+    N --> O[Exact text output]
+```
+
+The reference images scored **10/10 exact match**. On the 120-image synthetic development benchmark, ROADREAD scored **109/120 (90.8%)** with zero recorded contract violations; warning-sign cases were the weakest slice. See the [detailed benchmark](results/dev.md).
+
 ## SOURCEBOUND — Mini-Challenge 3
 
 SOURCEBOUND is the exact-citation mixed-format RAG entry. Its specification, GPU evidence, and release verification are recorded in [`docs/MINI_CHALLENGE_3_SPEC.md`](docs/MINI_CHALLENGE_3_SPEC.md), [`results/mc3-e4-holdout-scale.md`](results/mc3-e4-holdout-scale.md), and [`results/mc3-release.md`](results/mc3-release.md).
+
+### Architecture
+
+Indexing extracts text and OCR from the supplied corpus, then builds lexical, dense, and identifier indexes. For each question, hybrid retrieval assembles evidence for the reader. Gates check grounding and document status before the client emits an answer with the necessary citations or a refusal.
+
+```mermaid
+flowchart TB
+    subgraph Indexing
+        CORPUS[Mixed-format corpus] --> WALK[Defensive file walker]
+        WALK --> PARSE[Isolated parsers]
+        PARSE --> OCR[Image and page OCR]
+        PARSE --> SEG[Text segments with source metadata]
+        OCR --> SEG
+        SEG --> IDX[BM25, dense, and identifier indexes]
+    end
+    subgraph Query
+        Q[Question] --> RET[Hybrid retrieval]
+        IDX --> RET
+        RET --> BR[Identifier bridge and evidence pack]
+        BR --> LLM[Qwen3-VL reader]
+        LLM --> G[Grounding, supersession, and necessity gates]
+        G -->|Supported| ANS[Answer with exact citations]
+        G -->|Unsupported or insufficient evidence| REF[Refusal]
+    end
+    APP[Thin harness client] -->|index and query requests| WORKER[Resident worker and supervisor]
+    WORKER --> WALK
+    WORKER --> RET
+    ANS --> APP
+    REF --> APP
+```
+
+The pinned 8B reader scored **10/10 on the starter kit** and **32/32 on the untouched holdout**. The release image passed CI publication and image checks. The W7900D rehearsal used the documented local-layer fallback because downloading the temporary registry tool on the pod was unreliable; the checkpointed kit and supervisor-recovery results are in [release verification](results/mc3-release.md). The release reference is intentionally not printed in this README.
 
 ## Repository map
 
@@ -76,6 +155,8 @@ SOURCEBOUND is the exact-citation mixed-format RAG entry. Its specification, GPU
 | `docs/evidence/silentpath-w7900/` | Real GPU run records, reports, metadata, selected traces, archive hashes |
 | `roadread/`, `app/`, `docker/` | Separate ROADREAD Mini-Challenge 2 implementation |
 | `docs/roadread/README.md` | ROADREAD Mini-Challenge 2 project guide |
+| `sourcebound/`, `mc3/`, `eval_mc3/`, `release/` | SOURCEBOUND Mini-Challenge 3 implementation and evaluation |
+| `results/mc3-release.md`, `results/mc3-scale.md` | SOURCEBOUND release and GPU scale evidence |
 | `aidlc-docs/` | Project baseline, effort history, current release state |
 | `tests/` | SILENTPATH, ROADREAD, and evaluation tests |
 
