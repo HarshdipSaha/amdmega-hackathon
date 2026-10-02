@@ -3,8 +3,8 @@
 ## Metadata
 
 - **Effort ID:** `013`
-- **State:** `in-progress` (release rc1 pushing; rehearsal and submission remain)
-- **Updated:** 2026-10-01
+- **State:** `complete` (release checks and checkpointed notebook rehearsal complete; competition submission remains user-owned)
+- **Updated:** 2026-10-02
 - **Branch:** `feat/sourcebound-mc3` (pushed; NOT merged to master)
 - **Spec:** `docs/MINI_CHALLENGE_3_SPEC.md`. **Plan:** `docs/superpowers/plans/2026-10-01-sourcebound-mc3.md` (22 tasks, reviewed and approved).
 - **Memory:** `mc3-rag-spec-status.md` in the Claude project memory.
@@ -16,16 +16,14 @@
   - 4B dev reader: kit 10/10, dev 64/64. 8B: dev 63/64, kit 10/10. 9B: dev 62/64, kit 10/10.
   - **Release reader chosen: Qwen3-VL-8B-Instruct** (rev `0c351dd01ed87e9c1b53cbc748cba10e6187ff3b`); embedder Qwen3-Embedding-0.6B (rev `97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3`).
   - Holdout (run ONCE, 8B): 32/32. Frozen at tag `mc3-freeze-1` (later commits only touch CI and the deadline guard).
-  - Scale (300 files): index 63.7 s, worker start 18 s; max question 22.7 s, so `SB_MIN_CALL_S` default raised 6 -> 10 (NOT yet re-measured on GPU).
+  - Scale (300 files): initial run indexed in 63.7 s with a 22.7 s maximum question; `SB_MIN_CALL_S` default was raised 6 -> 10. The checkpointed fresh-worker re-measurement was 63.65 s index and 15.303 s maximum question.
+- Release `rc1`: GitHub Actions publish and image-check jobs passed. The notebook used the documented local-layer fallback because the temporary `crane` download was not reliable; kit rehearsal was 10/10 with 19.4 GiB peak VRAM, supervisor recovery returned `E7731`, and fresh scale timing at `SB_MIN_CALL_S=10` was 63.65 s index / 15.303 s worst query / 21.01 GiB peak VRAM.
 - Secret `MC3_IMAGE` set in GitHub (`docker.io/harshdipsaha/sb-r7k2-private`, no tag). The Docker Hub repo must stay PUBLIC for the grader. Never commit the reference.
 
-## Remaining
+## Completion notes
 
-1. **Check the rc1 release run.** Pushing `release/rc.env` triggers `.github/workflows/mc3-release.yml` (dispatch is impossible: workflow is not on master). Run: `gh run list --workflow mc3-release.yml --limit 3`, then `gh run view <id> --log-failed`. Earlier failures were YAML/env-file bugs, all fixed; the run after commit `2ea4cc9` is the first to reach `publish.sh`. Expected: `published tag rc1`, then `check_image.py` prints `"ok": true`. Possible new failures: `crane mutate --workdir`/`--cmd` flags, runner disk, Docker Hub push size/timeouts (lower `LAYER_MAX` in `release/build_layers.py`), base image has an ENTRYPOINT (publish.sh stops on purpose). To retrigger, change `release/rc.env` (comment lines are allowed) and push.
-2. **Task 21 Step 4: rehearse on the pod.** `export MC3_IMAGE='docker.io/harshdipsaha/sb-r7k2-private:rc1'` then `node tools/amd-gpu/remote-mc3.js sync` and `node tools/amd-gpu/remote-mc3.js rehearse` (use `rehearse local` if the pod cannot reach Docker Hub; re-download the model with `model Qwen/Qwen3-VL-8B-Instruct reader tmp` first because `/root/models` is ephemeral). Expect kit 10/10, torch `+rocm`, liveness query answers `E7731`, supervisor alive. Also confirm the 8B at `SB_MIN_CALL_S=10` keeps max question under about 25 s (rerun `suite eval_mc3/data/scale scale-final2` after a fresh `worker-start`).
-3. If the image size fails the check (`size_ok`), fall back to the 4B reader (8.9 GB; it scored 64/64 dev) by changing `release/rc.env`.
-4. **Submit.** The user submits the image reference on the lablab.ai MC3 form (deadline unknown, programme ends 2026-12-01). Update `docs/STATUS.md` (Task 22) and the registry row.
-5. Optional: if the branch should be merged to master, ask the user first.
+1. The image reference still must be submitted by the user on the LabLab MC3 form; no submission is claimed here.
+2. The branch remains `feat/sourcebound-mc3` and is not merged to master.
 
 ## Practical notes for the next session
 

@@ -1,5 +1,18 @@
 # SILENTPATH project status
 
+## SOURCEBOUND — Mini-Challenge 3
+
+The SOURCEBOUND implementation is complete on branch `feat/sourcebound-mc3`. The CPU contract and grader-isolation CI are green; the release workflow published and checked `rc1`; and the checkpointed W7900D local-layer rehearsal passed the kit 10/10 with supervisor recovery. The pushed image’s own integrity is covered by the successful CI image check; the notebook used the documented local-layer fallback because the temporary `crane` download was unreliable.
+
+Measured evidence:
+
+- Kit: **10/10 strict**, 200/200 points, 0 violations; maximum query 7.222s; peak VRAM 19.4 GiB.
+- Development: 64/64; holdout: **32/32** with the pinned 8B reader.
+- Scale timing: 300 files indexed in 63.65s, 50 images transcribed, maximum query 15.303s, 21.01 GiB peak VRAM, 0 violations.
+- Supervisor recovery returned `E7731` with the exact log citation.
+
+The image reference has not been submitted on LabLab; that external submission remains user-owned. Full records are in [the MC3 effort state](../aidlc-docs/efforts/013-sourcebound-mc3-rag/effort-state.md) and [release evidence](results/mc3-release.md).
+
 Last updated: 2026-09-28. See the [specification](SPEC.md), [public rules check](hackathon-rules-2026-09-28.md), [Effort 012](../aidlc-docs/efforts/012-silentpath-cli-mcp-verification/effort-state.md), and [AI-DLC registry](../aidlc-docs/registry.md).
 
 ## Current state

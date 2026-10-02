@@ -63,6 +63,10 @@ For the optional MCP transport, install the project extra with `python -m pip in
 
 ROADREAD is the separate AMD ROCm vision OCR project for license plates and road signs. It uses a thin evaluator client, resident model worker, and domain-specific normalization. Its implementation is in the `roadread/`, `app/`, and `docker/` directories. The preserved [ROADREAD project README](docs/roadread/README.md) describes its evaluation constraints; the challenge brief is in [`docs/hackathon-brief.md`](docs/hackathon-brief.md). Those results do not validate SILENTPATH's inference-path claims.
 
+## SOURCEBOUND — Mini-Challenge 3
+
+SOURCEBOUND is the exact-citation mixed-format RAG entry. Its specification, GPU evidence, and release verification are recorded in [`docs/MINI_CHALLENGE_3_SPEC.md`](docs/MINI_CHALLENGE_3_SPEC.md), [`results/mc3-e4-holdout-scale.md`](results/mc3-e4-holdout-scale.md), and [`results/mc3-release.md`](results/mc3-release.md).
+
 ## Repository map
 
 | Path | Contents |
